@@ -6,28 +6,21 @@ options {
 }
 
 @header {
-import java.util.HashMap;
+import com.cozilyworks.cozily.compiler.codedom.*;
 }
 
 @members {
 
 }
-function returns[FunctionExpression exp]
-	:
-	^(c=CONTROL 'class' i=ID ^('{' e=expression '}'))
+// $<CLASS LEVEL
+program	returns [ProgramDom p]:
+	^('class' MODIFIER ^('{' ID '}'))
 	{
-		exp=new FunctionExpression();
-		exp.ctrl=$c.text;
-		exp.name=$i.text;
-		exp.exps.add($e.nexp);	
+	p=new ProgramDom();
+	p.setName($ID.text);
 	}
 	;
-expression returns[NewExpression nexp]
-	:
-	^(type=ID id=ID ^('=' NEW ID '();'))
-	{
-	nexp=new NewExpression();
-	nexp.type=$type.text;
-	nexp.id=$id.text;
-	}
-	;
+// $>
+// $<STATEMENT LEVEL
+
+// $>

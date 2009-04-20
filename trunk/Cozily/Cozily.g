@@ -3,23 +3,25 @@ options {
     output=AST;
     ASTLabelType=CommonTree;
 }
-function
-	:
-	CONTROL  'class'  ID '{'
-		expression
-	'}'
+// $<CLASS LEVEL
+program	:
+	MODIFIER 'class' ID '{' '}'
 	->
-	^(CONTROL 'class' ID ^('{' expression '}'))
+	^('class' MODIFIER ^('{' ID '}'))
 	;
-expression
-	:	
-	ID ID '=' NEW ID'();'->^(ID ID ^('=' NEW ID '();'))
-	
+
+method	:	
+	MODIFIER ID '{' '}'
 	;
-	
+// $>
+// $<STATEMENTS LEVEL
+
+// $>
+// $<TOKENS
+MODIFIER:	'public'|'private'|'protected';	
 NEW	:	'new';
-CONTROL	:	'public';
 ID  :   ('a'..'z'|'A'..'Z')+ ;
 INT :   '0'..'9'+ ;
 NEWLINE:'\r'? '\n' +{skip();};
 WS  :   (' '|'\t')+ {skip();} ;
+// $>
