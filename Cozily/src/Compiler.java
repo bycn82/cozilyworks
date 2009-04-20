@@ -14,12 +14,13 @@ public class Compiler{
 		// Create a parser that feeds off the token stream
 		CozilyParser parser=new CozilyParser(tokens);
 		// Begin parsing at rule prog, get return value structure
-		CozilyParser.program_return r=parser.program();
+		CozilyParser.newstatement_return r=parser.newstatement();
 		// WALK RESULTING TREE
 		CommonTree t=(CommonTree)r.getTree(); // get tree from parser
 		// Create a tree node stream from resulting tree
 		CommonTreeNodeStream nodes=new CommonTreeNodeStream(t);
 		CozilyTree walker=new CozilyTree(nodes); // create a tree parser
-		System.out.println(walker.program());// launch at start rule prog
+		System.out.println(walker.newstatement());
+		System.out.println(walker.methodstatement());// 
 	}
 }

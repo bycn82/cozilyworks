@@ -7,6 +7,9 @@ public class ProgramDom{
 	private String modifier;
 	private String name;
 	private List<MethodDom> methods=new ArrayList<MethodDom>();
+	public void addMethod(MethodDom m){
+		this.methods.add(m);
+	}
 	public String getModifier(){
 		return modifier;
 	}

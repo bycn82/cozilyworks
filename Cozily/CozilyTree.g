@@ -13,14 +13,24 @@ import com.cozilyworks.cozily.compiler.codedom.*;
 
 }
 // $<CLASS LEVEL
-program	returns [ProgramDom p]:
-	^('class' MODIFIER ^('{' ID '}'))
-	{
-	p=new ProgramDom();
-	p.setName($ID.text);
-	}
-	;
+
 // $>
 // $<STATEMENT LEVEL
-
+methodstatement returns[MethodDom m]
+	:^(name=ID modi=MODIFIER  ^( s=newstatement'{' '}'))
+	{
+	m=new MethodDom();
+	m.setModifier($modi.text);
+	m.setName($name.text);
+	m.addStatement($s.ns);
+	}
+	;
+newstatement returns[NewStatement ns]
+	:	^('=' ^(type=ID id=ID) ^(NEW ID '();'))	
+	{	
+		ns=new NewStatement();
+		ns.setName($id.text);
+		ns.setType($type.text);
+	}
+	;
 // $>
