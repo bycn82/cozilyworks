@@ -4,18 +4,16 @@ options {
     ASTLabelType=CommonTree;
 }
 // $<CLASS LEVEL
-program	:
-	MODIFIER 'class' ID '{' '}'
-	->
-	^('class' MODIFIER ^('{' ID '}'))
-	;
-
-method	:	
-	MODIFIER ID '{' '}'
+methodstatement
+	:	
+	MODIFIER ID '{'	newstatement '}'->^(ID MODIFIER ^( newstatement '{' '}'))
 	;
 // $>
 // $<STATEMENTS LEVEL
-
+newstatement
+	:
+	ID ID '=' NEW ID'();'-> ^('=' ^(ID ID) ^(NEW ID '();'))	
+	;
 // $>
 // $<TOKENS
 MODIFIER:	'public'|'private'|'protected';	
