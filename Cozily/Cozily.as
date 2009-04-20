@@ -1,3 +1,3 @@
-public class google{
-String name=new String();
+public class cozily{
+        
 }
