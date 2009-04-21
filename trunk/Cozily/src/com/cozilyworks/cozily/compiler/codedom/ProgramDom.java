@@ -6,8 +6,8 @@ import java.util.List;
 public class ProgramDom{
 	private String modifier;
 	private String name;
-	private List<MethodDom> methods=new ArrayList<MethodDom>();
-	public void addMethod(MethodDom m){
+	private List<MethodBlock> methods=new ArrayList<MethodBlock>();
+	public void addMethod(MethodBlock m){
 		this.methods.add(m);
 	}
 	public String getModifier(){
