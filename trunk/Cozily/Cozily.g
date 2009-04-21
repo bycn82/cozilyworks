@@ -4,25 +4,22 @@ options {
     ASTLabelType=CommonTree;
 }
 // $<CLASS LEVEL
-methodstatement
-	:	
-	MODIFIER ID ID '(){' newstatements '}'->^(ID MODIFIER ^(ID ^('(){' newstatements '}')))
-	;
+
 // $>
 // $<STATEMENTS LEVEL
-newstatements
-	:	newstatement+
-	;
-newstatement
+
+// $>
+// $<FRAGMENT
+expression
 	:
-	ID ID '=' NEW ID'();'-> ^('=' ^(ID ID) ^(NEW ID '();'))	
+	//argumentExpression
+	ID ID ->^(ID ID)
+	|
+	//newExpression
+	NEW ID	
 	;
 // $>
 // $<TOKENS
-// $<FRAGMENT
-
-// $>
-
 MODIFIER:	'public'|'private'|'protected';	
 
 
