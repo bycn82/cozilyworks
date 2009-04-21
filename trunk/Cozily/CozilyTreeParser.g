@@ -9,16 +9,20 @@ options {
 package com.cozilyworks.cozily.compiler;
 import com.cozilyworks.cozily.compiler.codedom.*;
 }
-
 @members {
 
 }
-
-expression returns[Expression exp]
+argumentexpression returns[ArgumentExpression argExp]
 	:
-	//argumentExpression
 	^(type=ID arg=ID)
 	{
-	exp=new ArgumentExpression($type.text,$arg.text);
-	}	
+	argExp=new ArgumentExpression($type.text,$arg.text);
+	}
+	;
+expression returns[Expression exp]
+	:
+	^(NEW type=ID ^('(' e=argumentexpression ')'))
+	{
+	exp=new NewExpression($type.text,$e.argExp);
+	}
 	;
