@@ -4,6 +4,9 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+import com.cozilyworks.cozily.compiler.CozilyLexer;
+import com.cozilyworks.cozily.compiler.CozilyParser;
+import com.cozilyworks.cozily.compiler.CozilyTreeParser;
 
 public class BaseTestCase extends TestCase{
 	public void trace(Object o){

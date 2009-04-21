@@ -16,13 +16,13 @@ package com.cozilyworks.cozily.compiler;
 
 // $>
 // $<FRAGMENT
+argumentexpression
+	:	ID ID ->^(ID ID)
+	;
 expression
 	:
-	//argumentExpression
-	ID ID ->^(ID ID)
-	|
 	//newExpression
-	NEW ID	
+	NEW ID '(' argumentexpression ')'->^(NEW ID ^('(' argumentexpression ')'))	
 	;
 // $>
 // $<TOKENS
