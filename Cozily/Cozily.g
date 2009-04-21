@@ -6,17 +6,26 @@ options {
 // $<CLASS LEVEL
 methodstatement
 	:	
-	MODIFIER ID '{'	newstatement '}'->^(ID MODIFIER ^( newstatement '{' '}'))
+	MODIFIER ID ID '(){' newstatements '}'->^(ID MODIFIER ^(ID ^('(){' newstatements '}')))
 	;
 // $>
 // $<STATEMENTS LEVEL
+newstatements
+	:	newstatement+
+	;
 newstatement
 	:
 	ID ID '=' NEW ID'();'-> ^('=' ^(ID ID) ^(NEW ID '();'))	
 	;
 // $>
 // $<TOKENS
+// $<FRAGMENT
+
+// $>
+
 MODIFIER:	'public'|'private'|'protected';	
+
+
 NEW	:	'new';
 ID  :   ('a'..'z'|'A'..'Z')+ ;
 INT :   '0'..'9'+ ;

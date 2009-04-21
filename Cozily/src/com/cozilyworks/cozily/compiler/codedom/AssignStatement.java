@@ -1,6 +1,6 @@
 package com.cozilyworks.cozily.compiler.codedom;
 
-public class NewStatement{
+public class AssignStatement{
 	private String type;
 	private String name;
 	public String toString(){

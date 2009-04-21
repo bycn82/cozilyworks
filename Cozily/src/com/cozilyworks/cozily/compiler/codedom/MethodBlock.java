@@ -3,13 +3,25 @@ package com.cozilyworks.cozily.compiler.codedom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MethodDom{
+public class MethodBlock{
 	private String modifier;
 	private String name;
 	private String returnType;
-	private List<NewStatement> statements=new ArrayList<NewStatement>();
-	public void addStatement(NewStatement ns){
+	private List<AssignStatement> statements=new ArrayList<AssignStatement>();
+	public void addStatement(AssignStatement ns){
 		this.statements.add(ns);
+	}
+	public void addAll(List<AssignStatement> nss) {
+		this.statements.addAll(nss);
+	}
+	public String toString(){
+		String s="\n";
+		if(statements.size()>0)
+		for(AssignStatement ns:statements){
+			s+=ns.toString()+"\n";
+		}
+			
+		return modifier+" "+returnType+" "+name+"{"+s+"}";
 	}
 	public String getReturnType(){
 		return returnType;
@@ -29,4 +41,5 @@ public class MethodDom{
 	public void setName(String name){
 		this.name=name;
 	}
+	
 }

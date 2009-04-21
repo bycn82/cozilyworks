@@ -17,14 +17,23 @@ import com.cozilyworks.cozily.compiler.codedom.*;
 // $>
 // $<STATEMENT LEVEL
 methodstatement returns[MethodDom m]
-	:^(name=ID modi=MODIFIER  ^( s=newstatement'{' '}'))
+	@init{m=new MethodDom();}
+	:^(returnType=ID modi=MODIFIER ^(name=ID ^('(){' nss=newstatements '}')))
 	{
-	m=new MethodDom();
 	m.setModifier($modi.text);
 	m.setName($name.text);
-	m.addStatement($s.ns);
+	m.setReturnType($returnType.text);
+	m.addAll($nss.ls);
 	}
 	;
+newstatements returns[List<NewStatement> ls]
+	@init{ ls=new ArrayList<NewStatement>();}
+	:(ns=newstatement
+	{
+	ls.add($ns.ns);
+	})+
+	;
+
 newstatement returns[NewStatement ns]
 	:	^('=' ^(type=ID id=ID) ^(NEW ID '();'))	
 	{	
