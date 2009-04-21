@@ -3,6 +3,12 @@ options {
     output=AST;
     ASTLabelType=CommonTree;
 }
+@header {
+package com.cozilyworks.cozily.compiler;
+}
+@lexer::header {
+package com.cozilyworks.cozily.compiler;
+}
 // $<CLASS LEVEL
 
 // $>

@@ -6,6 +6,7 @@ options {
 }
 
 @header {
+package com.cozilyworks.cozily.compiler;
 import com.cozilyworks.cozily.compiler.codedom.*;
 }
 
