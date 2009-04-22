@@ -9,20 +9,33 @@ package com.cozilyworks.cozily.compiler;
 @lexer::header {
 package com.cozilyworks.cozily.compiler;
 }
-// $<CLASS LEVEL
-
-// $>
-// $<STATEMENTS LEVEL
-
-// $>
-// $<FRAGMENT
-argumentexpression
-	:	ID ID ->^(ID ID)
+// $<BLOCK 
+classblock
+	:MODIFIER 'class' ID '{' methodblock* '}'
 	;
-expression
+methodblock
+	:MODIFIER ID ID'(){' 	definestatement* '}'
+	;
+// $>
+// $<STATEMENT
+definestatement
+	:	ID ID '=' newexpression ';'
+	;
+// $>
+// $<EXPRESSION
+newexpression
+	:	NEW ID '(' parametersexpression ')';
+argumentsexpression
+	:	ID ID (',' ID ID)*
+	;
+parametersexpression 
 	:
-	//newExpression
-	NEW ID '(' argumentexpression ')'->^(NEW ID ^('(' argumentexpression ')'))	
+	ID (',' ID)* 
+	;	
+// $>
+// $<BASIC ELEMENT
+stringelement
+	:	'"' ID '"'
 	;
 // $>
 // $<TOKENS
