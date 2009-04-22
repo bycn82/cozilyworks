@@ -32,7 +32,7 @@ definestatement returns[DefineStatement dstmt]
 // $<EXPRESSION
 newexpression returns[NewExpression nexp]
 	@init{nexp=new NewExpression();}
-	:	NEW a=ID '(' b=parametersexpression ')'{nexp.type=$a.text;nexp.pexp=b;}
+	:	NEW a=ID '(' (b=parametersexpression{nexp.pexp=b;})? ')'{nexp.type=$a.text;}
 	;
 argumentsexpression returns[ArgumentsExpression aexp]
 	@init{ aexp=new ArgumentsExpression();}

@@ -11,7 +11,7 @@ public class TestExpression extends BaseTestCase{
 		trace(step2(step1(str).argumentsexpression().getTree()).argumentsexpression().visit());
 	}
 	public void testNewExpression() throws RecognitionException{
-		str="new String(abc)";
+		str="new String( )";
 		trace(step2(step1(str).newexpression().getTree()).newexpression().visit());
 	}
 	public void testDefineStatement() throws RecognitionException{
