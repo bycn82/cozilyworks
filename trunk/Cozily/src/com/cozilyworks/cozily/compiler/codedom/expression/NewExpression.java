@@ -9,8 +9,8 @@ public class NewExpression implements Visitable {
 
 	public String visit() {
 		StringBuilder rtn = new StringBuilder();
-		if (!type.equalsIgnoreCase("") && pexp != null) {
-			rtn.append("new "+type).append("("+pexp.visit()+")");
+		if (!type.equalsIgnoreCase("")) {
+			rtn.append("new "+type).append("("+(pexp!=null?pexp.visit():"")+")");
 		}
 		return rtn.toString();
 	}

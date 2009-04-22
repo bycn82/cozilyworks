@@ -24,7 +24,7 @@ definestatement
 // $>
 // $<EXPRESSION
 newexpression
-	:	NEW ID '(' parametersexpression ')';
+	:	NEW ID '(' parametersexpression? ')';
 argumentsexpression
 	:	ID ID (',' ID ID)*
 	;
