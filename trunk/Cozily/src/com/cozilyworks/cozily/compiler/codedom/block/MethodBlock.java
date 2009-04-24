@@ -17,7 +17,7 @@ public class MethodBlock implements Visitable {
 		for(DefineStatement dstmt:stmts){
 			rtn.append(dstmt.visit());
 		}
-		rtn.append("}");
+		rtn.append("}\n");
 		return rtn.toString();
 	}
 

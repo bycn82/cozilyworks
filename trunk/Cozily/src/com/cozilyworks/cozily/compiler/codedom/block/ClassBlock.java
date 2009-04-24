@@ -15,7 +15,7 @@ public class ClassBlock implements Visitable {
 		for(MethodBlock mb:mblocks){
 			rtn.append(mb.visit());
 		}
-		rtn.append("}");
+		rtn.append("}\n");
 		return rtn.toString();
 	}
 

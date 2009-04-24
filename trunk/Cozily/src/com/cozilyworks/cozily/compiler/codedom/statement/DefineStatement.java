@@ -9,7 +9,7 @@ public class DefineStatement implements Visitable {
 	public NewExpression nexp;
 	public String visit() {
 		StringBuilder rtn = new StringBuilder();
-		rtn.append(type).append(" ").append(var).append("=new ").append(nexp.visit()).append(";");
+		rtn.append(type).append(" ").append(var).append("=new ").append(nexp.visit()).append(";\n");
 		return rtn.toString();
 	}
 
