@@ -111,6 +111,7 @@ public boolean hasErrors() {
 
 
 // Starting point for parsing a Java file.
+// $<CLASS
 javaSource
     :   ^(JAVA_SOURCE annotationList packageDeclaration? importDeclaration* typeDeclaration*)
     ;
@@ -138,6 +139,8 @@ extendsClause // actually 'type' for classes and 'type+' for interfaces, but thi
 implementsClause
     :   ^(IMPLEMENTS_CLAUSE type+)
     ;
+// $>
+// $<GERNRIC    
         
 genericTypeParameterList
     :   ^(GENERIC_TYPE_PARAM_LIST genericTypeParameter+)
@@ -146,11 +149,24 @@ genericTypeParameterList
 genericTypeParameter
     :   ^(IDENT bound?)
     ;
-        
+genericTypeArgumentList
+    :   ^(GENERIC_TYPE_ARG_LIST genericTypeArgument+)
+    ;
+    
+genericTypeArgument
+    :   type
+    |   ^(QUESTION genericWildcardBoundType?)
+    ;
+
+genericWildcardBoundType                                                                                                                      
+    :   ^(EXTENDS type)
+    |   ^(SUPER type)
+    ;
+// $>        
 bound
     :   ^(EXTENDS_BOUND_LIST type+)
     ;
-
+// $<EMUN
 enumTopLevelScope
     :   ^(ENUM_TOP_LEVEL_SCOPE enumConstant* classTopLevelScope?)
     ;
@@ -158,8 +174,8 @@ enumTopLevelScope
 enumConstant
     :   ^(IDENT annotationList arguments? classTopLevelScope?)
     ;
-    
-    
+// $>    
+// $<SOCPE    
 classTopLevelScope
     :   ^(CLASS_TOP_LEVEL_SCOPE classScopeDeclarations*)
     ;
@@ -181,13 +197,11 @@ interfaceTopLevelScope
 interfaceScopeDeclarations
     :   ^(FUNCTION_METHOD_DECL modifierList genericTypeParameterList? type IDENT formalParameterList arrayDeclaratorList? throwsClause?)
     |   ^(VOID_METHOD_DECL modifierList genericTypeParameterList? IDENT formalParameterList throwsClause?)
-                         // Interface constant declarations have been switched to variable
-                         // declarations by 'java.g'; the parser has already checked that
-                         // there's an obligatory initializer.
     |   ^(VAR_DECLARATION modifierList type variableDeclaratorList)
     |   typeDeclaration
     ;
-
+// $>    
+// $<VARIABLE
 variableDeclaratorList
     :   ^(VAR_DECLARATOR_LIST variableDeclarator+)
     ;
@@ -204,7 +218,8 @@ variableInitializer
     :   arrayInitializer
     |   expression
     ;
-
+// $>
+// $<ARRAY
 arrayDeclarator
     :   LBRACK RBRACK
     ;
@@ -216,10 +231,9 @@ arrayDeclaratorList
 arrayInitializer
     :   ^(ARRAY_INITIALIZER variableInitializer*)
     ;
+// $>
 
-throwsClause
-    :   ^(THROWS_CLAUSE qualifiedIdentifier+)
-    ;
+
 
 modifierList
     :   ^(MODIFIER_LIST modifier*)
@@ -271,19 +285,7 @@ primitiveType
     |   DOUBLE
     ;
 
-genericTypeArgumentList
-    :   ^(GENERIC_TYPE_ARG_LIST genericTypeArgument+)
-    ;
-    
-genericTypeArgument
-    :   type
-    |   ^(QUESTION genericWildcardBoundType?)
-    ;
 
-genericWildcardBoundType                                                                                                                      
-    :   ^(EXTENDS type)
-    |   ^(SUPER type)
-    ;
 
 formalParameterList
     :   ^(FORMAL_PARAM_LIST formalParameterStandardDecl* formalParameterVarargDecl?) 
@@ -302,7 +304,7 @@ qualifiedIdentifier
     |   ^(DOT qualifiedIdentifier IDENT)
     ;
     
-// ANNOTATIONS
+// $<ANNOTATIONS
 
 annotationList
     :   ^(ANNOTATION_LIST annotation*)
@@ -344,8 +346,9 @@ annotationScopeDeclarations
 annotationDefaultValue
     :   ^(DEFAULT annotationElementValue)
     ;
+// $>
 
-// STATEMENTS / BLOCKS
+// $<STATEMENTS / BLOCKS
 
 block
     :   ^(BLOCK_SCOPE blockStatement*)
@@ -381,7 +384,10 @@ statement
     |   expression
     |   SEMI // Empty statement.
     ;
-        
+throwsClause
+    :   ^(THROWS_CLAUSE qualifiedIdentifier+)
+    ;
+           
 catches
     :   ^(CATCH_CLAUSE_LIST catchClause+)
     ;
@@ -413,8 +419,8 @@ forCondition
 forUpdater
     :   ^(FOR_UPDATE expression*)
     ;
-    
-// EXPRESSIONS
+// $>    
+// $<EXPRESSIONS
 
 parenthesizedExpression
     :   ^(PARENTESIZED_EXPR expression)
@@ -537,3 +543,4 @@ literal
     |   FALSE
     |   NULL
     ;
+// $>
