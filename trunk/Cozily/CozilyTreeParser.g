@@ -51,18 +51,6 @@ package com.cozilyworks.cozily.compiler;
 private boolean mMessageCollectionEnabled = false;
 private List<String> mMessages;
 
-/**
- * Switches error message collection on or of.
- * <p>
- * The standard destination for parser error messages is <code>
- * System.err</code>. However, if <code>true</code> gets passed to this method 
- * this default behaviour will be switched off and all error messages will be 
- * collected instead of writing them to an output stream.
- * <p>
- * The default value is <code>false</code>.
- *
- * @param pNewState  <code>true</code> if error messages should be collected.
- */
 public void enableErrorMessageCollection(boolean pNewState) {
 
     mMessageCollectionEnabled = pNewState;
@@ -111,7 +99,7 @@ public boolean hasErrors() {
 
 
 // Starting point for parsing a Java file.
-// $<CLASS
+
 javaSource
     :   ^(JAVA_SOURCE annotationList packageDeclaration? importDeclaration* typeDeclaration*)
     ;
@@ -131,16 +119,14 @@ typeDeclaration
     |   ^(AT modifierList IDENT annotationTopLevelScope)
     ;
 
-extendsClause // actually 'type' for classes and 'type+' for interfaces, but this has 
-              // been resolved by the parser grammar.
+extendsClause 
     :   ^(EXTENDS_CLAUSE type+)
     ;   
     
 implementsClause
     :   ^(IMPLEMENTS_CLAUSE type+)
     ;
-// $>
-// $<GERNRIC    
+  
         
 genericTypeParameterList
     :   ^(GENERIC_TYPE_PARAM_LIST genericTypeParameter+)
@@ -162,11 +148,11 @@ genericWildcardBoundType
     :   ^(EXTENDS type)
     |   ^(SUPER type)
     ;
-// $>        
+       
 bound
     :   ^(EXTENDS_BOUND_LIST type+)
     ;
-// $<EMUN
+
 enumTopLevelScope
     :   ^(ENUM_TOP_LEVEL_SCOPE enumConstant* classTopLevelScope?)
     ;
@@ -174,8 +160,7 @@ enumTopLevelScope
 enumConstant
     :   ^(IDENT annotationList arguments? classTopLevelScope?)
     ;
-// $>    
-// $<SOCPE    
+  
 classTopLevelScope
     :   ^(CLASS_TOP_LEVEL_SCOPE classScopeDeclarations*)
     ;
@@ -200,8 +185,7 @@ interfaceScopeDeclarations
     |   ^(VAR_DECLARATION modifierList type variableDeclaratorList)
     |   typeDeclaration
     ;
-// $>    
-// $<VARIABLE
+
 variableDeclaratorList
     :   ^(VAR_DECLARATOR_LIST variableDeclarator+)
     ;
@@ -218,8 +202,7 @@ variableInitializer
     :   arrayInitializer
     |   expression
     ;
-// $>
-// $<ARRAY
+
 arrayDeclarator
     :   LBRACK RBRACK
     ;
@@ -231,7 +214,7 @@ arrayDeclaratorList
 arrayInitializer
     :   ^(ARRAY_INITIALIZER variableInitializer*)
     ;
-// $>
+
 
 
 
@@ -304,7 +287,7 @@ qualifiedIdentifier
     |   ^(DOT qualifiedIdentifier IDENT)
     ;
     
-// $<ANNOTATIONS
+
 
 annotationList
     :   ^(ANNOTATION_LIST annotation*)
@@ -346,9 +329,7 @@ annotationScopeDeclarations
 annotationDefaultValue
     :   ^(DEFAULT annotationElementValue)
     ;
-// $>
 
-// $<STATEMENTS / BLOCKS
 
 block
     :   ^(BLOCK_SCOPE blockStatement*)
@@ -419,8 +400,7 @@ forCondition
 forUpdater
     :   ^(FOR_UPDATE expression*)
     ;
-// $>    
-// $<EXPRESSIONS
+
 
 parenthesizedExpression
     :   ^(PARENTESIZED_EXPR expression)
@@ -533,14 +513,14 @@ arguments
     ;
 
 literal 
-    :   HEX_LITERAL
-    |   OCTAL_LITERAL
+    :   HEX_LITERAL{System.out.println($HEX_LITERAL.text);}
+    |   OCTAL_LITERAL{System.out.println($OCTAL_LITERAL.text);}
     |   DECIMAL_LITERAL{System.out.println($DECIMAL_LITERAL.text);}
-    |   FLOATING_POINT_LITERAL
-    |   CHARACTER_LITERAL
-    |   STRING_LITERAL
+    |   FLOATING_POINT_LITERAL{System.out.println($FLOATING_POINT_LITERAL.text+"float");}
+    |   CHARACTER_LITERAL{System.out.println($CHARACTER_LITERAL.text);}
+    |   STRING_LITERAL{System.out.println($STRING_LITERAL.text);}
     |   TRUE{System.out.println($TRUE.text);}
-    |   FALSE
-    |   NULL
+    |   FALSE{System.out.println($FALSE.text);}
+    |   NULL{System.out.println($NULL.text);}
     ;
 // $>
