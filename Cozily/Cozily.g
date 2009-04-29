@@ -745,10 +745,10 @@ relationalExpression
     ;
 
 relationalOp 
-    :    '<' '='
-    |    '>' '='
-    |   '<'
-    |   '>'
+    :    LT EQ
+    |    GT EQ
+    |    LT
+    |    GT
     ;
 
 shiftExpression 
@@ -759,9 +759,8 @@ shiftExpression
 
 
 shiftOp 
-    :    '<' '<'
-    |    '>' '>' '>'
-    |    '>' '>'
+    :   GT GT
+    |	LT LT
     ;
 
 
