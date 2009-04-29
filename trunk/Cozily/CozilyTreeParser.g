@@ -10,12 +10,43 @@ options {
 package com.cozilyworks.cozily.parser;
 
 import com.cozilyworks.cozily.codedom.*;
+import com.cozilyworks.cozily.codedom.impl.*;
 }
-
+// $<element
+typeArgument 
+    :   type
+    |   '?'(('extends'
+            |'super'
+            )
+            type
+        )?
+    ; 
+type 
+    :   classOrInterfaceType
+        ('[' ']'
+        )*
+    |   primitiveType
+        ('[' ']'
+        )*
+    ;
+classOrInterfaceType 
+    :   IDENTIFIER
+        (typeArguments
+        )?
+        ('.' IDENTIFIER
+            (typeArguments
+            )?
+        )*
+    ;
+typeArguments returns[TypeAguments tas]
+	@init{tas=new TypeArguments();}
+    :  ^(LT a=typeArgument{tas.add(a);} (^(COMMA b=typeArgument){tas.add(b);})* GT)
+    ;
+// $>
 // $<SimpleElement
 shiftOp returns[SimpleElement se]
-    :    GT GT{se=new SimpleElement($GT.text+$GT.text);}
-    |    LT LT{se=new SimpleElement($LT.text+$LT.text);}
+    :  ^(SHIFTOP a=GT b=GT){se=ShiftOp($a.text+$b.text);}
+    |  ^(SHIFTOP a=LT b=LT){se=ShiftOp($a.text+$b.text);}
     ;
 literal returns[SimpleElement se]
     :   INTLITERAL{se=new Literal($INTLITERAL.text);}
@@ -26,7 +57,7 @@ literal returns[SimpleElement se]
     |   STRINGLITERAL{se=new Literal($STRINGLITERAL.text);}
     |   TRUE{se=new Literal($TRUE.text);}
     |   FALSE{se=new Literal($FALSE.text);}
-    |   NULL{se=new Literal($NULL.text);}
+    |   IDENTIFIER{se=new Literal($IDENTIFIER.text);}
     ;
 primitiveType  returns[SimpleElement se]
     :   'boolean'{se=new PrimitiveType("boolean");}
