@@ -12,24 +12,30 @@ package com.cozilyworks.cozily.parser;
 import com.cozilyworks.cozily.codedom.*;
 }
 
-literal returns[Literal ltl]
-    :   INTLITERAL{ltl=new Literal($INTLITERAL.text);}
-    |   LONGLITERAL{ltl=new Literal($LONGLITERAL.text);}
-    |   FLOATLITERAL{ltl=new Literal($FLOATLITERAL.text);}
-    |   DOUBLELITERAL{ltl=new Literal($DOUBLELITERAL.text);}
-    |   CHARLITERAL{ltl=new Literal($CHARLITERAL.text);}
-    |   STRINGLITERAL{ltl=new Literal($STRINGLITERAL.text);}
-    |   TRUE{ltl=new Literal($TRUE.text);}
-    |   FALSE{ltl=new Literal($FALSE.text);}
-    |   NULL{ltl=new Literal($NULL.text);}
+// $<SimpleElement
+shiftOp returns[SimpleElement se]
+    :    GT GT{se=new SimpleElement($GT.text+$GT.text);}
+    |    LT LT{se=new SimpleElement($LT.text+$LT.text);}
     ;
-primitiveType  returns[PrimitiveType type]
-    :   'boolean'{type=new PrimitiveType("boolean");}
-    |   'char'{type=new PrimitiveType("char");}
-    |   'byte'{type=new PrimitiveType("byte");}
-    |   'short'{type=new PrimitiveType("short");}
-    |   'int'{type=new PrimitiveType("int");}
-    |   'long'{type=new PrimitiveType("long");}
-    |   'float'{type=new PrimitiveType("float");}
-    |   'double'{type=new PrimitiveType("double");}
+literal returns[SimpleElement se]
+    :   INTLITERAL{se=new Literal($INTLITERAL.text);}
+    |   LONGLITERAL{se=new Literal($LONGLITERAL.text);}
+    |   FLOATLITERAL{se=new Literal($FLOATLITERAL.text);}
+    |   DOUBLELITERAL{se=new Literal($DOUBLELITERAL.text);}
+    |   CHARLITERAL{se=new Literal($CHARLITERAL.text);}
+    |   STRINGLITERAL{se=new Literal($STRINGLITERAL.text);}
+    |   TRUE{se=new Literal($TRUE.text);}
+    |   FALSE{se=new Literal($FALSE.text);}
+    |   NULL{se=new Literal($NULL.text);}
     ;
+primitiveType  returns[SimpleElement se]
+    :   'boolean'{se=new PrimitiveType("boolean");}
+    |   'char'{se=new PrimitiveType("char");}
+    |   'byte'{se=new PrimitiveType("byte");}
+    |   'short'{se=new PrimitiveType("short");}
+    |   'int'{se=new PrimitiveType("int");}
+    |   'long'{se=new PrimitiveType("long");}
+    |   'float'{se=new PrimitiveType("float");}
+    |   'double'{se=new PrimitiveType("double");}
+    ;
+// $>
