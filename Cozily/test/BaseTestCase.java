@@ -1,11 +1,14 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
+
 import junit.framework.TestCase;
+
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
