@@ -6,12 +6,17 @@ options {
     output = AST;
     ASTLabelType = CommonTree;
 }
+tokens {
+	SHIFTOP;
+}
 @lexer::header{
 package com.cozilyworks.cozily.parser;
 }
 @parser::header{
 package com.cozilyworks.cozily.parser;
 }
+
+
 /********************************************************************************************
                           Parser section
 *********************************************************************************************/
@@ -322,12 +327,8 @@ interfaceFieldDeclaration
 
 
 type 
-    :   classOrInterfaceType
-        ('[' ']'
-        )*
-    |   primitiveType
-        ('[' ']'
-        )*
+    :   classOrInterfaceType ('[' ']')*
+    |   primitiveType('[' ']')*
     ;
 
 
@@ -353,10 +354,7 @@ primitiveType
     ;
 
 typeArguments 
-    :   '<' typeArgument
-        (',' typeArgument
-        )* 
-        '>'
+    :   LT typeArgument (COMMA typeArgument )* GT -> ^(LT typeArgument (^(COMMA typeArgument))* GT)
     ;
 
 typeArgument 
@@ -759,8 +757,8 @@ shiftExpression
 
 
 shiftOp 
-    :   GT GT
-    |	LT LT
+    :  SHIFTOP GT GT->^(SHIFTOP GT GT)
+    |  SHIFTOP LT LT->^(SHIFTOP LT LT)
     ;
 
 
@@ -959,7 +957,7 @@ literal
     |   STRINGLITERAL
     |   TRUE
     |   FALSE
-    |   NULL
+    |   IDENTIFIER
     ;
 
 /**
