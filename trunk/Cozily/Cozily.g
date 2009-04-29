@@ -6,7 +6,12 @@ options {
     output = AST;
     ASTLabelType = CommonTree;
 }
-
+@lexer::header{
+package com.cozilyworks.cozily.parser;
+}
+@parser::header{
+package com.cozilyworks.cozily.parser;
+}
 /********************************************************************************************
                           Parser section
 *********************************************************************************************/
@@ -1000,7 +1005,7 @@ localVariableHeader
 /********************************************************************************************
                   Lexer section
 *********************************************************************************************/
-
+// $<Lexer
 LONGLITERAL
     :   IntegerNumber LongSuffix    ; 
 INTLITERAL
@@ -1545,4 +1550,4 @@ IdentifierPart
     |   '\u005f'
     |   '\u0061'..'\u007a'
     ;
-
+// $>
