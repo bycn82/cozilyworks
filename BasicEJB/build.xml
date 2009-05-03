@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<project name="BasicEJB" default="default" basedir=".">
+
+	<property name="project.name" value="BasicEJB" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="jboss.server.config" value="default" />
+	<property name="jboss.home" value="D:\\SERVERS\\JBoss" />
+
+	<!-- Build classpath -->
+	<path id="build.classpath">
+		<fileset dir="${basedir}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<target name="default">
+		<echo>Default target</echo>
+	</target>
+	<target name="ALL">
+			<antcall target="ejb-jar"/>
+			<antcall target="web-war"/>
+			<antcall target="deploy"/>
+	</target>
+
+	<target name="prepare" depends="clean">
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="compile" depends="prepare" description="compile all the sources">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" debug="on" deprecation="on" optimize="off"
+			includes="com/**">
+			<classpath refid="build.classpath" />
+		</javac>
+	</target>
+
+	<target name="ejb-jar" depends="compile" description="create the ejb jar file">
+		<jar jarfile="${basedir}/${project.name}.jar">
+			<fileset dir="${build.dir}">
+				<include name="**/*.class" />
+			</fileset>
+		</jar>
+	</target>
+	<target name="web-war" description="create the war ball">
+		<war warfile="${basedir}/${project.name}.war" webxml="${basedir}/www/WEB-INF/web.xml">
+			<fileset dir="${basedir}/www/">
+				<include name="**/*" />
+			</fileset>
+		</war>
+	</target>
+
+
+
+	<target name="deploy">
+		<copy file="${basedir}/${project.name}.jar"
+			todir="${jboss.home}/server/${jboss.server.config}/deploy" />
+		<copy file="${basedir}/${project.name}.war"
+			todir="${jboss.home}/server/${jboss.server.config}/deploy" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete file="${jboss.home}/server/${jboss.server.config}/deploy/${project.name}.jar" />
+		<delete file="${jboss.home}/server/${jboss.server.config}/deploy/${project.name}.war" />
+		<delete file="${basedir}/${project.name}.jar"/>
+		<delete file="${basedir}/${project.name}.war"/>
+	</target>
+
+</project>
+
