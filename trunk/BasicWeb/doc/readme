@@ -1,5 +1,7 @@
 Filter
-Servlet
+Servlet including XFire Client
+
+Xfire
 
 SessionListener
 SessionAttributeListener
@@ -8,3 +10,4 @@ ContextListener
 ContextAttributeListener
 
 SimpleTagSupport
+
