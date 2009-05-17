@@ -9,7 +9,12 @@
 	<uri>/mytag</uri>
 	<tag>
 		<name>showtext</name>
-		<tag-class>com.cozilyworks.taglib.MyTagOne</tag-class>
+		<tag-class>com.cozilyworks.taglib.ShowTextTag</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+	<tag>
+		<name>showdate</name>
+		<tag-class>com.cozilyworks.taglib.ShowDateTag</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 </taglib>
