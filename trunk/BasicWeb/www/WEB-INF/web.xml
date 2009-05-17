@@ -4,7 +4,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
 	<listener>
-		<listener-class>com.cozilyworks.context.CozilyContextListener</listener-class>
+		<listener-class>com.cozilyworks.listener.CozilyContextListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.cozilyworks.listener.CozilyContextAttributeListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.cozilyworks.listener.CozilySessionListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.cozilyworks.listener.CozilySessionAttributeListener</listener-class>
 	</listener>
 
 	<filter>
@@ -13,7 +22,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>TestFilter</filter-name>
-		<url-pattern>/servlet/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<servlet>
@@ -25,7 +34,7 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>XFireServlet</servlet-name>
 		<display-name>XFire Servlet</display-name>
@@ -37,11 +46,11 @@
 		<servlet-name>invoker</servlet-name>
 		<url-pattern>/servlet/*</url-pattern>
 	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>XFireServlet</servlet-name>
 		<url-pattern>/servlet/XFireServlet/*</url-pattern>
 	</servlet-mapping>
-
 	<servlet-mapping>
 		<servlet-name>XFireServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
