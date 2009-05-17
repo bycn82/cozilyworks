@@ -41,12 +41,31 @@
 		<servlet-class>org.codehaus.xfire.transport.http.XFireConfigurableServlet</servlet-class>
 	</servlet>
 
+	<!-- servlet hessian -->
+	<servlet>
+		<servlet-name>hello</servlet-name>
+		<servlet-class>com.caucho.hessian.server.HessianServlet</servlet-class>
+		<init-param>
+			<param-name>home-class</param-name>
+			<param-value>com.cozilyworks.services.xfire.HelloServiceImpl</param-value>
+		</init-param>
+		<init-param>
+			<param-name>home-api</param-name>
+			<param-value>com.cozilyworks.services.xfire.HelloService</param-value>
+		</init-param>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>hello</servlet-name>
+		<url-pattern>/hello</url-pattern>
+	</servlet-mapping>
+	<!-- servlet invoker -->
 	<servlet-mapping>
 		<servlet-name>invoker</servlet-name>
 		<url-pattern>/servlet/*</url-pattern>
 	</servlet-mapping>
-	
+
+	<!-- mapping for xfire-->
 	<servlet-mapping>
 		<servlet-name>XFireServlet</servlet-name>
 		<url-pattern>/servlet/XFireServlet/*</url-pattern>

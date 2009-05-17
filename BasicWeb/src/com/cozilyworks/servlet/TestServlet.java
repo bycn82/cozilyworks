@@ -6,6 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.codehaus.xfire.client.Client;
+import com.caucho.hessian.client.HessianProxyFactory;
+import com.cozilyworks.services.xfire.HelloService;
+import com.cozilyworks.services.xfire.HelloServiceImpl;
 
 /**
  * Servlet implementation class for Servlet: TestServlet
@@ -35,6 +38,8 @@ public class TestServlet extends javax.servlet.http.HttpServlet{
 		throws ServletException,IOException{
 		System.out.println(request.getParameter("name")+" from dopost()");
 		doGet(request,response);
+		
+		//client for xfire
 		try{
 			Client client=new Client(new URL(
 				"http://127.0.0.1:8080/BasicWeb/services/HelloService?wsdl"));
@@ -43,5 +48,11 @@ public class TestServlet extends javax.servlet.http.HttpServlet{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		//client for hessian
+		String url="http://127.0.0.1:8080/BasicWeb/hello";
+		HessianProxyFactory factory=new HessianProxyFactory();
+		HelloService basic=(HelloService)factory.create(HelloService.class,url);
+		System.out.println(basic.sayHello("william"));
 	}
 }
