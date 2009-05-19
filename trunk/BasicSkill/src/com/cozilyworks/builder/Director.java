@@ -8,8 +8,6 @@ public class Director {
 		this.builder = builder;
 	}
 
-	// ?partA partB partC
-	// ?
 	public void construct() {
 		builder.buildWall();
 		builder.buildWindow();
