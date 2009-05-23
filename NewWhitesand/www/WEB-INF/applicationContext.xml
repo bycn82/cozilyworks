@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<description>cozly.com</description>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/jdbc.properties</value>
+				<value>WEB-INF/mail.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 
+		<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+		<value>${jdbc.driverClassName}</value>
+		</property>
+		<property name="jdbcUrl">
+		<value>${jdbc.url}</value>
+		</property>
+		<property name="user">
+		<value>${jdbc.username}</value>
+		</property>
+		<property name="password">
+		<value>${jdbc.password}</value>
+		</property>
+		<property name="minPoolSize">
+		<value>25</value>
+		</property>
+		<property name="maxPoolSize">
+		<value>100</value>
+		</property>
+		<property name="acquireIncrement">
+		<value>5</value>
+		</property>
+		<property name="maxStatements">
+		<value>100</value>
+		</property>
+		</bean>
+	-->
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbc.driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc.url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc.username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc.password}</value>
+		</property>
+		<property name="initialSize">
+			<value>10</value>
+		</property>
+		<property name="maxActive">
+			<value>50</value>
+		</property>
+		<property name="minIdle">
+			<value>20</value>
+		</property>
+	</bean>
+
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="mappingDirectoryLocations">
+			<value>WEB-INF/mappings</value>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<!-- MySQL old versions-->
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+
+				<!-- MySQL 5
+					<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQL5Dialect
+					</prop>
+				-->
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.query.substitutions">
+					true 1, false 0
+				</prop>
+			</props>
+		</property>
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="post*">PROPAGATION_REQUIRED</prop>
+				<prop key="comment*">PROPAGATION_REQUIRED</prop>
+				<prop key="rate*">PROPAGATION_REQUIRED</prop>
+				<prop key="bookmark*">PROPAGATION_REQUIRED</prop>
+				<prop key="add*">PROPAGATION_REQUIRED</prop>
+				<prop key="set*">PROPAGATION_REQUIRED</prop>
+				<prop key="approve*">PROPAGATION_REQUIRED</prop>
+				<prop key="deal*">PROPAGATION_REQUIRED</prop>
+				<prop key="close*">PROPAGATION_REQUIRED</prop>
+				<prop key="refuse*">PROPAGATION_REQUIRED</prop>
+				<prop key="logon">PROPAGATION_REQUIRED</prop>
+				<prop key="userDelete*">PROPAGATION_REQUIRED</prop>
+				<prop key="cancel*">PROPAGATION_REQUIRED</prop>
+				<prop key="auto*">PROPAGATION_REQUIRED</prop>
+				<prop key="admin*">PROPAGATION_REQUIRED</prop>				
+				<!-- 
+					<prop key="sendDailyAlerts">PROPAGATION_REQUIRED</prop>
+					<prop key="sendWeeklyAlerts">PROPAGATION_REQUIRED</prop>
+					<prop key="createThumbnails">PROPAGATION_REQUIRED</prop>
+				-->
+				<prop key="authorizeAdmin">PROPAGATION_REQUIRED</prop>
+				<prop key="disableOrEnable">PROPAGATION_REQUIRED</prop>
+				<prop key="expertOrNot">PROPAGATION_REQUIRED</prop>
+				<prop key="restoreCommentByAdmin">PROPAGATION_REQUIRED</prop>
+				<prop key="realDeleteCommentByAdmin">PROPAGATION_REQUIRED</prop>
+				<prop key="move*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Java Mail Sender -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host">
+			<value>${mail.host}</value>
+		</property>
+		<property name="username">
+			<value>${mail.username}</value>
+		</property>
+		<property name="password">
+			<value>${mail.password}</value>
+		</property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">${mail.auth}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- used for email templates -->
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="velocityProperties">
+			<props>
+				<prop key="resource.loader">class</prop>
+				<prop key="class.resource.loader.class">
+					org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Three Beans defined below is providing cache service for your business methods -->
+	<!-- An interceptor that implements caching of the results of a method. 
+		Available implementations are OSCacheInterceptor, EHCacheInterceptor, 
+		MemoryCacheInterceptor and SwarmCacheInterceptor.
+		MemoryCacheInterceptor is a simple in-memory cache that's not meant for production. -->
+	<bean id="cacheInterceptor"
+		class="org.springframework.aop.interceptor.cache.OSCacheInterceptor">
+		<property name="refreshPeriods">
+			<props>
+				<!-- Cache the returned conversion rate for 15 minutes 
+					<prop
+					key="com.askjongo.services.CurrencyServiceImpl@conversionRate">
+					900
+					</prop>
+				-->
+				<!-- Cache the returned weather forecast for 1 hr
+					<prop
+					key="jweather.WeatherChannelService@getForecast">
+					3600
+					</prop>
+				-->
+				<!-- Cache the returned current condition for 1 hr
+					<prop
+					key="jweather.WeatherChannelService@getCurrentCondition">
+					3600
+					</prop>
+					<prop key="jweather.WeatherChannelService@request">
+					900
+					</prop>
+				-->
+			</props>
+		</property>
+		<!-- For caches not defined under 'refreshPeriods', use this value -->
+		<property name="defaultRefreshPeriod">
+			<value>-1</value>
+		</property>
+	</bean>
+
+	<!-- An advisor that wraps beans with the cacheInterceptor -->
+	<bean id="cacheAdvisor"
+		class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice">
+			<ref bean="cacheInterceptor" />
+		</property>
+		<property name="patterns">
+			<list>
+				<!-- sample patterns
+					<value>.*conversionRate</value>
+					<value>.*getForecast</value>
+					<value>.*getCurrentCondition</value>
+					<value>.*request</value>
+				-->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="cacheProxyCreator"
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<!-- sample
+					<value>currencyService</value>
+					<value>weatherService</value>
+				-->
+			</list>
+		</property>
+		<property name="proxyTargetClass">
+			<value>true</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>cacheAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="baseServiceBean"
+		class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true">
+		<property name="interceptorNames">
+			<list>
+				<idref local="transactionInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="baseCronServiceBean"
+		class="org.springframework.aop.framework.ProxyFactoryBean"
+		abstract="true">
+		<property name="interceptorNames">
+			<list>
+				<idref local="hibernateInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hibernateInterceptor"
+		class="org.springframework.orm.hibernate3.HibernateInterceptor"
+		autowire="byName">
+	</bean>
+
+
+
+	<import resource="businessContext.xml" />
+	<import resource="controllerContext.xml" />
+</beans>

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.cozly.pro.entity">
+	<class
+		name="Account"
+		table="tbl_account"
+	>
+		<meta attribute="sync-DAO">false</meta>
+		<id
+			name="Id"
+			type="integer"
+			column="id"
+		>
+			<generator class="native"/>
+		</id>
+
+		<property
+			name="Cozid"
+			column="cozid"
+			type="string"
+			not-null="true"
+			length="45"
+		/>
+		<property
+			name="Username"
+			column="username"
+			type="string"
+			not-null="true"
+			length="45"
+		/>
+		<property
+			name="Password"
+			column="password"
+			type="string"
+			not-null="true"
+			length="45"
+		/>
+		<property
+			name="Email"
+			column="email"
+			type="string"
+			not-null="false"
+			length="45"
+		/>
+		<property
+			name="Createdat"
+			column="createdat"
+			type="timestamp"
+			not-null="false"
+			length="19"
+		/>
+		<property
+			name="Updatedat"
+			column="updatedat"
+			type="timestamp"
+			not-null="false"
+			length="19"
+		/>
+		<property
+			name="Registedip"
+			column="registedip"
+			type="string"
+			not-null="false"
+			length="45"
+		/>
+	</class>	
+</hibernate-mapping>

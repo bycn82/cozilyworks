@@ -1,0 +1,54 @@
+<!--
+	Cozilyworks XML Controller DTD, version 1.0
+	@Authors: ordinarybackstreetmoldywilliam
+	@Date: 2007-10-31
+	This defines a simple and consistent way of creating a namespace
+	of whitesand-struts's controllers whitch will be managed by a 
+	Spring BeanFactory, read by	XmlBeanDefinitionReader (with 
+	DefaultBeanDefinitionDocumentReader).
+
+	XML documents that conform to this DTD should declare the following doctype:
+
+	<!DOCTYPE beans PUBLIC "-//Cozilyworks//DTD BEAN 1.0//EN"
+		  "http://www.Cozilyworks.com/dtd/whitesand-struts-1.0.dtd">
+-->
+
+<!--
+	The document root. A document can contain bean definitions only,
+	also can contain some bean nodes.
+-->
+<!ELEMENT beans (
+	description?, bean*
+)>
+<!--
+	This Element containing informative text describing the purpose of the enclosing
+	element. Always optional.
+	Used primarily for user documentation of XML bean definition documents.
+-->
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT bean (
+	description?
+)>
+
+
+<!--
+	Optional. Can be used to create one or more aliases illegal in an id.
+	Multiple aliases can be separated by any number of spaces, commas, or
+	semi-colons (or indeed any mixture of the three).
+-->
+<!ATTLIST bean name CDATA #IMPLIED>
+
+<!--
+	Each bean definition must specify the fully qualified name of the class,
+	except if it pure serves as parent for child bean definitions.
+-->
+<!ATTLIST bean class CDATA #IMPLIED>
+
+<!--
+	this attribute is not needed.cause when the spring's beanfactory will check 
+	this attribute ,and infact we don't need it ,so there is a default value and
+	also no other attributes to choose.
+-->
+<!ATTLIST bean autowire (byName) "byName">
+

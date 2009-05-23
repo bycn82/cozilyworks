@@ -1,0 +1,13 @@
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN"
+    "http://www.getahead.ltd.uk/dwr/dwr10.dtd">
+
+<dwr>
+	<allow>
+		<create creator="spring" javascript="UAS">
+			<param name="beanName" value="userService" />
+			<include method="hasThisUserName" />
+			<include method="hasThisEmail" />
+		</create>
+	</allow>
+</dwr>

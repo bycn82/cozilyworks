@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<tlib-version>1.0</tlib-version>
+	<short-name>jng</short-name>
+	<uri>http://com.jongo/jsp/taglib/jongo-tags.tld</uri>
+	<tag-file>
+		<name>pagination</name>
+		<path>/WEB-INF/tags/jng/pagination.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>pagination2</name>
+		<path>/WEB-INF/tags/jng/pagination2.tag</path>
+	</tag-file>	
+</taglib>
