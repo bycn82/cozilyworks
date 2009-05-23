@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<project>
+	<property file="build.properties">
+	</property>
+
+	<target name="help">
+		<echo>====================================</echo>
+		<echo>--           Cozly.com            --</echo>
+		<echo>====================================</echo>
+	</target>
+
+	<target name="all">
+		<antcall target="clean"></antcall>
+		<antcall target="jar"></antcall>
+		<antcall target="war"></antcall>
+	</target>
+	<target name="jar">
+	
+	</target>
+	<target name="war">
+	
+	</target>
+	<target name="clean">
+	
+	</target>
+
+
+</project>

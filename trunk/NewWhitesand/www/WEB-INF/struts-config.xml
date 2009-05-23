@@ -1,0 +1,27 @@
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "struts-config_1_2.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="HaHaForm" type="org.apache.struts.action.DynaActionForm"></form-bean>
+		<form-bean name="ABCForm" type="com.cozly.pro.web.action.ABCForm"></form-bean>
+		<form-bean name="POJOForm" type="com.cozly.pro.web.action.POJO"></form-bean>
+	</form-beans>
+
+	<global-exceptions></global-exceptions>
+
+	<global-forwards>
+		<forward name="REDIRECT"
+			path="/_common/redirect.jsp" />
+	</global-forwards>
+
+	<action-mappings>
+		<action attribute="ABCForm" name="ABCForm" path="/haha"
+			type="com.cozly.pro.web.action.ABCAction" validate="false" scope="request"></action>
+	</action-mappings>
+
+	<message-resources parameter="resources.application" />
+
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property property="pathnames"
+			value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml" />
+	</plug-in>
+</struts-config>

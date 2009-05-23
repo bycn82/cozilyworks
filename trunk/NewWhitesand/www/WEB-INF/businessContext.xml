@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- user -->
+	<bean id="usersDao"
+		class="com.cozly.pro.dao.impl.UsersDaoHibernateImpl"
+		autowire="byName">
+	</bean>
+	<bean name="userServiceBean"
+		class="com.cozly.pro.service.impl.UserServiceImpl" autowire="byName" />
+	<bean id="userService" parent="baseServiceBean">
+		<property name="proxyInterfaces">
+			<value>com.cozly.pro.service.UserService</value>
+		</property>
+		<property name="target">
+			<ref bean="userServiceBean" />
+		</property>
+	</bean>
+	<!-- CozidGenerator -->
+	<bean name="cozidGeneratorBean"
+		class="com.cozly.pro.service.impl.CozidGeneratorImpl" autowire="byName" />
+	<bean id="cozidGenerator" parent="baseServiceBean">
+		<property name="proxyInterfaces">
+			<value>com.cozly.pro.service.CozidGenerator</value>
+		</property>
+		<property name="target">
+			<ref bean="cozidGeneratorBean" />
+		</property>
+	</bean>
+	<!--weather -->
+	<bean id="weatherService" parent="baseServiceBean">
+		<property name="proxyInterfaces">
+			<value>com.cozly.pro.service.WeatherService</value>
+		</property>
+		<property name="target">
+			<ref bean="weatherServiceBean" />
+		</property>
+	</bean>
+	<bean name="weatherServiceBean"
+		class="com.cozly.pro.service.impl.WeatherServiceImpl"
+		autowire="byName">
+	</bean>
+
+	<!--auto fresh the data for weather reports  -->
+	<bean id="autoFreshJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weatherService" />
+		<property name="targetMethod" value="freshWeatherData" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="autoFreshWeatherDataTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="autoFreshJobDetail" />
+		<property name="cronExpression" value="0 25 0/1 * * ?" />
+	</bean>
+	<bean
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		destroy-method="destroy">
+		<property name="triggers">
+			<list>
+				<ref bean="autoFreshWeatherDataTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>
