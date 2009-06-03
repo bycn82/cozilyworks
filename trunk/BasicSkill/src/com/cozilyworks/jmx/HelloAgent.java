@@ -19,33 +19,36 @@ public class HelloAgent implements NotificationListener{
 		HelloWorld hw=new HelloWorld();
 		try{
 			MyListener listener=new MyListener();
-			server.registerMBean(listener,new ObjectName("HelloAgent:name=myListener"));
-			server.registerMBean(hw,new ObjectName("HelloAgent:name=helloWorld"));
+			server.registerMBean(listener,new ObjectName("OK:name=myListener"));
+			server.registerMBean(hw,new ObjectName("OK:name=helloWorld"));
 			hw.addNotificationListener(listener,null,null);
 			hw.addNotificationListener(this,null,null);
-			adapter.setPort(9092);
-			server.registerMBean(adapter,new ObjectName("HelloAgent:name=htmlAdaptor,port=9092"));
+			adapter.setPort(8082);
+			server.registerMBean(adapter,new ObjectName("OK:name=htmlAdaptor,port=8082"));
 			adapter.start();
 		}catch(MalformedObjectNameException e){
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch(NullPointerException e){
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch(InstanceAlreadyExistsException e){
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch(MBeanRegistrationException e){
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch(NotCompliantMBeanException e){
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	public static void main(String[] args){
 		System.out.println("HelloAgent is running!");
 		HelloAgent agent=new HelloAgent();
+		while(true){
+			System.out.println(HelloWorld.greeting);
+			try{
+				Thread.sleep(3000);
+			}catch(InterruptedException e){
+				e.printStackTrace();
+			}
+		}
 	}
 	public void handleNotification(Notification notification,Object handback){
 		System.out.println(notification.getMessage());
