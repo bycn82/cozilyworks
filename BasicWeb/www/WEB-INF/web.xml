@@ -54,6 +54,13 @@
 			<param-value>com.cozilyworks.services.xfire.HelloService</param-value>
 		</init-param>
 	</servlet>
+	<servlet>
+		<description></description>
+		<display-name>TestGenericServlet</display-name>
+		<servlet-name>TestGenericServlet</servlet-name>
+		<servlet-class>com.cozilyworks.servlet.TestGenericServlet</servlet-class>
+	</servlet>
+
 
 	<servlet-mapping>
 		<servlet-name>hello</servlet-name>
@@ -74,5 +81,10 @@
 		<servlet-name>XFireServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TestGenericServlet</servlet-name>
+		<url-pattern>/TestGenericServlet</url-pattern>
+	</servlet-mapping>
+
 </web-app>
 
