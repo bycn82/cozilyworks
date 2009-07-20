@@ -1,7 +1,7 @@
-package com.xa.service;
+package com.cozilyworks.xa.service;
 
-import com.xa.dao.UserDao1;
-import com.xa.dao.UserDao2;
+import com.cozilyworks.xa.dao.UserDao1;
+import com.cozilyworks.xa.dao.UserDao2;
 
 public class UserServiceImpl implements UserService{
 	public UserDao1 dao1;

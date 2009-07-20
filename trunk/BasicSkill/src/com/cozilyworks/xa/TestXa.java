@@ -1,11 +1,12 @@
-package com.xa;
+package com.cozilyworks.xa;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
-import com.xa.service.UserService;
+
+import com.cozilyworks.xa.service.UserService;
 
 public class TestXa extends AbstractDependencyInjectionSpringContextTests{
 	protected String[] getConfigLocations(){
