@@ -44,19 +44,19 @@
 		<property name="dataSource" ref="ds2" />
 	</bean>
 
-	<bean id="dao1" class="com.xa.dao.UserDao1Impl">
+	<bean id="dao1" class="com.cozilyworks.xa.dao.UserDao1Impl">
 		<property name="jdbcTemplate">
 			<ref bean="template1"></ref>
 		</property>
 	</bean>
 
-	<bean id="dao2" class="com.xa.dao.UserDao2Impl">
+	<bean id="dao2" class="com.cozilyworks.xa.dao.UserDao2Impl">
 		<property name="jdbcTemplate">
 			<ref bean="template2"></ref>
 		</property>
 	</bean>
 
-	<bean id="userServiceTarget" class="com.xa.service.UserServiceImpl">
+	<bean id="userServiceTarget" class="com.cozilyworks.xa.service.UserServiceImpl">
 		<property name="dao1" ref="dao1" />
 		<property name="dao2" ref="dao2" />
 	</bean>
