@@ -1,60 +1,53 @@
 package com.cozilyworks.concurrent;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-/**
- * ExecuteService 提供一个环境,用来跑线程的,但是这个环境只允许有限个线程在运行
- */
-public class TestThreadPool {
-	public static void main(String args[]) throws InterruptedException {
-		//通过Executors获得一个环境
-		ExecutorService exec = Executors.newFixedThreadPool(3);
-		//往里面塞,这个过程是不阻塞的,但是里面只能用3个同时运行
-		for (int i = 0; i < 10; i++) {
-			A a = new A(String.valueOf(i));
-			exec.execute(a);
-			B b = new B(String.valueOf(i));
-			exec.execute(b);
-			System.out.println("go");
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+public class TestThreadPool{
+	private static int produceTaskSleepTime=2;
+	private static int consumeTaskSleepTime=2000;
+	private static int produceTaskMaxNumber=10;
+	public static void main(String[] args){
+		// 构造一个线程池
+		ThreadPoolExecutor threadPool=new ThreadPoolExecutor(2,4,3,TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(3),
+			new ThreadPoolExecutor.DiscardOldestPolicy());
+		for(int i=1;i<=produceTaskMaxNumber;i++){
+			try{
+				// 产生一个任务，并将其加入到线程池
+				String task="task@ "+i;
+				System.out.println("put "+task);
+				threadPool.execute(new ThreadPoolTask(task));
+				// 便于观察，等待一段时间
+				Thread.sleep(produceTaskSleepTime);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
-		
-		exec.shutdown();
 	}
-}
-
-class A implements Runnable {
-	private String name;
-
-	public A(String i) {
-		this.name = i;
-	}
-
-	@Override
-	public void run() {
-		System.out.println(Thread.currentThread().getName() + "  A  " + name);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
+	/**
+	 * 线程池执行的任务
+	 * 
+	 * @author hdpan
+	 */
+	public static class ThreadPoolTask implements Runnable{
+		private static final long serialVersionUID=0;
+		// 保存任务所需要的数据
+		private String threadPoolTaskData;
+		ThreadPoolTask(String tasks){
+			this.threadPoolTaskData=tasks;
 		}
-
-	}
-
-}
-
-class B implements Runnable {
-	private String name;
-
-	public B(String i) {
-		this.name = i;
-	}
-
-	@Override
-	public void run() {
-		System.out.println(Thread.currentThread().getName() + "  B  " + name);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
+		public void run(){
+			// 处理一个任务，这里的处理方式太简单了，仅仅是一个打印语句
+			System.out.println("start .."+threadPoolTaskData);
+			try{
+				// 便于观察，等待一段时间
+				Thread.sleep(consumeTaskSleepTime);
+				System.out.println("stop .."+threadPoolTaskData);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			threadPoolTaskData=null;
 		}
-
 	}
-
 }
