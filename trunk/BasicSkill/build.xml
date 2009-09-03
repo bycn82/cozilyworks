@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BasicSkill" default="libs" basedir=".">
+	<target name="libs">
+		<get src="http://cozilyilib.googlecode.com/svn/lib/mysql-withsource-5.1.8.jar" dest="./lib/mysql-withsource-5.1.8.jar" />
+	</target>
+</project>
