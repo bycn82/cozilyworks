@@ -11,61 +11,76 @@ import com.cozilyworks.cozily.codedom.impl.*;
 }
 
 // START:decl
-program
-    :   declaration+
+program returns[Program p]
+@init{ p=new Program();}
+    :   (a=declaration{p.addDeclaration(a);})+
     ;
 
-declaration
-    :   variable
-    |   function
+declaration returns[Declaration dec]
+    :   d=variable{dec=new Declaration(d);}
+    |   f=function{dec=new Declaration(f);}
     ;
 
-variable
-    :   ^(VAR type ID)
-        {System.out.println("define "+$type.text+" "+$ID.text);}
+variable returns[Variable v]
+    :   ^(VAR t=type id=ID)
+        {v=new Variable(t,$id.text);}
     ;
 
-type:   'int' 
-    |   'char'
+type returns[String t]
+    :   'int' {t="int";}
+    |   'char'{t="char";}
     ;
 
-function
-    :   ^(FUNC type ID formalParameter* block)
-        {System.out.println("define "+$type.text+" "+$ID.text+"()");}
+function returns[Function f]
+@init{f=new Function();}
+    :   ^(FUNC s=type{f.setType(s);} ID{f.setId($ID.text);}
+     (fp=formalParameter{f.addFormalParameter(fp);})* b=block{f.setBlock(b);})
     ;
 
-formalParameter
-    :   ^(ARG type ID)
+formalParameter returns[FormalParameter f]
+@init{f=new FormalParameter();}
+    :   ^(ARG t=type{f.setType(t);} ID{f.setId($ID.text);})
     ;
 // END:decl
 
 // START:stat
-block
-    :   ^(SLIST variable* stat*)
+block returns[Block b]
+@init{b=new Block();}
+    :   ^(SLIST (v=variable{b.addVariable(v);})* (s=stat{b.addStat(s);})*)
     ;
 
-stat: forStat
-    | expr
-    | block
-    | assignStat
+stat returns[Stat s]
+@init{s=new Stat();}
+    : fs=forStat{s.setForStat(fs);}
+    | ex=expr{s.setExpr(ex);}
+    | b=block{s.setBlock(b);}
+    | as=assignStat{s.setAssignStat(as);}
     ;
 
-forStat
-    :   ^('for' assignStat expr assignStat block)
+forStat returns[ForStat fs]
+@init{fs=new ForStat();}
+    :   ^('for' a=assignStat{fs.addAssignStat(a);} e=expr{fs.setExpr(e);}
+     b= assignStat{fs.addAssignStat(b);} bl=block{fs.setBlock(bl);})
     ;
 
-assignStat
-    :   ^('=' ID expr)
+assignStat returns[AssignStat as]
+@init{as=new AssignStat();}
+    :   ^('=' ID{as.setID($ID.text);} e=expr{as.setExpr(e);})
     ;
 // END:stat
 
 // START:expr
-expr:   ^('==' expr expr)
-    |   ^('!=' expr expr)
-    |   ^('+' expr expr)
-    |   ^('*' expr expr)
-    |   ID
-    |   INT
+expr returns[Expr e]
+@init{e=new Expr();}
+    :   ^(
+    ('=='{e.setMethod("==");}    
+    |'!='{e.setMethod("!=");}
+    |'+'{e.setMethod("+");}
+    |'*'{e.setMethod("*");}
+    ) 
+    a=expr{e.addExpr(a);} b=expr{e.addExpr(b);})
+    |   ID {e.setId($ID.text);}
+    |   INT{e.setInt($INT.text);}
     ;
 // END:expr
 

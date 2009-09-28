@@ -11,6 +11,6 @@ public class TestExpression extends BaseTestCase{
 	public void testReturnLiteral() throws RecognitionException{
 		File f=new File("src/example");
 		System.out.println(f.exists());
-		getParser(readFile(f).program().getTree()).program();
+		trace(getParser(readFile(f).program().getTree()).program());
 	}
 }
