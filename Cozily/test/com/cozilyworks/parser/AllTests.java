@@ -1,3 +1,4 @@
+package com.cozilyworks.parser;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

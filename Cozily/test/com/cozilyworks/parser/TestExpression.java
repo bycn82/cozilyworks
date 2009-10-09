@@ -1,3 +1,4 @@
+package com.cozilyworks.parser;
 import java.io.File;
 import org.antlr.runtime.RecognitionException;
 
@@ -9,8 +10,6 @@ public class TestExpression extends BaseTestCase{
 //  }
 	
 	public void testReturnLiteral() throws RecognitionException{
-		File f=new File("src/example");
-		System.out.println(f.exists());
-		trace(getParser(readFile(f).program().getTree()).program());
+
 	}
 }
