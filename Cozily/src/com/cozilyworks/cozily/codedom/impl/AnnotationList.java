@@ -1,0 +1,10 @@
+package com.cozilyworks.cozily.codedom.impl;
+import java.util.ArrayList;
+import java.util.List;
+import com.cozilyworks.cozily.codedom.*;
+public class AnnotationList extends CodeDocument{
+private List<Annotation> annotations=new ArrayList<Annotation>();
+public void addAnnotation(Annotation t){
+this.annotations.add(t);
+}
+}
