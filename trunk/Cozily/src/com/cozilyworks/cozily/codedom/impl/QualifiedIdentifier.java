@@ -19,8 +19,8 @@ public class QualifiedIdentifier extends CodeDocument{
 	}
 	public void visit(){
 		if(qid!=null){
-			sb.append(qid).append(dot);
+			add(qid);add(dot);
 		}
-		sb.append(id);
+		add(id);
 	}
 }

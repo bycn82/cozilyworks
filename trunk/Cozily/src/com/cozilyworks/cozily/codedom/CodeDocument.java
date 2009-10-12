@@ -16,6 +16,19 @@ public class CodeDocument{
 		}
 	}
 	public void visit(){
-		
+	}
+	public void add(Object obj){
+		if(obj!=null){
+			sb.append(obj.toString());
+		}
+	}
+	public void debug(Object obj){
+		System.err.print("[DEBUG:]"+this.getClass().getSimpleName()+(obj!=null?obj.toString(): "null"));
+	}
+	public void b(){
+		add(B);
+	}
+	public String show(){
+		return sb.toString();
 	}
 }

@@ -23,16 +23,16 @@ public class JavaSource extends CodeDocument{
 	}
 	public void visit(){
 		if(this.packageDec!=null){
-			sb.append(this.packageDec.toString());
+			add(this.packageDec.toString());
 		}
 		if(this.importdeclarations!=null){
 			for(ImportDeclaration importDec:this.importdeclarations){
-				sb.append(importDec);
+				add(importDec);
 			}
 		}
 		if(this.typedeclarations!=null){
 			for(TypeDeclaration typeDec:this.typedeclarations){
-				sb.append(typeDec);
+				add(typeDec);
 			}
 		}
 	}

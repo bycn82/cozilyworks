@@ -14,6 +14,9 @@ public class PackageDeclaration extends CodeDocument{
 		this.id=t;
 	}
 	public void visit(){
-		sb.append(pkg).append(B).append(id).append(SEMIN);
+		add(pkg);
+		b();
+		add(id);
+		add(SEMIN);
 	}
 }
