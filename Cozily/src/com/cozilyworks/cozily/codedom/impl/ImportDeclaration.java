@@ -22,10 +22,11 @@ public class ImportDeclaration extends CodeDocument{
 		this.dotStar=t;
 	}
 	public void visit(){
-		sb.append(importStr).append(B);
+		add(importStr);
+		add(B);
 		if(staticStr!=null){
-			sb.append(staticStr);
+			add(staticStr);
 		}
-		sb.append(qid).append(dotStar).append(SEMIN);
+		add(qid);add(dotStar);add(SEMIN);
 	}
 }

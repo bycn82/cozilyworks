@@ -133,7 +133,7 @@ importDeclaration returns[ImportDeclaration rtn]
 
 typeDeclaration returns[TypeDeclaration rtn]
 @init{rtn=new TypeDeclaration();}
-:   ^((x12=CLASS{rtn.setCLASS($x12.text);}) (x13=modifierList{rtn.setModifierList(x13);}) (x14=IDENT{rtn.setIDENT($x14.text);}) (x15=genericTypeParameterList{rtn.setGenericTypeParameterList(x15);})? (x16=extendsClause{rtn.setExtendsClause(x16);})? (x17=implementsClause{rtn.setImplementsClause(x17);})? (x18=classTopLevelScope{rtn.setClassTopLevelScope(x18);}))
+:   ^((x12=CLASS{rtn.setCLASS($x12.text);}) (x13=modifierList{rtn.setModifierList(x13);}) (x14=IDENT{rtn.setIDENT($x14.text);}) (x15=genericTypeParameterList{rtn.setGenericTypeParameterList(x15);})? (x16=extendsClause{rtn.setExtendsClause(x16);})? (x17=implementsClause{rtn.setImplementsClause(x17);})? (x18=classTopLevelScope{rtn.addClassTopLevelScope(x18);})*)
 |   ^((x19=INTERFACE{rtn.setINTERFACE($x19.text);}) (x20=modifierList{rtn.setModifierList(x20);}) (x21=IDENT{rtn.setIDENT($x21.text);}) (x22=genericTypeParameterList{rtn.setGenericTypeParameterList(x22);})? (x23=extendsClause{rtn.setExtendsClause(x23);})? (x24=interfaceTopLevelScope{rtn.setInterfaceTopLevelScope(x24);}))
 |   ^((x25=ENUM{rtn.setENUM($x25.text);}) (x26=modifierList{rtn.setModifierList(x26);}) (x27=IDENT{rtn.setIDENT($x27.text);}) (x28=implementsClause{rtn.setImplementsClause(x28);})? (x29=enumTopLevelScope{rtn.setEnumTopLevelScope(x29);}))
 |   ^((x30=AT{rtn.setAT($x30.text);}) (x31=modifierList{rtn.setModifierList(x31);}) (x32=IDENT{rtn.setIDENT($x32.text);}) (x33=annotationTopLevelScope{rtn.setAnnotationTopLevelScope(x33);}))
