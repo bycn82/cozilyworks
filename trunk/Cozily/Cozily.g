@@ -115,7 +115,7 @@ tokens {
     VOLATILE                = 'volatile'        ;
     WHILE                   = 'while'           ;
     
-    // tokens for imaginary nodes
+    //imaginary begin
     
     ANNOTATION_INIT_ARRAY_ELEMENT;
     ANNOTATION_INIT_BLOCK;
@@ -177,6 +177,8 @@ tokens {
     VAR_DECLARATOR;
     VAR_DECLARATOR_LIST;
     VOID_METHOD_DECL;
+    
+    //imaginary end
 }
 
 

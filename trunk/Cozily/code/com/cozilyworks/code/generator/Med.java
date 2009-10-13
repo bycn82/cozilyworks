@@ -1,5 +1,4 @@
-package com.cozilyworks.generator;
-
+package com.cozilyworks.code.generator;
 public class Med{
 	private String name;
 	private String type;
