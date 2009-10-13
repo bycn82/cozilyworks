@@ -1,8 +1,6 @@
-package com.cozilyworks.generator;
-
+package com.cozilyworks.code.generator;
 import java.util.ArrayList;
 import java.util.List;
-
 public class Clz{
 	private String name;
 	private List<Med> meds=new ArrayList<Med>();

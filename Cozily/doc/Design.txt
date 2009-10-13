@@ -1,0 +1,14 @@
+1,根据grammer 自动生成tree grammer
+2,tree grammer需要有action
+3,自动生成codedom
+4,虚拟node也给设置值,为了在visit时候减少麻烦
+5,做一个备份visit方法的工具,防止action写错,后重新生成,然后visit方法丢失
+6,
+
+
+
+
+
+
+N-1,compiler
+N,LLVM
