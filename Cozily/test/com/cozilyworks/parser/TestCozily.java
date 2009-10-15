@@ -24,7 +24,7 @@ public class TestCozily{
 		File f=new File(path);
 		getAllJava(f);
 		for(File file:files){
-			trace(getParser(readFile(file).javaSource().getTree()).javaSource());
+			trace(getParser(readFile(file).fileDeclaration().getTree()));
 		}
 
 	}
