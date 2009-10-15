@@ -1,13 +1,10 @@
 grammar Cozily;
-
-
 options {
 	memoize=true;
 	backtrack=true;
 	output=AST;
 	ASTLabelType=CommonTree;
 }
-
 @header {
 package com.cozilyworks.cozily.parser;
 }
@@ -16,10 +13,9 @@ package com.cozilyworks.cozily.parser;
 import com.cozilyworks.cozily.codedom.*;
 import com.cozilyworks.cozily.codedom.impl.*;
 }
-
-
+//rules begin
            
-compilationUnit 
+fileDeclaration 
     :   ((annotations)? packageDeclaration )? (importDeclaration)* (typeDeclaration)* 
     
     ;

@@ -12,5 +12,7 @@ import com.cozilyworks.cozily.codedom.impl.*;
 }
 
 
-
+fileDeclaration
+	:
+	;
     
