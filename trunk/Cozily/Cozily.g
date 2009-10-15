@@ -5,19 +5,22 @@ options {
 	output=AST;
 	ASTLabelType=CommonTree;
 }
+tokens{
+	VAR;
+	FILEDECLARATION;
+}
 @header {
-packagecom.cozilyworks.cozily.parser;
+package com.cozilyworks.cozily.parser;
 }
 @lexer::header {
-packagecom.cozilyworks.cozily.parser;
-importcom.cozilyworks.cozily.codedom.*;
-importcom.cozilyworks.cozily.codedom.impl.*;
+package com.cozilyworks.cozily.parser;
+import com.cozilyworks.cozily.codedom.*;
+import com.cozilyworks.cozily.codedom.impl.*;
 }
-//rulesbegin
+//rules begin
            
 fileDeclaration 
 	:   ( (annotations)? packageDeclaration )? (importDeclaration)* (typeDeclaration)* 
-    
 	;
 
 packageDeclaration 
@@ -59,7 +62,7 @@ modifier
 	;
 
 variableModifiers 
-    :   ('final'|annotation)*
+    :   ('final'| annotation)*
     ;
     
 
@@ -209,7 +212,7 @@ typeArgument
     ;
 
 qualifiedNameList 
-    :   qualifiedName (',' qualifiedName)*
+    :    (',' qualifiedName)*
     ;
 
 formalParameters 
@@ -586,11 +589,11 @@ literal
     |   NULL
     ;
 
+//rules end
 
 
 
-
-
+//tokensbegin
 
 LONGLITERAL
     :   IntegerNumber LongSuffix
@@ -707,42 +710,18 @@ WS
         |    '\t'
         |    '\u000C'
         |    '\n'
-        ) 
-            {
-                skip();
-            }          
+        ) {skip();}          
     ;
     
 COMMENT
-         @init{
-            booleanisJavaDoc = false;
-        }
     :   '/*'
-            {
-                if((char)input.LA(1) == '*'){
-                    isJavaDoc = true;
-                }
-            }
-        (options {greedy=false;} : . )* 
-        '*/'
-            {
-                if(isJavaDoc==true){
-                    $channel=HIDDEN;
-                }else{
-                    skip();
-                }
-            }
+	//TODO
+        '*/'{skip();}
     ;
 
 LINE_COMMENT
-    :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n') 
-            {
-                skip();
-            }
-    |   '//' ~('\n'|'\r')*     // alinecommentcouldappearattheendofthefilewithoutCR/LF
-            {
-                skip();
-            }
+    :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n') {skip();}
+    |   '//' ~('\n'|'\r')* {skip();}
     ;   
         
 ABSTRACT
