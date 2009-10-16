@@ -16,6 +16,7 @@ tokens{
 	TYPELIST;
 	CLASSBODY;
 	FORMALPARAMETERDECLS;
+
 }
 @header {
 package com.cozilyworks.cozily.parser;
@@ -240,7 +241,7 @@ qualifiedNameList
     ;
 
 formalParameters 
-    :   '('(formalParameterDecls)? ')'
+    :   '('formalParameterDecls? ')'
     ;
 
 formalParameterDecls 
@@ -270,12 +271,13 @@ qualifiedName
     ;
 
 annotations 
-    :   (annotation)+
+    :   annotation+
     ;
 
 
 annotation 
     :   '@' qualifiedName (   '(' (elementOfAnno)?  ')' )?
+->^('@' qualifiedName elementOfAnno?)
     ;
 
 elementOfAnno
@@ -289,6 +291,7 @@ elementValuePairs
 
 elementValuePair 
     :   IDENTIFIER '=' elementValue
+->^('=' IDENTIFIER elementValue)
     ;
 
 elementValue 
@@ -298,18 +301,20 @@ elementValue
     ;
 
 elementValueArrayInitializer 
-    :   '{'(elementValue  (',' elementValue)*  )? (',')? '}'
+    :   '{'(elementValue  (',' elementValue)*  )? COMMA? '}'
+->^('{' (elementValue elementValue+)? COMMA?)
     ;
 
 
 
 annotationTypeDeclaration 
     :   modifiers '@' 'interface' IDENTIFIER annotationTypeBody
+->^('@' modifiers IDENTIFIER annotationTypeBody)
     ;
 
 
 annotationTypeBody 
-    :   '{' (annotationTypeElementDeclaration)* '}'
+    :   '{' annotationTypeElementDeclaration* '}'
     ;
 
 
@@ -328,7 +333,7 @@ annotationMethodDeclaration
     ;
 
 block 
-    :   '{'(blockStatement)* '}'
+    :   '{'blockStatement* '}'
     ;
 
 blockStatement 
@@ -348,7 +353,7 @@ localVariableDeclaration
 
 statement 
     :   block
-    |   ('assert') expression (':' expression)? ';'
+    |   'assert' expression (':' expression)? ';'
     |   'assert'  expression (':' expression)? ';'            
     |   'if' parExpression statement ('else' statement)?          
     |   forstatement
@@ -357,26 +362,26 @@ statement
     |   trystatement
     |   'switch' parExpression '{' switchBlockStatementGroups '}'
     |   'synchronized' parExpression block
-    |   'return' (expression )? ';'
+    |   'return' expression? ';'
     |   'throw' expression ';'
-    |   'break' (IDENTIFIER)? ';'
-    |   'continue'(IDENTIFIER)? ';'
+    |   'break' IDENTIFIER? ';'
+    |   'continue'IDENTIFIER? ';'
     |   expression  ';'     
     |   IDENTIFIER ':' statement
     |   ';'
     ;
 
 switchBlockStatementGroups 
-    :   (switchBlockStatementGroup )*
+    :   switchBlockStatementGroup*
     ;
 
 switchBlockStatementGroup 
-    :   switchLabel (blockStatement )*
+    :   switchLabel blockStatement*
     ;
 
 switchLabel 
-    :   'case' expression ':'
-    |   'default' ':'
+    :   CASE expression ':'
+    |   DEFAULT ':'
     ;
 
 
@@ -389,7 +394,7 @@ trystatement
      ;
 
 catches 
-    :   catchClause (catchClause )*
+    :   catchClause+
     ;
 
 catchClause 
@@ -402,7 +407,9 @@ formalParameter
 
 forstatement 
     :   'for' '(' variableModifiers type IDENTIFIER ':' expression ')' statement
-    |   'for' '(' (forInit)? ';' (expression)? ';' (expressionList)? ')' statement
+->^('for' variableModifiers type IDENTIFIER expression statement)
+    |   'for' '(' forInit? ';' expression? ';' expressionList? ')' statement
+->^('for' forInit? expression? expressionList? statement)
     ;
 
 forInit 
@@ -416,6 +423,7 @@ parExpression
 
 expressionList 
     :   expression (',' expression)*
+-> expression+
     ;
 
 
@@ -571,8 +579,8 @@ creator
     ;
 
 arrayCreator 
-    :   'new' createdName '[' ']' ('[' ']')* arrayInitializer
-    |   'new' createdName '[' expression ']' (   '[' expression ']')* ('[' ']' )*
+    :   'new' createdName BRACKETS+ arrayInitializer
+    |   'new' createdName '[' expression ']' (   '[' expression ']')* BRACKETS*
     ;
 
 variableInitializer 
