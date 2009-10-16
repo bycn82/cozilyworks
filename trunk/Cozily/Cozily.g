@@ -16,6 +16,7 @@ tokens{
 	TYPELIST;
 	CLASSBODY;
 	FORMALPARAMETERDECLS;
+	ANNOMETHODDEC;
 
 }
 @header {
@@ -206,8 +207,8 @@ interfaceFieldDeclaration
 
 
 type 
-    :   classOrInterfaceType ('[' ']')*
-    |   primitiveType ('[' ']')*
+    :   classOrInterfaceType BRACKETS*
+    |   primitiveType BRACKETS*
     ;
 
 
@@ -330,10 +331,11 @@ annotationTypeElementDeclaration
 
 annotationMethodDeclaration 
     :   modifiers type IDENTIFIER '(' ')' ('default' elementValue)? ';'
+->^(ANNOMETHODDEC modifiers type IDENTIFIER elementValue?)
     ;
 
 block 
-    :   '{'blockStatement* '}'
+    :   '{' blockStatement* '}'
     ;
 
 blockStatement 
@@ -353,15 +355,20 @@ localVariableDeclaration
 
 statement 
     :   block
-    |   'assert' expression (':' expression)? ';'
-    |   'assert'  expression (':' expression)? ';'            
-    |   'if' parExpression statement ('else' statement)?          
+    |   'assert'  expression (':' expression)? ';'    
+ 	->^('assert' expression expression?)        
+    |   'if' parExpression statement ('else' statement)?   
+    ->^('if' parExpression statement statement?)       
     |   forstatement
     |   'while' parExpression statement
+    ->^('while' parExpression statement)
     |   'do' statement 'while' parExpression ';'
+    ->^('do' statement parExpression)
     |   trystatement
     |   'switch' parExpression '{' switchBlockStatementGroups '}'
+    ->^('switch' parExpression switchBlockStatementGroups)
     |   'synchronized' parExpression block
+    ->^('synchronized' parExpression block)
     |   'return' expression? ';'
     |   'throw' expression ';'
     |   'break' IDENTIFIER? ';'
