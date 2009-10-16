@@ -5,13 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 /**
- * this class can read all the imaginary node from the grammer file and write
- * all of them into a txt file
+ * read the rules and generate the tree grammers with the actions
  *
  * @author billyuan
  *
@@ -39,13 +34,17 @@ public class ActionGenerator{
 	}
 	public static void main(String[] arg){
 		init();
-		List<String> rules=pickRules();
-		for(String str:rules){
-			System.out.println(str);
+		String[] rules=pickRules().split(";");
+		for(String rule:rules){
+			System.out.println(rule);
+			analyse(rule);
 		}
 	}
-	private static List<String> pickRules(){
-		List<String> rules=new ArrayList<String>();
+	private static void analyse(String rule){
+
+	}
+	private static String pickRules(){
+		StringBuilder sb=new StringBuilder();
 		try{
 			String line=reader.readLine();
 			boolean isRule=false;
@@ -57,15 +56,14 @@ public class ActionGenerator{
 					isRule=false;
 				}
 				if(isRule){
-					//System.out.println(line);
-					rules.add(line);
+					sb.append(line);
 				}
 				line=reader.readLine();
 			}
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		return rules;
+		return sb.toString().replace(Constants.RULES_BEGIN,"");
 	}
 	private static void writeImaginry(String line){
 		try{
