@@ -1,15 +1,18 @@
 //rules begin
            
 fileDeclaration 
-	:   ( (annotations)? packageDeclaration )? (importDeclaration)* (typeDeclaration)* 
+	:	(annotations? packageDeclaration)? importDeclaration* typeDeclaration* 
+->^(FILEDEC (annotations? packageDeclaration)? importDeclaration* typeDeclaration*)
 	;
 
 packageDeclaration 
     :   'package' qualifiedName ';'
+->^('package' qualifiedName)
     ;
 
 importDeclaration  
-    :   'import' ('static')? qualifiedName ('.' '*')? ';'
+    :   'import' STATIC? qualifiedName DOTSTAR? ';'
+->^('import' STATIC? qualifiedName DOTSTAR?)
     ;
 
 typeDeclaration 
@@ -23,12 +26,10 @@ classOrInterfaceDeclaration
 
 
 modifiers  
-    :
-    	(modifier)*
+    : 	(modifier)*
     ;
 modifier
-    :
-	 annotation
+    :	 annotation
     |   'public'
     |   'protected'
     |   'private'
@@ -40,12 +41,16 @@ modifier
     |   'transient'
     |   'volatile'
     |   'strictfp'
-	;
+    ;
 
 variableModifiers 
-    :   ('final'| annotation)*
+    :   (variableModifier)*
     ;
-    
+
+variableModifier
+	:	annotation 
+	|	'final'
+	;
 
 classDeclaration 
     :   normalClassDeclaration
@@ -54,38 +59,46 @@ classDeclaration
 
 normalClassDeclaration 
     :   modifiers  'class' IDENTIFIER (typeParameters)? ('extends' type)? ('implements' typeList )? classBody
+->^('class' modifiers IDENTIFIER typeParameters? type? typeList? classBody)
     ;
 
 
 typeParameters 
     :   '<' typeParameter (',' typeParameter)* '>'
+->^('<' typeParameter  typeParameter* )
     ;
 
 typeParameter 
     :   IDENTIFIER ('extends' typeBound )?
+->^(TYPEPARAMETER IDENTIFIER typeBound?)
     ;
 
 typeBound 
     :   type ('&' type)*
+->^(TYPEBOUND type  type*)
     ;
 
 
 enumDeclaration 
-    :   modifiers ('enum') IDENTIFIER ('implements' typeList )? enumBody
+    :   modifiers 'enum' IDENTIFIER ('implements' typeList )? enumBody
+->^('enum' modifiers IDENTIFIER typeList? enumBody)
     ;
     
 
 enumBody 
-    :   '{' (enumConstants)? (',')? (enumBodyDeclarations)? '}'
+    :   '{' (enumConstants)? COMMA? (enumBodyDeclarations)? '}'
+->^('{' enumConstants? COMMA? enumBodyDeclarations?)
     ;
 
 enumConstants 
     :   enumConstant (',' enumConstant)*
+->^(ENUMCONSTANTS enumConstant enumConstant* )
     ;
 
 
 enumConstant 
     :   (annotations)? IDENTIFIER (arguments)? (classBody)?
+->^(ENUMCONSTANT annotations? IDENTIFIER arguments? classBody?)
     ;
 
 enumBodyDeclarations 
@@ -99,10 +112,12 @@ interfaceDeclaration
     
 normalInterfaceDeclaration 
     :   modifiers 'interface' IDENTIFIER (typeParameters)?  ('extends' typeList)? interfaceBody
+->^('interface'modifiers IDENTIFIER typeParameters? typeList? interfaceBody)
     ;
 
 typeList 
     :   type (',' type)*
+->^(TYPELIST type type*)
     ;
 
 classBody 
@@ -115,7 +130,7 @@ interfaceBody
 
 classBodyDeclaration 
     :   ';'
-    |   ('static')? block
+    |   (STATIC)? block
     |   memberDecl
     ;
 
@@ -185,6 +200,7 @@ primitiveType
 
 typeArguments 
     :   '<' typeArgument (',' typeArgument)* '>'
+->^('<' typeArgument typeArgument*)
     ;
 
 typeArgument 
@@ -203,11 +219,13 @@ formalParameters
 formalParameterDecls 
     :   ellipsisParameterDecl
     |   normalParameterDecl (',' normalParameterDecl)*
+->^(FORMALPARAMETERDECLS normalParameterDecl normalParameterDecl*)
     |   (normalParameterDecl ',')+ ellipsisParameterDecl
+->^(FORMALPARAMETERDECLS normalParameterDecl+ ellipsisParameterDecl)
     ;
 
 normalParameterDecl 
-    :   variableModifiers type IDENTIFIER ('[' ']')*
+    :   variableModifiers type IDENTIFIER BRACKETS*
     ;
 
 ellipsisParameterDecl 
@@ -230,8 +248,13 @@ annotations
 
 
 annotation 
-    :   '@' qualifiedName (   '(' (elementValuePairs |   elementValue)?  ')' )?
+    :   '@' qualifiedName (   '(' (elementOfAnno)?  ')' )?
     ;
+
+elementOfAnno
+	:	elementValuePairs 
+	|	elementValue
+	;
 
 elementValuePairs 
     :   elementValuePair (',' elementValuePair)*
@@ -521,8 +544,8 @@ creator
     ;
 
 arrayCreator 
-    :   'new' createdName '[' ']' ('[' ']')* arrayInitializer
-    |   'new' createdName '[' expression ']' (   '[' expression ']')* ('[' ']' )*
+    :   'new' createdName BRACKETS+ arrayInitializer
+    |   'new' createdName '[' expression ']' (   '[' expression ']')* BRACKETS*
     ;
 
 variableInitializer 
