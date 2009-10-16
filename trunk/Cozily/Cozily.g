@@ -7,7 +7,15 @@ options {
 }
 tokens{
 	VAR;
-	FILEDECLARATION;
+	FILEDEC;
+	PACKAGEDEC;
+	TYPEPARAMETER;
+	TYPEBOUND;
+	ENUMCONSTANTS;
+	ENUMCONSTANT;
+	TYPELIST;
+	CLASSBODY;
+	FORMALPARAMETERDECLS;
 }
 @header {
 package com.cozilyworks.cozily.parser;
@@ -20,15 +28,18 @@ import com.cozilyworks.cozily.codedom.impl.*;
 //rules begin
            
 fileDeclaration 
-	:   ( (annotations)? packageDeclaration )? (importDeclaration)* (typeDeclaration)* 
+	:	(annotations? packageDeclaration)? importDeclaration* typeDeclaration* 
+->^(FILEDEC (annotations? packageDeclaration)? importDeclaration* typeDeclaration*)
 	;
 
 packageDeclaration 
     :   'package' qualifiedName ';'
+->^('package' qualifiedName)
     ;
 
 importDeclaration  
-    :   'import' ('static')? qualifiedName ('.' '*')? ';'
+    :   'import' STATIC? qualifiedName DOTSTAR? ';'
+->^('import' STATIC? qualifiedName DOTSTAR?)
     ;
 
 typeDeclaration 
@@ -42,12 +53,10 @@ classOrInterfaceDeclaration
 
 
 modifiers  
-    :
-    	(modifier)*
+    : 	(modifier)*
     ;
 modifier
-    :
-	 annotation
+    :	 annotation
     |   'public'
     |   'protected'
     |   'private'
@@ -59,12 +68,16 @@ modifier
     |   'transient'
     |   'volatile'
     |   'strictfp'
-	;
+    ;
 
 variableModifiers 
-    :   ('final'| annotation)*
+    :   (variableModifier)*
     ;
-    
+
+variableModifier
+	:	annotation 
+	|	'final'
+	;
 
 classDeclaration 
     :   normalClassDeclaration
@@ -73,38 +86,46 @@ classDeclaration
 
 normalClassDeclaration 
     :   modifiers  'class' IDENTIFIER (typeParameters)? ('extends' type)? ('implements' typeList )? classBody
+->^('class' modifiers IDENTIFIER typeParameters? type? typeList? classBody)
     ;
 
 
 typeParameters 
     :   '<' typeParameter (',' typeParameter)* '>'
+->^('<' typeParameter  typeParameter* )
     ;
 
 typeParameter 
     :   IDENTIFIER ('extends' typeBound )?
+->^(TYPEPARAMETER IDENTIFIER typeBound?)
     ;
 
 typeBound 
     :   type ('&' type)*
+->^(TYPEBOUND type  type*)
     ;
 
 
 enumDeclaration 
-    :   modifiers ('enum') IDENTIFIER ('implements' typeList )? enumBody
+    :   modifiers 'enum' IDENTIFIER ('implements' typeList )? enumBody
+->^('enum' modifiers IDENTIFIER typeList? enumBody)
     ;
     
 
 enumBody 
-    :   '{' (enumConstants)? (',')? (enumBodyDeclarations)? '}'
+    :   '{' (enumConstants)? COMMA? (enumBodyDeclarations)? '}'
+->^('{' enumConstants? COMMA? enumBodyDeclarations?)
     ;
 
 enumConstants 
     :   enumConstant (',' enumConstant)*
+->^(ENUMCONSTANTS enumConstant enumConstant* )
     ;
 
 
 enumConstant 
     :   (annotations)? IDENTIFIER (arguments)? (classBody)?
+->^(ENUMCONSTANT annotations? IDENTIFIER arguments? classBody?)
     ;
 
 enumBodyDeclarations 
@@ -118,10 +139,12 @@ interfaceDeclaration
     
 normalInterfaceDeclaration 
     :   modifiers 'interface' IDENTIFIER (typeParameters)?  ('extends' typeList)? interfaceBody
+->^('interface'modifiers IDENTIFIER typeParameters? typeList? interfaceBody)
     ;
 
 typeList 
     :   type (',' type)*
+->^(TYPELIST type type*)
     ;
 
 classBody 
@@ -134,7 +157,7 @@ interfaceBody
 
 classBodyDeclaration 
     :   ';'
-    |   ('static')? block
+    |   (STATIC)? block
     |   memberDecl
     ;
 
@@ -204,6 +227,7 @@ primitiveType
 
 typeArguments 
     :   '<' typeArgument (',' typeArgument)* '>'
+->^('<' typeArgument typeArgument*)
     ;
 
 typeArgument 
@@ -222,11 +246,13 @@ formalParameters
 formalParameterDecls 
     :   ellipsisParameterDecl
     |   normalParameterDecl (',' normalParameterDecl)*
+->^(FORMALPARAMETERDECLS normalParameterDecl normalParameterDecl*)
     |   (normalParameterDecl ',')+ ellipsisParameterDecl
+->^(FORMALPARAMETERDECLS normalParameterDecl+ ellipsisParameterDecl)
     ;
 
 normalParameterDecl 
-    :   variableModifiers type IDENTIFIER ('[' ']')*
+    :   variableModifiers type IDENTIFIER BRACKETS*
     ;
 
 ellipsisParameterDecl 
@@ -249,8 +275,13 @@ annotations
 
 
 annotation 
-    :   '@' qualifiedName (   '(' (elementValuePairs |   elementValue)?  ')' )?
+    :   '@' qualifiedName (   '(' (elementOfAnno)?  ')' )?
     ;
+
+elementOfAnno
+	:	elementValuePairs 
+	|	elementValue
+	;
 
 elementValuePairs 
     :   elementValuePair (',' elementValuePair)*
@@ -597,13 +628,10 @@ literal
 
 LONGLITERAL
     :   IntegerNumber LongSuffix
-    ;
-
-    
+    ;  
 INTLITERAL
     :   IntegerNumber 
     ;
-    
 fragment
 IntegerNumber
     :   '0' 
@@ -611,23 +639,18 @@ IntegerNumber
     |   '0' ('0'..'7')+         
     |   HexPrefix HexDigit+        
     ;
-
 fragment
 HexPrefix
     :   '0x' | '0X'
-    ;
-        
+    ;     
 fragment
 HexDigit
     :   ('0'..'9'|'a'..'f'|'A'..'F')
     ;
-
 fragment
 LongSuffix
     :   'l' | 'L'
     ;
-
-
 fragment
 NonIntegerNumber
     :   ('0' .. '9')+ '.' ('0' .. '9')* Exponent?  
@@ -642,31 +665,25 @@ NonIntegerNumber
         ( 'p' | 'P' ) 
         ( '+' | '-' )? 
         ( '0' .. '9' )+
-        ;
-        
+        ;       
 fragment 
 Exponent    
     :   ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ 
-    ;
-    
+    ;   
 fragment 
 FloatSuffix
     :   'f' | 'F' 
     ;     
-
 fragment
 DoubleSuffix
     :   'd' | 'D'
-    ;
-        
+    ;      
 FLOATLITERAL
     :   NonIntegerNumber FloatSuffix
-    ;
-    
+    ;   
 DOUBLELITERAL
     :   NonIntegerNumber DoubleSuffix?
     ;
-
 CHARLITERAL
     :   '\'' 
         (   EscapeSequence 
@@ -674,7 +691,6 @@ CHARLITERAL
         ) 
         '\''
     ; 
-
 STRINGLITERAL
     :   '"' 
         (   EscapeSequence
@@ -682,7 +698,6 @@ STRINGLITERAL
         )* 
         '"' 
     ;
-
 fragment
 EscapeSequence 
     :   '\\' (
@@ -702,7 +717,6 @@ EscapeSequence
                  ('0'..'7')
              )          
 ;     
-
 WS  
     :   (
              ' '
@@ -711,59 +725,46 @@ WS
         |    '\u000C'
         |    '\n'
         ) {skip();}          
-    ;
-    
+    ;    
 COMMENT
     :   '/*'
 	//TODO
         '*/'{skip();}
     ;
-
 LINE_COMMENT
     :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n') {skip();}
     |   '//' ~('\n'|'\r')* {skip();}
-    ;   
-        
+    ;           
 ABSTRACT
     :   'abstract'
-    ;
-    
+    ;    
 ASSERT
     :   'assert'
-    ;
-    
+    ;    
 BOOLEAN
     :   'boolean'
-    ;
-    
+    ;    
 BREAK
     :   'break'
-    ;
-    
+    ;    
 BYTE
     :   'byte'
-    ;
-    
+    ;    
 CASE
     :   'case'
-    ;
-    
+    ;    
 CATCH
     :   'catch'
-    ;
-    
+    ;    
 CHAR
     :   'char'
     ;
-    
 CLASS
     :   'class'
     ;
-    
 CONST
     :   'const'
     ;
-
 CONTINUE
     :   'continue'
     ;
@@ -951,7 +952,11 @@ LBRACE
 RBRACE
     :   '}'
     ;
-
+    
+BRACKETS
+	:	'[' ']'
+	;
+	
 LBRACKET
     :   '['
     ;
@@ -959,7 +964,7 @@ LBRACKET
 RBRACKET
     :   ']'
     ;
-
+   
 SEMI
     :   ';'
     ;
@@ -967,7 +972,11 @@ SEMI
 COMMA
     :   ','
     ;
-
+    
+DOTSTAR
+	:	'.*'
+	;
+	
 DOT
     :   '.'
     ;
