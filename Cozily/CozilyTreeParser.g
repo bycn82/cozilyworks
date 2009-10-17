@@ -383,8 +383,8 @@ localVariableDeclaration returns[LocalVariableDeclaration rtn]
 statement returns[Statement rtn]
 @init{rtn=new Statement();}
 : ^(STATEMENT0{rtn.coz=0;}    (x0=block{rtn.setBlock(x0);}))
-| ^(STATEMENT1{rtn.coz=1;}      (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression(x2);}))?)
-| ^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement(x5);}))?)
+| ^(STATEMENT1{rtn.coz=1;}      (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression2(x2);}))?)
+| ^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement2(x5);}))?)
 | ^(STATEMENT3{rtn.coz=3;}    (x6=forstatement{rtn.setForstatement(x6);}))
 | ^(STATEMENT4{rtn.coz=4;}     (x7=parExpression{rtn.setParExpression(x7);}) (x8=statement{rtn.setStatement(x8);}))
 | ^(STATEMENT5{rtn.coz=5;}     (x9=statement{rtn.setStatement(x9);})  (x10=parExpression{rtn.setParExpression(x10);}))
@@ -513,7 +513,7 @@ andExpression returns[AndExpression rtn]
 
 equalityExpression returns[EqualityExpression rtn]
 @init{rtn=new EqualityExpression();}
-: ^(EQUALITYEXPRESSION0{rtn.coz=0;}    (x0=instanceOfExpression{rtn.setInstanceOfExpression(x0);}) ( (x1=equalOrNotequal{rtn.setEqualOrNotequal(x1);}) (x2=instanceOfExpression{rtn.addInstanceOfExpression(x2);}))*)
+: ^(EQUALITYEXPRESSION0{rtn.coz=0;}    (x0=instanceOfExpression{rtn.setInstanceOfExpression(x0);}) ( (x1=equalOrNotequal{rtn.addEqualOrNotequal(x1);}) (x2=instanceOfExpression{rtn.addInstanceOfExpression(x2);}))*)
 ;
 
 equalOrNotequal returns[EqualOrNotequal rtn]
@@ -529,7 +529,7 @@ instanceOfExpression returns[InstanceOfExpression rtn]
 
 relationalExpression returns[RelationalExpression rtn]
 @init{rtn=new RelationalExpression();}
-: ^(RELATIONALEXPRESSION0{rtn.coz=0;}    (x0=shiftExpression{rtn.setShiftExpression(x0);}) ((x1=relationalOp{rtn.setRelationalOp(x1);}) (x2=shiftExpression{rtn.addShiftExpression(x2);}))*)
+: ^(RELATIONALEXPRESSION0{rtn.coz=0;}    (x0=shiftExpression{rtn.setShiftExpression(x0);}) ((x1=relationalOp{rtn.addRelationalOp(x1);}) (x2=shiftExpression{rtn.addShiftExpression(x2);}))*)
 ;
 
 relationalOp returns[RelationalOp rtn]
@@ -542,7 +542,7 @@ relationalOp returns[RelationalOp rtn]
 
 shiftExpression returns[ShiftExpression rtn]
 @init{rtn=new ShiftExpression();}
-: ^(SHIFTEXPRESSION0{rtn.coz=0;}    (x0=additiveExpression{rtn.setAdditiveExpression(x0);}) ((x1=shiftOp{rtn.setShiftOp(x1);}) (x2=additiveExpression{rtn.addAdditiveExpression(x2);}))*)
+: ^(SHIFTEXPRESSION0{rtn.coz=0;}    (x0=additiveExpression{rtn.setAdditiveExpression(x0);}) ((x1=shiftOp{rtn.addShiftOp(x1);}) (x2=additiveExpression{rtn.addAdditiveExpression(x2);}))*)
 ;
 
 shiftOp returns[ShiftOp rtn]
@@ -554,7 +554,7 @@ shiftOp returns[ShiftOp rtn]
 
 additiveExpression returns[AdditiveExpression rtn]
 @init{rtn=new AdditiveExpression();}
-: ^(ADDITIVEEXPRESSION0{rtn.coz=0;}    (x0=multiplicativeExpression{rtn.setMultiplicativeExpression(x0);}) ( (x1=plusOrMinus{rtn.setPlusOrMinus(x1);}) (x2=multiplicativeExpression{rtn.addMultiplicativeExpression(x2);}))*)
+: ^(ADDITIVEEXPRESSION0{rtn.coz=0;}    (x0=multiplicativeExpression{rtn.setMultiplicativeExpression(x0);}) ( (x1=plusOrMinus{rtn.addPlusOrMinus(x1);}) (x2=multiplicativeExpression{rtn.addMultiplicativeExpression(x2);}))*)
 ;
 
 plusOrMinus returns[PlusOrMinus rtn]
@@ -565,7 +565,7 @@ plusOrMinus returns[PlusOrMinus rtn]
 
 multiplicativeExpression returns[MultiplicativeExpression rtn]
 @init{rtn=new MultiplicativeExpression();}
-: ^(MULTIPLICATIVEEXPRESSION0{rtn.coz=0;} 	(x0=unaryExpression{rtn.setUnaryExpression(x0);}) ( (x1=timesDivide{rtn.setTimesDivide(x1);}) (x2=unaryExpression{rtn.addUnaryExpression(x2);}))*)
+: ^(MULTIPLICATIVEEXPRESSION0{rtn.coz=0;} 	(x0=unaryExpression{rtn.setUnaryExpression(x0);}) ( (x1=timesDivide{rtn.addTimesDivide(x1);}) (x2=unaryExpression{rtn.addUnaryExpression(x2);}))*)
 ;
 
 timesDivide returns[TimesDivide rtn]
