@@ -13,12 +13,16 @@ public class CodeDocument{
 		visit();
 		if(sb.length()==0){
 			if(developing){
-				return this.getClass().getSimpleName()+"\n";
+				return "\n["+this.getClass().getSimpleName()+"]\n";
 			}else{
 				return " ";
 			}
 		}else{
-			return sb.toString();
+			if(developing){
+				return "\n["+this.getClass().getSimpleName()+"]->  "+sb.toString()+"\n";
+			}else{
+				return sb.toString();
+			}
 		}
 	}
 	public void visit(){
@@ -42,5 +46,8 @@ public class CodeDocument{
 	}
 	public void trace(int i){
 		trace(String.valueOf(i));
+	}
+	public void coz(){
+		trace(coz);
 	}
 }
