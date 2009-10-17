@@ -1,0 +1,469 @@
+fileDeclaration 
+: ^(FILEDECLARATION0 	(annotations? packageDeclaration)? importDeclaration* typeDeclaration*)
+;
+packageDeclaration 
+: ^(PACKAGEDECLARATION0     qualifiedName)
+;
+importDeclaration  
+: ^(IMPORTDECLARATION0     STATIC? qualifiedName DOTSTAR?)
+;
+typeDeclaration 
+: ^(TYPEDECLARATION0    classOrInterfaceDeclaration)
+;
+classOrInterfaceDeclaration 
+: ^(CLASSORINTERFACEDECLARATION0    classDeclaration)
+| ^(CLASSORINTERFACEDECLARATION1    interfaceDeclaration)
+;
+modifiers  
+: ^(MODIFIERS0  	modifier*)
+;
+modifier
+: ^(MODIFIER0 	 annotation)
+| ^(MODIFIER1    PUBLIC)
+| ^(MODIFIER2    PROTECTED)
+| ^(MODIFIER3    PRIVATE)
+| ^(MODIFIER4    STATIC)
+| ^(MODIFIER5    ABSTRACT)
+| ^(MODIFIER6    FINAL)
+| ^(MODIFIER7    NATIVE)
+| ^(MODIFIER8    SYNCHRONIZED)
+| ^(MODIFIER9    TRANSIENT)
+| ^(MODIFIER10    VOLATILE)
+| ^(MODIFIER11    STRICTFP)
+;
+variableModifiers 
+: ^(VARIABLEMODIFIERS0    variableModifier*)
+;
+variableModifier
+: ^(VARIABLEMODIFIER0 	annotation)
+| ^(VARIABLEMODIFIER1 	FINAL)
+;
+classDeclaration 
+: ^(CLASSDECLARATION0    normalClassDeclaration)
+| ^(CLASSDECLARATION1    enumDeclaration)
+;
+normalClassDeclaration 
+: ^(NORMALCLASSDECLARATION0    modifiers   IDENTIFIER typeParameters? ( type)? ( typeList)? classBody)
+;
+typeParameters 
+: ^(TYPEPARAMETERS0     typeParameter ( typeParameter)*)
+;
+typeParameter 
+: ^(TYPEPARAMETER0    IDENTIFIER ( typeBound)?)
+;
+typeBound 
+: ^(TYPEBOUND0    type ( type)*)
+;
+enumDeclaration 
+: ^(ENUMDECLARATION0    modifiers  IDENTIFIER ( typeList)? enumBody)
+;
+enumBody 
+: ^(ENUMBODY0     enumConstants? COMMA? (enumBodyDeclarations)?)
+;
+enumConstants 
+: ^(ENUMCONSTANTS0    enumConstant ( enumConstant)*)
+;
+enumConstant 
+: ^(ENUMCONSTANT0    annotations? IDENTIFIER arguments? classBody?)
+;
+enumBodyDeclarations 
+: ^(ENUMBODYDECLARATIONS0     classBodyDeclaration*)
+;
+interfaceDeclaration 
+: ^(INTERFACEDECLARATION0    normalInterfaceDeclaration)
+| ^(INTERFACEDECLARATION1    annotationTypeDeclaration)
+;
+normalInterfaceDeclaration 
+: ^(NORMALINTERFACEDECLARATION0    modifiers  IDENTIFIER typeParameters?  ( typeList)? interfaceBody)
+;
+typeList 
+: ^(TYPELIST0    type ( type)*)
+;
+classBody 
+: ^(CLASSBODY0     classBodyDeclaration*)
+;
+interfaceBody 
+: ^(INTERFACEBODY0     interfaceBodyDeclaration*)
+;
+classBodyDeclaration 
+: ^(CLASSBODYDECLARATION0 )
+| ^(CLASSBODYDECLARATION1    STATIC? block)
+| ^(CLASSBODYDECLARATION2    memberDecl)
+;
+memberDecl 
+: ^(MEMBERDECL0     fieldDeclaration)
+| ^(MEMBERDECL1     methodDeclaration)
+| ^(MEMBERDECL2     classDeclaration)
+| ^(MEMBERDECL3     interfaceDeclaration)
+;
+methodDeclaration 
+: ^(METHODDECLARATION0    modifiers typeParameters? IDENTIFIER formalParameters ( qualifiedNameList)?  explicitConstructorInvocation? blockStatement*)
+| ^(METHODDECLARATION1    modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ( qualifiedNameList)? blockOrComma)
+;
+blockOrComma
+: ^(BLOCKORCOMMA0 	block)
+| ^(BLOCKORCOMMA1    SEMI)
+;
+returnType
+: ^(RETURNTYPE0 	type)
+| ^(RETURNTYPE1 	VOID)
+;
+fieldDeclaration 
+: ^(FIELDDECLARATION0    modifiers type variableDeclarator ( variableDeclarator)*)
+;
+variableDeclarator 
+: ^(VARIABLEDECLARATOR0    IDENTIFIER BRACKETS* ( variableInitializer)?)
+;
+interfaceBodyDeclaration 
+: ^(INTERFACEBODYDECLARATION0    interfaceFieldDeclaration)
+| ^(INTERFACEBODYDECLARATION1    interfaceMethodDeclaration)
+| ^(INTERFACEBODYDECLARATION2    interfaceDeclaration)
+| ^(INTERFACEBODYDECLARATION3    classDeclaration)
+| ^(INTERFACEBODYDECLARATION4    SEMI)
+;
+interfaceMethodDeclaration 
+: ^(INTERFACEMETHODDECLARATION0    modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ( qualifiedNameList)?)
+;
+interfaceFieldDeclaration 
+: ^(INTERFACEFIELDDECLARATION0    modifiers type variableDeclarator ( variableDeclarator)*)
+;
+type 
+: ^(TYPE0    classOrInterfaceType BRACKETS*)
+| ^(TYPE1    primitiveType BRACKETS*)
+;
+classOrInterfaceType 
+: ^(CLASSORINTERFACETYPE0    IDENTIFIER typeArguments? ( IDENTIFIER typeArguments? )*)
+;
+primitiveType  
+: ^(PRIMITIVETYPE0    BOOLEAN)
+| ^(PRIMITIVETYPE1    CHAR)
+| ^(PRIMITIVETYPE2    BYTE)
+| ^(PRIMITIVETYPE3    SHORT)
+| ^(PRIMITIVETYPE4    INT)
+| ^(PRIMITIVETYPE5    LONG)
+| ^(PRIMITIVETYPE6    FLOAT)
+| ^(PRIMITIVETYPE7    DOUBLE)
+;
+typeArguments 
+: ^(TYPEARGUMENTS0     typeArgument ( typeArgument)*)
+;
+typeArgument 
+: ^(TYPEARGUMENT0    type)
+| ^(TYPEARGUMENT1     ( extendsOrSuper type )?)
+;
+extendsOrSuper
+: ^(EXTENDSORSUPER0 	EXTENDS)
+| ^(EXTENDSORSUPER1 	SUPER)
+;
+qualifiedNameList 
+: ^(QUALIFIEDNAMELIST0     ( qualifiedName)*)
+;
+formalParameters 
+: ^(FORMALPARAMETERS0    formalParameterDecls?)
+;
+formalParameterDecls 
+: ^(FORMALPARAMETERDECLS0    ellipsisParameterDecl)
+| ^(FORMALPARAMETERDECLS1    normalParameterDecl ( normalParameterDecl)*)
+| ^(FORMALPARAMETERDECLS2    (normalParameterDecl )+ ellipsisParameterDecl)
+;
+normalParameterDecl 
+: ^(NORMALPARAMETERDECL0    variableModifiers type IDENTIFIER BRACKETS*)
+;
+ellipsisParameterDecl 
+: ^(ELLIPSISPARAMETERDECL0    variableModifiers type   IDENTIFIER)
+;
+explicitConstructorInvocation 
+: ^(EXPLICITCONSTRUCTORINVOCATION0    nonWildcardTypeArguments? thisOrSuper arguments)
+| ^(EXPLICITCONSTRUCTORINVOCATION1    primary  nonWildcardTypeArguments?  arguments)
+;
+thisOrSuper
+: ^(THISORSUPER0 	THIS)
+| ^(THISORSUPER1 	SUPER)
+;
+qualifiedName 
+: ^(QUALIFIEDNAME0    IDENTIFIER ( IDENTIFIER)*)
+;
+annotations 
+: ^(ANNOTATIONS0    annotation+)
+;
+annotation 
+: ^(ANNOTATION0     qualifiedName (    elementOfAnno?   )?)
+;
+elementOfAnno
+: ^(ELEMENTOFANNO0 	elementValuePairs)
+| ^(ELEMENTOFANNO1 	elementValue)
+;
+elementValuePairs 
+: ^(ELEMENTVALUEPAIRS0    elementValuePair ( elementValuePair)*)
+;
+elementValuePair 
+: ^(ELEMENTVALUEPAIR0    IDENTIFIER  elementValue)
+;
+elementValue 
+: ^(ELEMENTVALUE0    conditionalExpression)
+| ^(ELEMENTVALUE1    annotation)
+| ^(ELEMENTVALUE2    elementValueArrayInitializer)
+;
+elementValueArrayInitializer 
+: ^(ELEMENTVALUEARRAYINITIALIZER0    (elementValue  ( elementValue)*  )? COMMA?)
+;
+annotationTypeDeclaration 
+: ^(ANNOTATIONTYPEDECLARATION0    modifiers   IDENTIFIER annotationTypeBody)
+;
+annotationTypeBody 
+: ^(ANNOTATIONTYPEBODY0     annotationTypeElementDeclaration*)
+;
+annotationTypeElementDeclaration 
+: ^(ANNOTATIONTYPEELEMENTDECLARATION0    annotationMethodDeclaration)
+| ^(ANNOTATIONTYPEELEMENTDECLARATION1    interfaceFieldDeclaration)
+| ^(ANNOTATIONTYPEELEMENTDECLARATION2    normalClassDeclaration)
+| ^(ANNOTATIONTYPEELEMENTDECLARATION3    normalInterfaceDeclaration)
+| ^(ANNOTATIONTYPEELEMENTDECLARATION4    enumDeclaration)
+| ^(ANNOTATIONTYPEELEMENTDECLARATION5    annotationTypeDeclaration)
+| ^(ANNOTATIONTYPEELEMENTDECLARATION6 )
+;
+annotationMethodDeclaration 
+: ^(ANNOTATIONMETHODDECLARATION0    modifiers type IDENTIFIER   ( elementValue)?)
+;
+block 
+: ^(BLOCK0     blockStatement*)
+;
+blockStatement 
+: ^(BLOCKSTATEMENT0    localVariableDeclarationStatement)
+| ^(BLOCKSTATEMENT1    classOrInterfaceDeclaration)
+| ^(BLOCKSTATEMENT2    statement)
+;
+localVariableDeclarationStatement 
+: ^(LOCALVARIABLEDECLARATIONSTATEMENT0    localVariableDeclaration)
+;
+localVariableDeclaration 
+: ^(LOCALVARIABLEDECLARATION0    variableModifiers type variableDeclarator ( variableDeclarator)*)
+;
+statement 
+: ^(STATEMENT0    block)
+| ^(STATEMENT1      expression ( expression)?)
+| ^(STATEMENT2     parExpression statement ( statement)?)
+| ^(STATEMENT3    forstatement)
+| ^(STATEMENT4     parExpression statement)
+| ^(STATEMENT5     statement  parExpression)
+| ^(STATEMENT6    trystatement)
+| ^(STATEMENT7     parExpression  switchBlockStatementGroups)
+| ^(STATEMENT8     parExpression block)
+| ^(STATEMENT9     expression?)
+| ^(STATEMENT10     expression)
+| ^(STATEMENT11     IDENTIFIER?)
+| ^(STATEMENT12    IDENTIFIER?)
+| ^(STATEMENT13    expression)
+| ^(STATEMENT14    IDENTIFIER  statement)
+| ^(STATEMENT15    SEMI)
+;
+switchBlockStatementGroups 
+: ^(SWITCHBLOCKSTATEMENTGROUPS0    switchBlockStatementGroup*)
+;
+switchBlockStatementGroup 
+: ^(SWITCHBLOCKSTATEMENTGROUP0    switchLabel blockStatement*)
+;
+switchLabel 
+: ^(SWITCHLABEL0    CASE expression)
+| ^(SWITCHLABEL1    DEFAULT)
+;
+trystatement 
+: ^(TRYSTATEMENT0     block   catches  block)
+| ^(TRYSTATEMENT1   block  catches)
+| ^(TRYSTATEMENT2   block   block)
+;
+catches 
+: ^(CATCHES0    catchClause+)
+;
+catchClause 
+: ^(CATCHCLAUSE0      formalParameter  block)
+;
+formalParameter 
+: ^(FORMALPARAMETER0    variableModifiers type IDENTIFIER BRACKETS*)
+;
+forstatement 
+: ^(FORSTATEMENT0      variableModifiers type IDENTIFIER  expression  statement)
+| ^(FORSTATEMENT1      forInit?  expression?  expressionList?  statement)
+;
+forInit 
+: ^(FORINIT0    localVariableDeclaration)
+| ^(FORINIT1    expressionList)
+;
+parExpression 
+: ^(PAREXPRESSION0     expression)
+;
+expressionList 
+: ^(EXPRESSIONLIST0    expression ( expression)*)
+;
+expression 
+: ^(EXPRESSION0    conditionalExpression (assignmentOperator expression)?)
+;
+assignmentOperator 
+: ^(ASSIGNMENTOPERATOR0    EQ)
+| ^(ASSIGNMENTOPERATOR1    PLUSEQ)
+| ^(ASSIGNMENTOPERATOR2    SUBEQ)
+| ^(ASSIGNMENTOPERATOR3    STAREQ)
+| ^(ASSIGNMENTOPERATOR4    SLASHEQ)
+| ^(ASSIGNMENTOPERATOR5    AMPEQ)
+| ^(ASSIGNMENTOPERATOR6    BAREQ)
+| ^(ASSIGNMENTOPERATOR7    CARETEQ)
+| ^(ASSIGNMENTOPERATOR8    PERCENTEQ)
+| ^(ASSIGNMENTOPERATOR9    LT LT EQ)
+| ^(ASSIGNMENTOPERATOR10    GT GT GT EQ)
+| ^(ASSIGNMENTOPERATOR11    GT GT EQ)
+;
+conditionalExpression 
+: ^(CONDITIONALEXPRESSION0    conditionalOrExpression ( expression  conditionalExpression)?)
+;
+conditionalOrExpression 
+: ^(CONDITIONALOREXPRESSION0    conditionalAndExpression ( conditionalAndExpression)*)
+;
+conditionalAndExpression 
+: ^(CONDITIONALANDEXPRESSION0    inclusiveOrExpression ( inclusiveOrExpression)*)
+;
+inclusiveOrExpression 
+: ^(INCLUSIVEOREXPRESSION0    exclusiveOrExpression ( exclusiveOrExpression)*)
+;
+exclusiveOrExpression 
+: ^(EXCLUSIVEOREXPRESSION0    andExpression ( andExpression)*)
+;
+andExpression 
+: ^(ANDEXPRESSION0    equalityExpression ( equalityExpression)*)
+;
+equalityExpression 
+: ^(EQUALITYEXPRESSION0    instanceOfExpression ( equalOrNotequal instanceOfExpression)*)
+;
+equalOrNotequal
+: ^(EQUALORNOTEQUAL0 	EQEQ)
+| ^(EQUALORNOTEQUAL1 	BANGEQ)
+;
+instanceOfExpression 
+: ^(INSTANCEOFEXPRESSION0    relationalExpression ( type )?)
+;
+relationalExpression 
+: ^(RELATIONALEXPRESSION0    shiftExpression (relationalOp shiftExpression)*)
+;
+relationalOp 
+: ^(RELATIONALOP0    LT EQ)
+| ^(RELATIONALOP1    GT EQ)
+| ^(RELATIONALOP2    LT)
+| ^(RELATIONALOP3    GT)
+;
+shiftExpression 
+: ^(SHIFTEXPRESSION0    additiveExpression (shiftOp additiveExpression)*)
+;
+shiftOp 
+: ^(SHIFTOP0     LT LT)
+| ^(SHIFTOP1     GT GT)
+| ^(SHIFTOP2     GT GT GT)
+;
+additiveExpression 
+: ^(ADDITIVEEXPRESSION0    multiplicativeExpression ( plusOrMinus multiplicativeExpression)*)
+;
+plusOrMinus
+: ^(PLUSORMINUS0 	PLUS)
+| ^(PLUSORMINUS1 	SUB)
+;
+multiplicativeExpression 
+: ^(MULTIPLICATIVEEXPRESSION0 	unaryExpression ( timesDivide unaryExpression)*)
+;
+timesDivide
+: ^(TIMESDIVIDE0 	STAR)
+| ^(TIMESDIVIDE1 	SLASH)
+| ^(TIMESDIVIDE2 	PERCENT)
+;
+unaryExpression 
+: ^(UNARYEXPRESSION0      unaryExpression)
+| ^(UNARYEXPRESSION1     unaryExpression)
+| ^(UNARYEXPRESSION2     unaryExpression)
+| ^(UNARYEXPRESSION3     unaryExpression)
+| ^(UNARYEXPRESSION4    unaryExpressionNotPlusMinus)
+;
+unaryExpressionNotPlusMinus 
+: ^(UNARYEXPRESSIONNOTPLUSMINUS0     unaryExpression)
+| ^(UNARYEXPRESSIONNOTPLUSMINUS1     unaryExpression)
+| ^(UNARYEXPRESSIONNOTPLUSMINUS2    castExpression)
+| ^(UNARYEXPRESSIONNOTPLUSMINUS3    primary selector* doublePlusMinus?)
+;
+doublePlusMinus
+: ^(DOUBLEPLUSMINUS0 	PLUSPLUS)
+| ^(DOUBLEPLUSMINUS1 	SUBSUB)
+;
+castExpression 
+: ^(CASTEXPRESSION0     primitiveType  unaryExpression)
+| ^(CASTEXPRESSION1     type  unaryExpressionNotPlusMinus)
+;
+primary 
+: ^(PRIMARY0    parExpression)
+| ^(PRIMARY1     ( IDENTIFIER)* identifierSuffix?)
+| ^(PRIMARY2    IDENTIFIER ( IDENTIFIER)* identifierSuffix?)
+| ^(PRIMARY3     superSuffix)
+| ^(PRIMARY4    literal)
+| ^(PRIMARY5    creator)
+| ^(PRIMARY6    primitiveType (BRACKETS)*)
+| ^(PRIMARY7 )
+;
+superSuffix  
+: ^(SUPERSUFFIX0    arguments)
+| ^(SUPERSUFFIX1     typeArguments? IDENTIFIER arguments?)
+;
+identifierSuffix 
+: ^(IDENTIFIERSUFFIX0    BRACKETS+)
+| ^(IDENTIFIERSUFFIX1    ( expression  )+)
+| ^(IDENTIFIERSUFFIX2    arguments)
+| ^(IDENTIFIERSUFFIX3 )
+| ^(IDENTIFIERSUFFIX4     nonWildcardTypeArguments IDENTIFIER arguments)
+| ^(IDENTIFIERSUFFIX5 )
+| ^(IDENTIFIERSUFFIX6      arguments)
+| ^(IDENTIFIERSUFFIX7    innerCreator)
+;
+selector  
+: ^(SELECTOR0     IDENTIFIER arguments?)
+| ^(SELECTOR1 )
+| ^(SELECTOR2      superSuffix)
+| ^(SELECTOR3    innerCreator)
+| ^(SELECTOR4     expression)
+;
+creator 
+: ^(CREATOR0     nonWildcardTypeArguments classOrInterfaceType classCreatorRest)
+| ^(CREATOR1     classOrInterfaceType classCreatorRest)
+| ^(CREATOR2    arrayCreator)
+;
+arrayCreator 
+: ^(ARRAYCREATOR0     createdName BRACKETS+ arrayInitializer)
+| ^(ARRAYCREATOR1     createdName  expression  (    expression )* BRACKETS*)
+;
+variableInitializer 
+: ^(VARIABLEINITIALIZER0    arrayInitializer)
+| ^(VARIABLEINITIALIZER1    expression)
+;
+arrayInitializer 
+: ^(ARRAYINITIALIZER0     (variableInitializer ( variableInitializer )* )? (COMMA)?)
+;
+createdName 
+: ^(CREATEDNAME0    classOrInterfaceType)
+| ^(CREATEDNAME1    primitiveType)
+;
+innerCreator  
+: ^(INNERCREATOR0      nonWildcardTypeArguments? IDENTIFIER typeArguments?  classCreatorRest)
+;
+classCreatorRest 
+: ^(CLASSCREATORREST0    arguments classBody?)
+;
+nonWildcardTypeArguments 
+: ^(NONWILDCARDTYPEARGUMENTS0     typeList)
+;
+arguments 
+: ^(ARGUMENTS0     expressionList?)
+;
+literal 
+: ^(LITERAL0    INTLITERAL)
+| ^(LITERAL1    LONGLITERAL)
+| ^(LITERAL2    FLOATLITERAL)
+| ^(LITERAL3    DOUBLELITERAL)
+| ^(LITERAL4    CHARLITERAL)
+| ^(LITERAL5    STRINGLITERAL)
+| ^(LITERAL6    TRUE)
+| ^(LITERAL7    FALSE)
+| ^(LITERAL8    NULL)
+;

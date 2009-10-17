@@ -1,14 +1,13 @@
-1,根据grammer 自动生成tree grammer
-2,tree grammer需要有action
-3,自动生成codedom
-4,虚拟node也给设置值,为了在visit时候减少麻烦
-5,做一个备份visit方法的工具,防止action写错,后重新生成,然后visit方法丢失
-6,
+步骤
+1,rulePicker会根据//rules begin来取出rules到code/rules.txt
+
+2,TreeGenerator会分析rules.txt,按照暴力规则生成带tree grammer的new_rules.txt,顺便生成imaginary
+
+3,TreePicker分析new_rules,生成new_tree.txt
+
+4,ActionGenerator分析new_tree.txt,生成带Action的tree_grammer.txt,以及codedom;
 
 
+规则
 
-
-
-
-N-1,compiler
-N,LLVM
+1,grammer规则		"|"比如在开头,不能在中间			 能取消的括弧都取消

@@ -2,17 +2,14 @@
            
 fileDeclaration 
 	:	(annotations? packageDeclaration)? importDeclaration* typeDeclaration* 
-->^(FILEDEC (annotations? packageDeclaration)? importDeclaration* typeDeclaration*)
 	;
 
 packageDeclaration 
     :   'package' qualifiedName ';'
-->^('package' qualifiedName)
     ;
 
 importDeclaration  
     :   'import' STATIC? qualifiedName DOTSTAR? ';'
-->^('import' STATIC? qualifiedName DOTSTAR?)
     ;
 
 typeDeclaration 
@@ -26,30 +23,30 @@ classOrInterfaceDeclaration
 
 
 modifiers  
-    : 	(modifier)*
+    : 	modifier*
     ;
 modifier
     :	 annotation
-    |   'public'
-    |   'protected'
-    |   'private'
-    |   'static'
-    |   'abstract'
-    |   'final'
-    |   'native'
-    |   'synchronized'
-    |   'transient'
-    |   'volatile'
-    |   'strictfp'
+    |   PUBLIC
+    |   PROTECTED
+    |   PRIVATE
+    |   STATIC
+    |   ABSTRACT
+    |   FINAL
+    |   NATIVE
+    |   SYNCHRONIZED
+    |   TRANSIENT
+    |   VOLATILE
+    |   STRICTFP
     ;
 
 variableModifiers 
-    :   (variableModifier)*
+    :   variableModifier*
     ;
 
 variableModifier
 	:	annotation 
-	|	'final'
+	|	FINAL
 	;
 
 classDeclaration 
@@ -58,51 +55,43 @@ classDeclaration
     ;
 
 normalClassDeclaration 
-    :   modifiers  'class' IDENTIFIER (typeParameters)? ('extends' type)? ('implements' typeList )? classBody
-->^('class' modifiers IDENTIFIER typeParameters? type? typeList? classBody)
+    :   modifiers  'class' IDENTIFIER typeParameters? ('extends' type)? ('implements' typeList)? classBody
     ;
 
 
 typeParameters 
     :   '<' typeParameter (',' typeParameter)* '>'
-->^('<' typeParameter  typeParameter* )
     ;
 
 typeParameter 
-    :   IDENTIFIER ('extends' typeBound )?
-->^(TYPEPARAMETER IDENTIFIER typeBound?)
+    :   IDENTIFIER ('extends' typeBound)?
     ;
 
 typeBound 
     :   type ('&' type)*
-->^(TYPEBOUND type  type*)
     ;
 
 
 enumDeclaration 
-    :   modifiers 'enum' IDENTIFIER ('implements' typeList )? enumBody
-->^('enum' modifiers IDENTIFIER typeList? enumBody)
+    :   modifiers 'enum' IDENTIFIER ('implements' typeList)? enumBody
     ;
     
 
 enumBody 
-    :   '{' (enumConstants)? COMMA? (enumBodyDeclarations)? '}'
-->^('{' enumConstants? COMMA? enumBodyDeclarations?)
+    :   '{' enumConstants? COMMA? (enumBodyDeclarations)? '}'
     ;
 
 enumConstants 
     :   enumConstant (',' enumConstant)*
-->^(ENUMCONSTANTS enumConstant enumConstant* )
     ;
 
 
 enumConstant 
-    :   (annotations)? IDENTIFIER (arguments)? (classBody)?
-->^(ENUMCONSTANT annotations? IDENTIFIER arguments? classBody?)
+    :   annotations? IDENTIFIER arguments? classBody?
     ;
 
 enumBodyDeclarations 
-    :   ';' (classBodyDeclaration )*
+    :   ';' classBodyDeclaration*
     ;
 
 interfaceDeclaration 
@@ -111,26 +100,24 @@ interfaceDeclaration
     ;
     
 normalInterfaceDeclaration 
-    :   modifiers 'interface' IDENTIFIER (typeParameters)?  ('extends' typeList)? interfaceBody
-->^('interface'modifiers IDENTIFIER typeParameters? typeList? interfaceBody)
+    :   modifiers 'interface' IDENTIFIER typeParameters?  ('extends' typeList)? interfaceBody
     ;
 
 typeList 
     :   type (',' type)*
-->^(TYPELIST type type*)
     ;
 
 classBody 
-    :   '{' (classBodyDeclaration)* '}'
+    :   '{' classBodyDeclaration* '}'
     ;
 
 interfaceBody 
-    :   '{' (interfaceBodyDeclaration )* '}'
+    :   '{' interfaceBodyDeclaration* '}'
     ;
 
 classBodyDeclaration 
     :   ';'
-    |   (STATIC)? block
+    |   STATIC? block
     |   memberDecl
     ;
 
@@ -143,12 +130,19 @@ memberDecl
 
 
 methodDeclaration 
-    :
-        modifiers (typeParameters)? IDENTIFIER formalParameters ('throws' qualifiedNameList)? '{' 
-         	(explicitConstructorInvocation)? (blockStatement)* '}'
-    |   modifiers (typeParameters)? (type|'void') IDENTIFIER formalParameters ('[' ']')* ('throws' qualifiedNameList)? 
-    	 ( block |   ';'   )
+    :   modifiers typeParameters? IDENTIFIER formalParameters ('throws' qualifiedNameList)? '{' explicitConstructorInvocation? blockStatement* '}'
+    |   modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? blockOrComma
     ;
+
+blockOrComma
+	:	block 
+	|   SEMI  
+	;
+
+returnType
+	:	type
+	|	VOID
+	;
 
 
 fieldDeclaration 
@@ -156,20 +150,19 @@ fieldDeclaration
     ;
 
 variableDeclarator 
-    :   IDENTIFIER ('[' ']')* ('=' variableInitializer)?
+    :   IDENTIFIER BRACKETS* ('=' variableInitializer)?
     ;
 
 interfaceBodyDeclaration 
-    :
-        interfaceFieldDeclaration
+    :   interfaceFieldDeclaration
     |   interfaceMethodDeclaration
     |   interfaceDeclaration
     |   classDeclaration
-    |   ';'
+    |   SEMI
     ;
 
 interfaceMethodDeclaration 
-    :   modifiers (typeParameters)? (type|'void') IDENTIFIER formalParameters ('[' ']')* ('throws' qualifiedNameList)? ';'
+    :   modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? ';'
     ;
 
 interfaceFieldDeclaration 
@@ -178,50 +171,52 @@ interfaceFieldDeclaration
 
 
 type 
-    :   classOrInterfaceType ('[' ']')*
-    |   primitiveType ('[' ']')*
+    :   classOrInterfaceType BRACKETS*
+    |   primitiveType BRACKETS*
     ;
 
 
 classOrInterfaceType 
-    :   IDENTIFIER (typeArguments)? ('.' IDENTIFIER (typeArguments)? )*
+    :   IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments? )*
     ;
 
 primitiveType  
-    :   'boolean'
-    |   'char'
-    |   'byte'
-    |   'short'
-    |   'int'
-    |   'long'
-    |   'float'
-    |   'double'
+    :   BOOLEAN
+    |   CHAR
+    |   BYTE
+    |   SHORT
+    |   INT
+    |   LONG
+    |   FLOAT
+    |   DOUBLE
     ;
 
 typeArguments 
     :   '<' typeArgument (',' typeArgument)* '>'
-->^('<' typeArgument typeArgument*)
     ;
 
 typeArgument 
     :   type
-    |   '?' ( ('extends'|'super') type )?
+    |   '?' ( extendsOrSuper type )?
     ;
+
+extendsOrSuper
+	:	EXTENDS
+	|	SUPER
+	;
 
 qualifiedNameList 
     :    (',' qualifiedName)*
     ;
 
 formalParameters 
-    :   '('(formalParameterDecls)? ')'
+    :   '('formalParameterDecls? ')'
     ;
 
 formalParameterDecls 
     :   ellipsisParameterDecl
     |   normalParameterDecl (',' normalParameterDecl)*
-->^(FORMALPARAMETERDECLS normalParameterDecl normalParameterDecl*)
     |   (normalParameterDecl ',')+ ellipsisParameterDecl
-->^(FORMALPARAMETERDECLS normalParameterDecl+ ellipsisParameterDecl)
     ;
 
 normalParameterDecl 
@@ -234,21 +229,26 @@ ellipsisParameterDecl
 
 
 explicitConstructorInvocation 
-    :   (nonWildcardTypeArguments)? ('this'|'super') arguments ';' 
-    |   primary '.' (nonWildcardTypeArguments)? 'super' arguments ';'
+    :   nonWildcardTypeArguments? thisOrSuper arguments ';' 
+    |   primary '.' nonWildcardTypeArguments? 'super' arguments ';'
     ;
+
+thisOrSuper
+	:	THIS
+	|	SUPER
+	;
 
 qualifiedName 
     :   IDENTIFIER ('.' IDENTIFIER)*
     ;
 
 annotations 
-    :   (annotation)+
+    :   annotation+
     ;
 
 
 annotation 
-    :   '@' qualifiedName (   '(' (elementOfAnno)?  ')' )?
+    :   '@' qualifiedName (   '(' elementOfAnno?  ')' )?
     ;
 
 elementOfAnno
@@ -271,7 +271,7 @@ elementValue
     ;
 
 elementValueArrayInitializer 
-    :   '{'(elementValue  (',' elementValue)*  )? (',')? '}'
+    :   '{'(elementValue  (',' elementValue)*  )? COMMA? '}'
     ;
 
 
@@ -282,7 +282,7 @@ annotationTypeDeclaration
 
 
 annotationTypeBody 
-    :   '{' (annotationTypeElementDeclaration)* '}'
+    :   '{' annotationTypeElementDeclaration* '}'
     ;
 
 
@@ -301,7 +301,7 @@ annotationMethodDeclaration
     ;
 
 block 
-    :   '{'(blockStatement)* '}'
+    :   '{' blockStatement* '}'
     ;
 
 blockStatement 
@@ -321,48 +321,45 @@ localVariableDeclaration
 
 statement 
     :   block
-    |   ('assert') expression (':' expression)? ';'
-    |   'assert'  expression (':' expression)? ';'            
-    |   'if' parExpression statement ('else' statement)?          
+    |   'assert'  expression (':' expression)? ';'    
+    |   'if' parExpression statement ('else' statement)?      
     |   forstatement
     |   'while' parExpression statement
     |   'do' statement 'while' parExpression ';'
     |   trystatement
     |   'switch' parExpression '{' switchBlockStatementGroups '}'
     |   'synchronized' parExpression block
-    |   'return' (expression )? ';'
+    |   'return' expression? ';'
     |   'throw' expression ';'
-    |   'break' (IDENTIFIER)? ';'
-    |   'continue'(IDENTIFIER)? ';'
+    |   'break' IDENTIFIER? ';'
+    |   'continue'IDENTIFIER? ';'
     |   expression  ';'     
     |   IDENTIFIER ':' statement
-    |   ';'
+    |   SEMI
     ;
 
 switchBlockStatementGroups 
-    :   (switchBlockStatementGroup )*
+    :   switchBlockStatementGroup*
     ;
 
 switchBlockStatementGroup 
-    :   switchLabel (blockStatement )*
+    :   switchLabel blockStatement*
     ;
 
 switchLabel 
-    :   'case' expression ':'
-    |   'default' ':'
+    :   CASE expression ':'
+    |   DEFAULT ':'
     ;
 
 
 trystatement 
-    :   'try' block
-        (   catches 'finally' block
-        |   catches
-        |   'finally' block
-        )
-     ;
+    :   'try' block   catches 'finally' block
+	| 'try' block  catches
+    | 'try' block  'finally' block    
+    ;
 
 catches 
-    :   catchClause (catchClause )*
+    :   catchClause+
     ;
 
 catchClause 
@@ -370,12 +367,12 @@ catchClause
     ;
 
 formalParameter 
-    :   variableModifiers type IDENTIFIER ('[' ']')*
+    :   variableModifiers type IDENTIFIER BRACKETS*
     ;
 
 forstatement 
     :   'for' '(' variableModifiers type IDENTIFIER ':' expression ')' statement
-    |   'for' '(' (forInit)? ';' (expression)? ';' (expressionList)? ')' statement
+    |   'for' '(' forInit? ';' expression? ';' expressionList? ')' statement
     ;
 
 forInit 
@@ -398,18 +395,18 @@ expression
 
 
 assignmentOperator 
-    :   '='
-    |   '+='
-    |   '-='
-    |   '*='
-    |   '/='
-    |   '&='
-    |   '|='
-    |   '^='
-    |   '%='
-    |    '<' '<' '='
-    |    '>' '>' '>' '='
-    |    '>' '>' '='
+    :   EQ
+    |   PLUSEQ
+    |   SUBEQ
+    |   STAREQ
+    |   SLASHEQ
+    |   AMPEQ
+    |   BAREQ
+    |   CARETEQ
+    |   PERCENTEQ
+    |   LT LT EQ
+    |   GT GT GT EQ
+    |   GT GT EQ
     ;
 
 
@@ -438,8 +435,13 @@ andExpression
     ;
 
 equalityExpression 
-    :   instanceOfExpression (   ('=='|'!=') instanceOfExpression)*
+    :   instanceOfExpression ( equalOrNotequal instanceOfExpression)*
     ;
+
+equalOrNotequal
+	:	EQEQ
+	|	BANGEQ
+	;
 
 instanceOfExpression 
     :   relationalExpression ('instanceof' type )?
@@ -450,10 +452,10 @@ relationalExpression
     ;
 
 relationalOp 
-    :   '<' '='
-    |   '>' '='
-    |   '<'
-    |   '>'
+    :   LT EQ
+    |   GT EQ
+    |   LT
+    |   GT
     ;
 
 shiftExpression 
@@ -462,20 +464,30 @@ shiftExpression
 
 
 shiftOp 
-    :    '<' '<'
-    |    '>' '>' '>'
-    |    '>' '>'
+    :    LT LT
+    |    GT GT
+    |    GT GT GT
     ;
 
 
 additiveExpression 
-    :   multiplicativeExpression (   ('+'|'-') multiplicativeExpression)*
+    :   multiplicativeExpression ( plusOrMinus multiplicativeExpression)*
     ;
 
+plusOrMinus
+	:	PLUS
+	|	SUB
+	;
+
 multiplicativeExpression 
-    :
-        unaryExpression (   ('*'|'/'|'%') unaryExpression)*
+    :	unaryExpression ( timesDivide unaryExpression)*
     ;
+
+timesDivide
+	:	STAR
+	|	SLASH
+	|	PERCENT
+	;
 
 
 unaryExpression 
@@ -490,8 +502,13 @@ unaryExpressionNotPlusMinus
     :   '~' unaryExpression
     |   '!' unaryExpression
     |   castExpression
-    |   primary (selector)* ('++'|'--')?
+    |   primary selector* doublePlusMinus?
     ;
+
+doublePlusMinus
+	:	PLUSPLUS
+	|	SUBSUB
+	;
 
 castExpression 
     :   '(' primitiveType ')' unaryExpression
@@ -501,24 +518,24 @@ castExpression
 
 primary 
     :   parExpression            
-    |   'this' ('.' IDENTIFIER)* (identifierSuffix)?
-    |   IDENTIFIER ('.' IDENTIFIER)* (identifierSuffix)?
+    |   'this' ('.' IDENTIFIER)* identifierSuffix?
+    |   IDENTIFIER ('.' IDENTIFIER)* identifierSuffix?
     |   'super' superSuffix
     |   literal
     |   creator
-    |   primitiveType ('[' ']')* '.' 'class'
+    |   primitiveType (BRACKETS)* '.' 'class'
     |   'void' '.' 'class'
     ;
     
 
 superSuffix  
     :   arguments
-    |   '.' (typeArguments)? IDENTIFIER (arguments)?
+    |   '.' typeArguments? IDENTIFIER arguments?
     ;
 
 
 identifierSuffix 
-    :   ('[' ']')+ '.' 'class'
+    :   BRACKETS+ '.' 'class'
     |   ('[' expression ']' )+
     |   arguments
     |   '.' 'class'
@@ -530,7 +547,7 @@ identifierSuffix
 
 
 selector  
-    :   '.' IDENTIFIER (arguments)?
+    :   '.' IDENTIFIER arguments?
     |   '.' 'this'
     |   '.' 'super' superSuffix
     |   innerCreator
@@ -554,7 +571,7 @@ variableInitializer
     ;
 
 arrayInitializer 
-    :   '{' (variableInitializer (',' variableInitializer )* )? (',')? '}' 
+    :   '{' (variableInitializer (',' variableInitializer )* )? (COMMA)? '}' 
     ;
 
 
@@ -564,12 +581,12 @@ createdName
     ;
 
 innerCreator  
-    :   '.' 'new' (nonWildcardTypeArguments)? IDENTIFIER (typeArguments)?  classCreatorRest
+    :   '.' 'new' nonWildcardTypeArguments? IDENTIFIER typeArguments?  classCreatorRest
     ;
 
 
 classCreatorRest 
-    :   arguments (classBody)?
+    :   arguments classBody?
     ;
 
 
@@ -578,7 +595,7 @@ nonWildcardTypeArguments
     ;
 
 arguments 
-    :   '(' (expressionList)? ')'
+    :   '(' expressionList? ')'
     ;
 
 literal 
