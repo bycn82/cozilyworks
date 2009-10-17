@@ -1,6 +1,8 @@
 package com.cozilyworks.cozily.codedom;
 
 public class CodeDocument{
+	public boolean developing=false;
+	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	protected String B=" ";
 	protected String N="\n";
@@ -10,7 +12,11 @@ public class CodeDocument{
 	public String toString(){
 		visit();
 		if(sb.length()==0){
-			return this.getClass().getSimpleName()+"\n";
+			if(developing){
+				return this.getClass().getSimpleName()+"\n";
+			}else{
+				return " ";
+			}
 		}else{
 			return sb.toString();
 		}
@@ -30,5 +36,11 @@ public class CodeDocument{
 	}
 	public String show(){
 		return sb.toString();
+	}
+	public void trace(String str){
+		System.out.println(str);
+	}
+	public void trace(int i){
+		trace(String.valueOf(i));
 	}
 }
