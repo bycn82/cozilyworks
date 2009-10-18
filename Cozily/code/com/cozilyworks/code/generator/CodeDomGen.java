@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import com.cozilyworks.util.StringUtilPlus;
+import com.cozilyworks.cozily.util.StringUtilPlus;
 
 public class CodeDomGen{
 	public static List<String> medNames;
