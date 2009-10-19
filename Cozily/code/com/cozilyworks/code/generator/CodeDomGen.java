@@ -1,5 +1,4 @@
 package com.cozilyworks.code.generator;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -7,13 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.util.StringUtilPlus;
-
 public class CodeDomGen{
 	public static List<String> medNames;
-	public static void parse(List<Clz> clzs){
+	public static void parse(String folder,List<Clz> clzs){
 		try{
-			String folder="src\\com\\cozilyworks\\cozily\\codedom\\impl";
+			if(folder==null){
+				folder="src\\com\\cozilyworks\\cozily\\codedom\\impl";
+			}
 			for(Clz clz:clzs){
+				System.out.println(folder);
+
 				if(clz!=null){
 					String clzName=StringUtilPlus.ucword(clz.getName());
 					File f=new File(folder+"\\"+clzName+".java");
@@ -33,7 +35,8 @@ public class CodeDomGen{
 									w.write("this."+med.getName().toLowerCase().substring(3)+"Str=t;\n");
 									w.write("}\n");
 								}else{
-									w.write("private List<String> "+med.getName().toLowerCase().substring(3)+"s=new ArrayList<String>();\n");
+									w.write("private List<String> "+med.getName().toLowerCase().substring(3)
+											+"s=new ArrayList<String>();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"s.add(t);\n");
 									w.write("}\n");
@@ -46,7 +49,7 @@ public class CodeDomGen{
 									w.write("}\n");
 								}else{
 									w.write("private List<"+med.getType()+"> "+med.getType().toLowerCase()
-										+"s=new ArrayList<"+med.getType()+">();\n");
+											+"s=new ArrayList<"+med.getType()+">();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"s.add(t);\n");
 									w.write("}\n");

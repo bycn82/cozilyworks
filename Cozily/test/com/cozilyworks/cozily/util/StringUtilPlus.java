@@ -1,5 +1,4 @@
 package com.cozilyworks.cozily.util;
-
 public class StringUtilPlus{
 	public static String ucword(String str){
 		String begin=str.substring(0,1);
@@ -14,10 +13,6 @@ public class StringUtilPlus{
 			}
 		}
 		return null;
-	}
-	public static void main(String[] args){
-		//System.out.println(setOrGetDependsOnNextOneOrTwoChar(3,"abc)   +*"));
-		System.out.println(clean("    :   modifiers  'class' IDENTIFIER typeParameters? ('extends' type)? ('implements' typeList)? classBody"));
 	}
 	public static String setOrGetDependsOnNextOneOrTwoChar(int pos,String rule){
 		String next=getNextOneChar(pos,rule);
@@ -63,5 +58,43 @@ public class StringUtilPlus{
 		}else{
 			return tree;
 		}
+	}
+	public static String setOrAdd(int start,String rule){
+		String c=getNextOneChar(start,rule);
+		if(c==null){
+			// the end
+			return "set";
+		}else if(c.equals("*")||c.equals("+")){
+			return "add";
+		}else{
+			boolean complexAdd=checkRparens(start,rule);
+			if(complexAdd){
+				return "add";
+			}
+			return "set";
+		}
+	}
+	private static boolean checkRparens(int start,String rule){
+		int n=0;
+		for(int i=start;i<rule.length();i++){
+			String c=rule.substring(i,i+1);
+			if(c.equals("(")){
+				n--;
+			}
+			if(c.equals(")")){
+				n++;
+			}
+			if(n>0){
+				String tmp=getNextOneChar(i,rule);
+				if(tmp.equals("+") || tmp.equals("*")){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	public static void main(String[] args){
+		System.out.println(setOrAdd(3,"(ab  (abc) (ok))+"));
 	}
 }
