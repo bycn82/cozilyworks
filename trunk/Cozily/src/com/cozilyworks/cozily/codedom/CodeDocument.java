@@ -13,15 +13,37 @@ public class CodeDocument{
 	public String format;
 	public String toString(){
 		visit();
-		V(format,single,multi);
+		sb.append(V(format,single,multi));
 		return controlOutput();
 	}
-	public void V(String format,HashMap<String,Object> single,HashMap<String,List<Object>> multi){
-		System.out.println(format);
+
+	public String V(String format,HashMap<String,Object> single,HashMap<String,List<Object>> multi){
+		//获取最小的一个( )内容
+		String substr=getMiniUnit(format);
 		
-		System.out.println(single.size());
-		System.out.println("====");
-		System.out.println(multi.size());
+		//把这段小的替换成文本
+		String cozStr=deal(substr,single,multi);
+		//如果已经是全部了,就返回
+		if(substr.equals(format)){
+			return cozStr;
+		}else{
+			//不然就先做个标记,以后再替换
+			String newformat=tag(format,cozStr);
+			//继续调用该函数
+			return V(newformat,single,multi);
+		}
+	}
+	//用标记替换取出的地方,然后把标记收集起来,以后要replace回来
+	private String tag(String format2,String cozStr){
+		return null;
+	}
+	//处理,好复杂的,其中判断是单还是多,好像可以用Utils的那个setOrAdd
+	private String deal(String substr,HashMap<String,Object> single2,HashMap<String,List<Object>> multi2){
+		return null;
+	}
+	//取出最小单元,
+	private String getMiniUnit(String format2){
+		return null;
 	}
 	private String controlOutput(){
 		if(sb.length()==0){
