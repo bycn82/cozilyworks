@@ -9,4 +9,6 @@ public class Constants{
 	public static String ACTION_PATH="code/action.txt";
 	public static String NEW_RULES_PATH="code/new_rules.txt";
 	public static String NEW_TREE="code/new_tree.txt";
+	public static String ACTION_V2="code/action_v2.txt";
+	public static String ACT_FORMAT="code/action_format.txt";
 }
