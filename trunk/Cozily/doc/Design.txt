@@ -11,3 +11,14 @@
 规则
 
 1,grammer规则		"|"比如在开头,不能在中间			 能取消的括弧都取消
+
+
+
+
+
+
+Conclusion
+1,提取rule  --->rules
+2,生成tree  --->new_rules
+3,提取tree  --->tree
+4,生成action --->action
