@@ -1,7 +1,7 @@
 package com.cozilyworks.cozily.codedom;
 
 public class CodeDocument{
-	public boolean developing=true;
+	public boolean developing=false;
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	protected String B=" ";
@@ -19,7 +19,7 @@ public class CodeDocument{
 			}
 		}else{
 			if(developing){
-				return sb.toString();
+				return "\n["+this.getClass().getSimpleName()+"]"+sb.toString();
 			}else{
 				return sb.toString();
 			}

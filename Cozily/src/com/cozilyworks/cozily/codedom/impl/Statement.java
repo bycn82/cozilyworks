@@ -79,7 +79,7 @@ public class Statement extends CodeDocument{
 			add(this.parexpression);
 		}
 		if(coz==6){
-			
+
 			add(this.trystatement);
 		}
 		if(coz==7){
@@ -93,7 +93,7 @@ public class Statement extends CodeDocument{
 			add(this.block);
 		}
 		if(coz==9){
-			add("return");
+			add("return ");
 			add(this.expression);
 		}
 		if(coz==10){
