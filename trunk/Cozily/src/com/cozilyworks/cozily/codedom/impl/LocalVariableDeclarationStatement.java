@@ -3,8 +3,12 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 public class LocalVariableDeclarationStatement extends CodeDocument{
-private LocalVariableDeclaration localvariabledeclaration;
-public void setLocalVariableDeclaration(LocalVariableDeclaration t){
-this.localvariabledeclaration=t;
-}
+	private LocalVariableDeclaration localvariabledeclaration;
+	public void setLocalVariableDeclaration(LocalVariableDeclaration t){
+		this.localvariabledeclaration=t;
+	}
+	public void visit(){
+		add(this.localvariabledeclaration);
+		add(SEMI);
+	}
 }
