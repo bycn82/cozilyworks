@@ -1,32 +1,26 @@
 package com.cozilyworks.cozily.codedom.impl;
-
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 import com.cozilyworks.cozily.codedom.*;
-
 public class EqualityExpression extends CodeDocument{
-	private InstanceOfExpression instanceofexpression;
-	public void setInstanceOfExpression(InstanceOfExpression t){
-		this.instanceofexpression=t;
-	}
-	private List<EqualOrNotequal> equalornotequals=new ArrayList<EqualOrNotequal>();
-	public void addEqualOrNotequal(EqualOrNotequal t){
-		this.equalornotequals.add(t);
-	}
-	private List<InstanceOfExpression> instanceofexpressions=new ArrayList<InstanceOfExpression>();
-	public void addInstanceOfExpression(InstanceOfExpression t){
-		this.instanceofexpressions.add(t);
-	}
-	public void visit(){
-		if(coz==0){
-			add(this.instanceofexpression);
-			for(EqualOrNotequal equalornot:this.equalornotequals){
-				add(equalornot);
-			}
-			for(InstanceOfExpression instantofexp:this.instanceofexpressions){
-				add(instantofexp);
-			}
-		}
-	}
+private InstanceOfExpression instanceofexpression;
+public void setInstanceOfExpression(InstanceOfExpression t){
+this.instanceofexpression=t;
+if(single.get("instanceofexpression")==null){single.put("instanceofexpression",instanceofexpression);}
+}
+private List<EqualOrNotequal> equalornotequals=new ArrayList<EqualOrNotequal>();
+public void addEqualOrNotequal(EqualOrNotequal t){
+this.equalornotequals.add(t);
+if(multi.get("equalornotequal")==null){multi.put("equalornotequal",equalornotequals);}
+}
+private List<InstanceOfExpression> instanceofexpressions=new ArrayList<InstanceOfExpression>();
+public void addInstanceOfExpression(InstanceOfExpression t){
+this.instanceofexpressions.add(t);
+if(multi.get("instanceofexpression")==null){multi.put("instanceofexpression",instanceofexpressions);}
+}
+public void visit(){
+if(coz==0){
+format="instanceOfExpression ( equalOrNotequal instanceOfExpression)*";
+}
+}
 }

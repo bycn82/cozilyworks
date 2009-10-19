@@ -6,9 +6,19 @@ public class ElementOfAnno extends CodeDocument{
 private ElementValuePairs elementvaluepairs;
 public void setElementValuePairs(ElementValuePairs t){
 this.elementvaluepairs=t;
+if(single.get("elementvaluepairs")==null){single.put("elementvaluepairs",elementvaluepairs);}
 }
 private ElementValue elementvalue;
 public void setElementValue(ElementValue t){
 this.elementvalue=t;
+if(single.get("elementvalue")==null){single.put("elementvalue",elementvalue);}
+}
+public void visit(){
+if(coz==0){
+format="elementValuePairs";
+}
+if(coz==1){
+format="elementValue";
+}
 }
 }

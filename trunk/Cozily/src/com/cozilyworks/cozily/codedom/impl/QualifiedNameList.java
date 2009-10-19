@@ -6,5 +6,11 @@ public class QualifiedNameList extends CodeDocument{
 private List<QualifiedName> qualifiednames=new ArrayList<QualifiedName>();
 public void addQualifiedName(QualifiedName t){
 this.qualifiednames.add(t);
+if(multi.get("qualifiedname")==null){multi.put("qualifiedname",qualifiednames);}
+}
+public void visit(){
+if(coz==0){
+format="(',' qualifiedName)*";
+}
 }
 }

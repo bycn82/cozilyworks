@@ -1,16 +1,29 @@
 package com.cozilyworks.cozily.codedom;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class CodeDocument{
 	public boolean developing=true;
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
-	protected String B=" ";
-	protected String N="\n";
-	protected String BN=" \n";
-	protected String SEMI=";";
-	protected String SEMIN=";\n";
+	public HashMap single=new HashMap();
+	public HashMap multi=new HashMap();
+	public String format;
 	public String toString(){
 		visit();
+		V(format,single,multi);
+		return controlOutput();
+	}
+	public void V(String format,HashMap<String,Object> single,HashMap<String,List<Object>> multi){
+		System.out.println(format);
+		
+		System.out.println(single.size());
+		System.out.println("====");
+		System.out.println(multi.size());
+	}
+	private String controlOutput(){
 		if(sb.length()==0){
 			if(developing){
 				return "\n["+this.getClass().getSimpleName()+"]\n";
@@ -27,27 +40,7 @@ public class CodeDocument{
 	}
 	public void visit(){
 	}
-	public void add(Object obj){
-		if(obj!=null){
-			sb.append(obj.toString());
-		}
-	}
 	public void debug(Object obj){
 		System.err.print("[DEBUG:]"+this.getClass().getSimpleName()+(obj!=null?obj.toString(): "null"));
-	}
-	public void b(){
-		add(B);
-	}
-	public String show(){
-		return sb.toString();
-	}
-	public void trace(String str){
-		System.out.println(str);
-	}
-	public void trace(int i){
-		trace(String.valueOf(i));
-	}
-	public void coz(){
-		trace(coz);
 	}
 }
