@@ -1,3 +1,7 @@
-public interface Example{
-	public void go();
+@ok
+package com;
+import nice;
+import nicel;
+public class Example{
+	
 }

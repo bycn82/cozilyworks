@@ -6,5 +6,11 @@ public class NonWildcardTypeArguments extends CodeDocument{
 private TypeList typelist;
 public void setTypeList(TypeList t){
 this.typelist=t;
+if(single.get("typelist")==null){single.put("typelist",typelist);}
+}
+public void visit(){
+if(coz==0){
+format="'<' typeList '>'";
+}
 }
 }

@@ -1,4 +1,5 @@
 package com.cozilyworks.code.generator;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -6,16 +7,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.util.StringUtilPlus;
+
 public class CodeDomGen{
 	public static List<String> medNames;
-	public static void parse(String folder,List<Clz> clzs){
+	public static void parse(List<Clz> clzs){
 		try{
-			if(folder==null){
-				folder="src\\com\\cozilyworks\\cozily\\codedom\\impl";
-			}
+			String folder="src\\com\\cozilyworks\\cozily\\codedom\\impl";
 			for(Clz clz:clzs){
-				System.out.println(folder);
-
 				if(clz!=null){
 					String clzName=StringUtilPlus.ucword(clz.getName());
 					File f=new File(folder+"\\"+clzName+".java");
@@ -33,12 +31,22 @@ public class CodeDomGen{
 									w.write("private String "+med.getName().toLowerCase().substring(3)+"Str;\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"Str=t;\n");
+									//
+									w.write("if(single.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
+									w.write("single.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+"Str);");
+									w.write("}\n");
+									//
 									w.write("}\n");
 								}else{
 									w.write("private List<String> "+med.getName().toLowerCase().substring(3)
-											+"s=new ArrayList<String>();\n");
+										+"s=new ArrayList<String>();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"s.add(t);\n");
+									//
+									w.write("if(multi.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
+									w.write("multi.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+"s);");
+									w.write("}\n");
+									//
 									w.write("}\n");
 								}
 							}else{
@@ -46,17 +54,36 @@ public class CodeDomGen{
 									w.write("private "+med.getType()+" "+med.getType().toLowerCase()+";\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"=t;\n");
+									w.write("if(single.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
+									w.write("single.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+");");
+									w.write("}\n");
 									w.write("}\n");
 								}else{
 									w.write("private List<"+med.getType()+"> "+med.getType().toLowerCase()
-											+"s=new ArrayList<"+med.getType()+">();\n");
+										+"s=new ArrayList<"+med.getType()+">();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"s.add(t);\n");
+									//
+									w.write("if(multi.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
+									w.write("multi.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+"s);");
+									w.write("}\n");
+									//
 									w.write("}\n");
 								}
 							}
 						}
 					}
+					//write visit() method
+					w.write("public void visit(){\n");
+					int k=0;
+					for(String format:clz.getFormats()){
+						w.write(String.format("if(coz==%d){\n",k));
+						w.write(String.format("format=\"%s\";\n",cutHead(clz.getFormats().get(k))));
+						w.write("}\n");
+						k++;
+					}
+					w.write("}\n");
+					//end visit
 					w.write("}\n");
 					w.flush();
 				}
@@ -64,6 +91,9 @@ public class CodeDomGen{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
+	private static Object cutHead(String format){
+		return format.substring(1).trim();
 	}
 	private static boolean notRepeat(Med med){
 		if(medNames.contains(med.getName())){

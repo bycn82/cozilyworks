@@ -1,4 +1,5 @@
 package com.cozilyworks.code.generator;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,13 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.cozilyworks.cozily.util.StringUtil;
 import com.cozilyworks.cozily.util.StringUtilPlus;
+
 /**
  * 直接从new rules里获得Tree Grammer,并且得到Visit,采用String.format来实现
  */
 public class ActionGenV2{
 	private static String from=Constants.NEW_RULES_PATH;
 	private static String to=Constants.ACTION_V2;
-	private static List<String> formats=new ArrayList<String>();
 	public static BufferedWriter writer;
 	public static BufferedReader reader;
 	public static Pattern p=Pattern.compile("([A-Za-z0-9]*)");
@@ -45,7 +46,7 @@ public class ActionGenV2{
 	private static void doRuleName(String ruleName){
 		ruleName=ruleName.trim();
 		write(String.format("%s returns[%s rtn]\n@init{rtn=new %s();}\n",ruleName,StringUtilPlus.ucword(ruleName),
-				StringUtilPlus.ucword(ruleName)));
+			StringUtilPlus.ucword(ruleName)));
 		clz=new Clz();
 		clz.setName(ruleName);
 	}
@@ -85,11 +86,11 @@ public class ActionGenV2{
 						med.setType(now);
 						if(!StringUtil.isUpperCase(now,"_")){
 							sb.append(String.format("(x%d=%s{rtn.%s%s(x%d);})",i,now,addset,StringUtilPlus.ucword(now),
-									i));
+								i));
 							med.setType(StringUtilPlus.ucword(now));
 						}else{
 							sb.append(String.format("(x%d=%s{rtn.%s%s($x%d.text);})",i,now,addset,StringUtilPlus
-									.ucword(now),i));
+								.ucword(now),i));
 							med.setType("String");
 						}
 						i++;
@@ -102,16 +103,16 @@ public class ActionGenV2{
 		}
 		if(rule.startsWith(":")){
 			write(":");
-			formats.add(clz.getName()+"--->"+rule);
+			clz.addFormat(rule);
 		}
 		if(rule.startsWith("|")){
 			write("|");
-			formats.add(clz.getName()+"--->"+rule);
+			clz.addFormat(rule);
 		}
 	}
 	private static boolean isRule(String rule){
 		if(rule.trim().startsWith(":")||rule.trim().startsWith("|")||rule.trim().startsWith(";")
-				||rule.trim().startsWith("->"))
+			||rule.trim().startsWith("->"))
 			return true;
 		return false;
 	}
@@ -135,10 +136,7 @@ public class ActionGenV2{
 		initImaginarys();
 		init();
 		analyse();
-		for(String format:formats){
-			System.out.println(format);
-		}
-		CodeDomGen.parse("code\\com\\cozilyworks\\cozily\\codedom\\impl",clzs);
+		CodeDomGen.parse(clzs);
 	}
 	private static void initImaginarys(){
 		try{

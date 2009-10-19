@@ -125,7 +125,7 @@ public class ActionGenerator{
 		initImaginarys();
 		init();
 		analyse();
-		CodeDomGen.parse(null,clzs);
+		CodeDomGen.parse(clzs);
 	}
 	private static void initImaginarys(){
 		try{
