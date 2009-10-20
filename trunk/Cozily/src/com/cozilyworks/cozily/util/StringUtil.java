@@ -1,5 +1,4 @@
 package com.cozilyworks.cozily.util;
-
 public class StringUtil{
 	public static String camelStyle(String str){
 		StringBuilder sb=new StringBuilder();
@@ -59,5 +58,33 @@ public class StringUtil{
 			}
 		}
 		return true;
+	}
+	public static String nextChar(int pos,String str){
+		return nextChar(pos,str,"");
+	}
+	public static String nextChar(int pos,String str,String except){
+		if(str.length()>pos){
+			String next=str.substring(pos,pos+1);
+			if(except.contains(next)){
+				return nextChar(pos+1,str,except);
+			}else{
+				return next;
+			}
+		}
+		return null;
+	}
+	public static String lastChar(int pos,String str){
+		return lastChar(pos,str,"");
+	}
+	public static String lastChar(int pos,String str,String except){
+		if(pos>0){
+			String next=str.substring(pos-1,pos);
+			if(except.contains(next)){
+				return lastChar(pos-1,str,except);
+			}else{
+				return next;
+			}
+		}
+		return null;
 	}
 }
