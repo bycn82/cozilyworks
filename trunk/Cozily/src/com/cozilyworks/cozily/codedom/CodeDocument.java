@@ -20,7 +20,7 @@ public class CodeDocument{
 	public String V(String format,HashMap<String,Object> single,HashMap<String,List<Object>> multi){
 		//获取最小的一个( )内容
 		String substr=getMiniUnit(format);
-		
+
 		//把这段小的替换成文本
 		String cozStr=deal(substr,single,multi);
 		//如果已经是全部了,就返回
@@ -42,7 +42,10 @@ public class CodeDocument{
 		return null;
 	}
 	//取出最小单元,
-	private String getMiniUnit(String format2){
+	private String getMiniUnit(String all){
+		System.out.println(all);
+		int i=all.indexOf(")");
+		System.out.println(i);
 		return null;
 	}
 	private String controlOutput(){
