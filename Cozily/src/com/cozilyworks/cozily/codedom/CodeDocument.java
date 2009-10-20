@@ -7,11 +7,6 @@ import java.util.regex.Pattern;
 import com.cozilyworks.cozily.util.StringUtil;
 import com.cozilyworks.cozily.util.StringUtilPlus;
 public class CodeDocument{
-	public static void main(String[] arg){
-		CodeDocument c=new CodeDocument();
-		c.format="((a? b)? c)* d* ";
-		System.out.println(c);
-	}
 	public boolean developing=true;
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
@@ -60,21 +55,24 @@ public class CodeDocument{
 		return all.replace(unit.getFormat(),tag);
 	}
 	// 处理,好复杂的,其中判断是单还是多,好像可以用Utils的那个setOrAdd
-	public static void deal(Unit unit){
-		String str="";
-		int start=0,end=0;
-		String fstr=unit.getFormat();
-		System.out.println("!!!! "+fstr);
-		Matcher m=pp.matcher(fstr);
-		System.out.println(m.groupCount());
-		while(m.find()){
-			end=m.start();
-			str+=fstr.substring(start,end);
-			str+=m.group().toUpperCase();
-			start=m.end();
+	public void deal(Unit unit){
+		StringBuilder sbr=new StringBuilder();
+		if(unit.isSingle()){//单次
+			int start=0,end=0;
+			String fstr=unit.getFormat();
+			Matcher m=pp.matcher(fstr);
+			System.out.println(m.groupCount());
+			while(m.find()){
+				end=m.start();
+				sbr.append(fstr.substring(start,end));
+				sbr.append(getSingle(m.group()));
+				start=m.end();
+			}
+			sbr.append(fstr.substring(start));
+			unit.setResult(sbr.toString());
+		}else{//多次,更加麻烦
+			unit.setResult("MULTI");
 		}
-		str+=fstr.substring(start);
-		unit.setResult(str);
 	}
 	// 取出最小单元,就是取出第一个)对应的一对( )
 	public static Unit getMiniUnit(String all){
@@ -133,6 +131,22 @@ public class CodeDocument{
 	public void visit(){}
 	public void debug(Object obj){
 		System.err.print("[DEBUG:]"+this.getClass().getSimpleName()+(obj!=null?obj.toString():"null"));
+	}
+	public String getSingle(String key){
+		Object obj;
+		if(StringUtil.isUpperCase(key,"_")){// String
+			obj=single.get(key.toLowerCase()+"Str");
+		}else{
+			obj=single.get(key.toLowerCase());
+		}
+		if(obj==null){
+			return "";
+		}else{
+			return obj.toString();
+		}
+	}
+	public String getMulti(String key){
+		return null;
 	}
 }
 class Unit{
