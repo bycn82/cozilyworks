@@ -6,8 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.cozilyworks.cozily.util.StringUtil;
 import com.cozilyworks.cozily.util.StringUtilPlus;
+@SuppressWarnings("unchecked")
 public class CodeDocument{
-	public boolean developing=true;
+	public boolean developing=false;
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	public HashMap single=new HashMap();
@@ -17,9 +18,12 @@ public class CodeDocument{
 	public int i=0;
 	public HashMap<String,String> cozily=new HashMap<String,String>();
 	public List<String> ckey=new ArrayList<String>();
+	/**
+	 * toString方法
+	 */
 	public String toString(){
 		visit();
-		String encoded=V(format);
+		String encoded=parse(format);
 		sb.append(decode(encoded));
 		return controlOutput();
 	}
@@ -31,10 +35,11 @@ public class CodeDocument{
 		}
 		return encoded;
 	}
-	public String V(String format){
-		// 获取最小的一个( )内容
+	public String parse(String format){
+		System.out.println(format);
+		// 获取最小单元内容
 		Unit unit=getMiniUnit(format);
-		// 把这段小的替换成文本
+		// 处理它
 		deal(unit);
 		// 如果已经是全部了,就返回
 		if(unit.getFormat().equals(format)){
@@ -43,7 +48,7 @@ public class CodeDocument{
 			// 不然就先做个标记,以后再替换
 			String newformat=tag(format,unit);
 			// 继续调用该函数
-			return V(newformat);
+			return parse(newformat);
 		}
 	}
 	// 用标记替换取出的地方,然后把标记收集起来,以后要replace回来
@@ -56,26 +61,65 @@ public class CodeDocument{
 	}
 	// 处理,好复杂的,其中判断是单还是多,好像可以用Utils的那个setOrAdd
 	public void deal(Unit unit){
-		StringBuilder sbr=new StringBuilder();
-		if(unit.isSingle()){//单次
-			int start=0,end=0;
-			String fstr=unit.getFormat();
-			Matcher m=pp.matcher(fstr);
-			System.out.println(m.groupCount());
-			while(m.find()){
-				end=m.start();
-				sbr.append(fstr.substring(start,end));
-				sbr.append(getSingle(m.group()));
-				start=m.end();
+		List args=new ArrayList();
+		StringBuilder f=new StringBuilder();
+		int start=0,end=0;
+		String fstr=unit.getFormat();
+		Matcher m=pp.matcher(fstr);
+		while(m.find()){
+			end=m.start();
+			f.append(fstr.substring(start,end));
+			String found=m.group();
+			if(StringUtilPlus.notRule(m.start(),m.end(),unit.getFormat())||m.group().startsWith("COZILY")){
+				f.append(found);
+			}else{
+				f.append("%s");
+				if(unit.isSingle()){
+					args.add(getSingle(m.group()));
+				}else{
+					args.add(getMulti(m.group()));
+				}
 			}
-			sbr.append(fstr.substring(start));
-			unit.setResult(sbr.toString());
-		}else{//多次,更加麻烦
-			unit.setResult("MULTI");
+			start=m.end();
 		}
+		f.append(fstr.substring(start));
+		String outcome=format(f,args,unit.isSingle());
+		unit.setResult(outcome);
+	}
+	private String format(StringBuilder f,List args,boolean single){
+		// System.out.println(this.getClass().getSimpleName()+"--->"+f.toString()+"   "+args.size()+single);
+		StringBuilder outcome=new StringBuilder();
+		if(single){
+			outcome.append(String.format(f.toString(),args.toArray()));
+		}else{
+			int size=getTimes(args);
+			for(int i=0;i<size;i++){
+				List ls=new ArrayList();
+				for(Object arg:args){
+					Object obj=((List)arg).get(i);
+					ls.add(obj);
+				}
+				Object ojs=ls.toArray();
+				outcome.append(String.format(f.toString(),ojs));
+			}
+		}
+		return outcome.toString();
+	}
+	public int getTimes(List args){
+		int size=0;
+		for(Object arg:args){
+			if(arg!=null){
+				try{
+					size=((List)arg).size();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		return size;
 	}
 	// 取出最小单元,就是取出第一个)对应的一对( )
-	public static Unit getMiniUnit(String all){
+	public Unit getMiniUnit(String all){
 		Unit unit=new Unit();
 		int i=all.indexOf(")");
 		if(i!=-1){
@@ -110,6 +154,7 @@ public class CodeDocument{
 			unit.setFormat(all.substring(start,end));
 		}else{
 			unit.setFormat(all);
+			unit.setSingle(true);
 		}
 		return unit;
 	}
@@ -128,6 +173,7 @@ public class CodeDocument{
 			}
 		}
 	}
+	// 设置Format
 	public void visit(){}
 	public void debug(Object obj){
 		System.err.print("[DEBUG:]"+this.getClass().getSimpleName()+(obj!=null?obj.toString():"null"));
@@ -135,18 +181,22 @@ public class CodeDocument{
 	public String getSingle(String key){
 		Object obj;
 		if(StringUtil.isUpperCase(key,"_")){// String
-			obj=single.get(key.toLowerCase()+"Str");
+			obj=single.get(key.toLowerCase());
 		}else{
 			obj=single.get(key.toLowerCase());
 		}
 		if(obj==null){
-			return "";
+			return "_";
 		}else{
 			return obj.toString();
 		}
 	}
-	public String getMulti(String key){
-		return null;
+	public List getMulti(String key){
+		List objs=(List)multi.get(key.toLowerCase());
+		if(objs==null){
+			return null;
+		}
+		return objs;
 	}
 }
 class Unit{

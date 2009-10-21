@@ -1,5 +1,4 @@
 package com.cozilyworks.cozily.util;
-
 public class StringUtilPlus{
 	public static String ucword(String str){
 		String begin=str.substring(0,1);
@@ -16,8 +15,8 @@ public class StringUtilPlus{
 		return null;
 	}
 	/*
-	v1中使用,有bug,过期了
-	*/
+	 * v1中使用,有bug,过期了
+	 */
 	public static String setOrGetDependsOnNextOneOrTwoChar(int pos,String rule){
 		String next=getNextOneChar(pos,rule);
 		if(next!=null){
@@ -64,19 +63,19 @@ public class StringUtilPlus{
 		}
 	}
 	/*
-	 * 
+	 *
 	 */
 	public static String setOrAdd(int start,String rule){
 		String c=getNextOneChar(start,rule);
-		//如果已经是最后的char 那么是set
+		// 如果已经是最后的char 那么是set
 		if(c==null){
 			// the end
 			return "set";
-			//如果后一个是* +都是add
+			// 如果后一个是* +都是add
 		}else if(c.equals("*")||c.equals("+")){
 			return "add";
 		}else{
-			//都不是的情况需要比较复杂,需要计算)的个数,
+			// 都不是的情况需要比较复杂,需要计算)的个数,
 			boolean complexAdd=checkRparens(start,rule);
 			if(complexAdd){
 				return "add";
@@ -84,17 +83,17 @@ public class StringUtilPlus{
 			return "set";
 		}
 	}/*
-		如果第N个)后面是* +就是add,如果N是大于0的
-		*/
+	 * 如果第N个)后面是* +就是add,如果N是大于0的
+	 */
 	private static boolean checkRparens(int start,String rule){
 		int n=0;
 		for(int i=start;i<rule.length();i++){
 			String c=rule.substring(i,i+1);
-			//碰到( 就n--
+			// 碰到( 就n--
 			if(c.equals("(")){
 				n--;
 			}
-			//碰到) 就n++
+			// 碰到) 就n++
 			if(c.equals(")")){
 				n++;
 				if(n>0){
@@ -112,7 +111,16 @@ public class StringUtilPlus{
 	public static String getVisit(String format){
 		return null;
 	}
-	public static void main(String[] args){
-		System.out.println(setOrAdd(4,"(((a      *"));
+	public static boolean notRule(int start,int end,String format){
+		String c=StringUtil.lastChar(start,format);
+		if(c!=null && c.equals("'")){
+			c=StringUtil.nextChar(end,format);
+		}
+		if(c!=null && c.equals("'")){
+		//	System.out.println(format.substring(start,end)+" in "+format +"is not a rule");
+			return true;
+		}
+	//	System.out.println(format.substring(start,end)+" in "+format +"is a rule");
+		return false;
 	}
 }
