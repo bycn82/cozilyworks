@@ -6,11 +6,10 @@ public class EnumBodyDeclarations extends CodeDocument{
 private List<ClassBodyDeclaration> classbodydeclarations=new ArrayList<ClassBodyDeclaration>();
 public void addClassBodyDeclaration(ClassBodyDeclaration t){
 this.classbodydeclarations.add(t);
-if(multi.get("classbodydeclaration")==null){multi.put("classbodydeclaration",classbodydeclarations);}
 }
 public void visit(){
 if(coz==0){
-format="';' classBodyDeclaration*";
+//"';' classBodyDeclaration*";
 }
 }
 }

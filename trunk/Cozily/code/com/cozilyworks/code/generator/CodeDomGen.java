@@ -31,22 +31,12 @@ public class CodeDomGen{
 									w.write("private String "+med.getName().toLowerCase().substring(3)+"Str;\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"Str=t;\n");
-									//
-									w.write("if(single.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
-									w.write("single.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+"Str);");
-									w.write("}\n");
-									//
 									w.write("}\n");
 								}else{
 									w.write("private List<String> "+med.getName().toLowerCase().substring(3)
 										+"s=new ArrayList<String>();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"s.add(t);\n");
-									//
-									w.write("if(multi.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
-									w.write("multi.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+"s);");
-									w.write("}\n");
-									//
 									w.write("}\n");
 								}
 							}else{
@@ -54,20 +44,12 @@ public class CodeDomGen{
 									w.write("private "+med.getType()+" "+med.getType().toLowerCase()+";\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"=t;\n");
-									w.write("if(single.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
-									w.write("single.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+");");
-									w.write("}\n");
 									w.write("}\n");
 								}else{
 									w.write("private List<"+med.getType()+"> "+med.getType().toLowerCase()
 										+"s=new ArrayList<"+med.getType()+">();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"s.add(t);\n");
-									//
-									w.write("if(multi.get(\""+med.getName().toLowerCase().substring(3)+"\")==null){");
-									w.write("multi.put(\""+med.getName().toLowerCase().substring(3)+"\","+med.getName().toLowerCase().substring(3)+"s);");
-									w.write("}\n");
-									//
 									w.write("}\n");
 								}
 							}
@@ -78,7 +60,7 @@ public class CodeDomGen{
 					int k=0;
 					for(String format:clz.getFormats()){
 						w.write(String.format("if(coz==%d){\n",k));
-						w.write(String.format("format=\"%s\";\n",cutHead(clz.getFormats().get(k))));
+						w.write(String.format("//\"%s\";\n",cutHead(clz.getFormats().get(k))));
 						w.write("}\n");
 						k++;
 					}

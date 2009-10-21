@@ -6,19 +6,17 @@ public class ThisOrSuper extends CodeDocument{
 private String thisStr;
 public void setTHIS(String t){
 this.thisStr=t;
-if(single.get("this")==null){single.put("this",thisStr);}
 }
 private String superStr;
 public void setSUPER(String t){
 this.superStr=t;
-if(single.get("super")==null){single.put("super",superStr);}
 }
 public void visit(){
 if(coz==0){
-format="THIS";
+//"THIS";
 }
 if(coz==1){
-format="SUPER";
+//"SUPER";
 }
 }
 }

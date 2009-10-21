@@ -1,4 +1,5 @@
 package com.cozilyworks.cozily.util;
+
 public class StringUtilPlus{
 	public static String ucword(String str){
 		String begin=str.substring(0,1);
@@ -83,8 +84,8 @@ public class StringUtilPlus{
 			return "set";
 		}
 	}/*
-	 * 如果第N个)后面是* +就是add,如果N是大于0的
-	 */
+		* 如果第N个)后面是* +就是add,如果N是大于0的
+		*/
 	private static boolean checkRparens(int start,String rule){
 		int n=0;
 		for(int i=start;i<rule.length();i++){
@@ -108,19 +109,100 @@ public class StringUtilPlus{
 		}
 		return false;
 	}
-	public static String getVisit(String format){
-		return null;
-	}
 	public static boolean notRule(int start,int end,String format){
 		String c=StringUtil.lastChar(start,format);
-		if(c!=null && c.equals("'")){
+		if(c!=null&&c.equals("'")){
 			c=StringUtil.nextChar(end,format);
 		}
-		if(c!=null && c.equals("'")){
-		//	System.out.println(format.substring(start,end)+" in "+format +"is not a rule");
+		if(c!=null&&c.equals("'")){
 			return true;
 		}
-	//	System.out.println(format.substring(start,end)+" in "+format +"is a rule");
 		return false;
+	}
+	public static void main(String[] arg){
+		String format="'package' qualifiedName ';'";
+		System.out.println(parse(format));
+	}
+	public static String parse(String all){
+		StringBuilder sb=new StringBuilder();
+		Unit unit=getUnit(all);
+		deal(unit);
+		// 如果已经是全部了,就返回
+		if(unit.getFormat().equals(all)){
+			return unit.getResult();
+		}else{
+			// 不然就先做个标记,以后再替换
+			String newAll=tag(all,unit);
+			// 继续调用该函数
+			return parse(newAll);
+		}
+	}
+	private static String tag(String all,Unit unit){
+		return null;
+	}
+	private static void deal(Unit unit){
+		unit.setResult("["+unit.getFormat()+"]");
+	}
+	public static Unit getUnit(String all){
+		Unit unit=new Unit();
+		int i=all.indexOf(")");
+		if(i!=-1){
+			// 判断是多还是单
+			String set=StringUtilPlus.setOrAdd(i,all);
+			if(set.equals("set")){
+				unit.setSingle(true);
+			}else{
+				unit.setSingle(false);
+			}
+			// 存在)号
+			int start=0,end=i;
+			// 取出)后面非空的第一个?*+ 如果不是空或者?*+,那么意思是没必要有这个)号,
+			for(int k=i+1;k<all.length();k++){
+				String next=StringUtil.nextChar(k,all);
+				if(next.equals(" ")){
+					continue;
+				}
+				if(next.equals("?")||next.equals("+")||next.equals("*")){
+					end=k+1;
+					break;
+				}
+			}
+			// 取)前的第一个(,形成一对
+			for(int k=i;k>1;k--){
+				String last=StringUtil.lastChar(k,all);
+				if(last.equals("(")){
+					start=k-1;
+					break;
+				}
+			}
+			unit.setFormat(all.substring(start,end));
+		}else{
+			unit.setFormat(all);
+		}
+		return unit;
+	}
+}
+
+class Unit{
+	private String format;
+	private boolean single;
+	private String result;
+	public void setResult(String r){
+		result=r;
+	}
+	public String getResult(){
+		return result;
+	}
+	public void setFormat(String f){
+		format=f;
+	}
+	public String getFormat(){
+		return format;
+	}
+	public boolean isSingle(){
+		return single;
+	}
+	public void setSingle(boolean sing){
+		single=sing;
 	}
 }

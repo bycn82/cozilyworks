@@ -6,19 +6,17 @@ public class DoublePlusMinus extends CodeDocument{
 private String plusplusStr;
 public void setPLUSPLUS(String t){
 this.plusplusStr=t;
-if(single.get("plusplus")==null){single.put("plusplus",plusplusStr);}
 }
 private String subsubStr;
 public void setSUBSUB(String t){
 this.subsubStr=t;
-if(single.get("subsub")==null){single.put("subsub",subsubStr);}
 }
 public void visit(){
 if(coz==0){
-format="PLUSPLUS";
+//"PLUSPLUS";
 }
 if(coz==1){
-format="SUBSUB";
+//"SUBSUB";
 }
 }
 }

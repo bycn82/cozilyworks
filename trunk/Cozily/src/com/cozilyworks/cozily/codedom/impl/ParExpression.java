@@ -6,11 +6,10 @@ public class ParExpression extends CodeDocument{
 private Expression expression;
 public void setExpression(Expression t){
 this.expression=t;
-if(single.get("expression")==null){single.put("expression",expression);}
 }
 public void visit(){
 if(coz==0){
-format="'(' expression ')'";
+//"'(' expression ')'";
 }
 }
 }

@@ -6,19 +6,17 @@ public class ReturnType extends CodeDocument{
 private Type type;
 public void setType(Type t){
 this.type=t;
-if(single.get("type")==null){single.put("type",type);}
 }
 private String voidStr;
 public void setVOID(String t){
 this.voidStr=t;
-if(single.get("void")==null){single.put("void",voidStr);}
 }
 public void visit(){
 if(coz==0){
-format="type";
+//"type";
 }
 if(coz==1){
-format="VOID";
+//"VOID";
 }
 }
 }

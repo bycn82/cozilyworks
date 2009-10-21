@@ -6,11 +6,10 @@ public class Catches extends CodeDocument{
 private List<CatchClause> catchclauses=new ArrayList<CatchClause>();
 public void addCatchClause(CatchClause t){
 this.catchclauses.add(t);
-if(multi.get("catchclause")==null){multi.put("catchclause",catchclauses);}
 }
 public void visit(){
 if(coz==0){
-format="catchClause+";
+//"catchClause+";
 }
 }
 }

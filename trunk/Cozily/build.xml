@@ -1,0 +1,6 @@
+<project name="cozily" default="usage">
+    <target name="usage">
+        <echo>nice</echo>
+    </target>
+
+</project>
