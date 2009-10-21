@@ -14,9 +14,9 @@ this.voidStr=t;
 public void visit(){
 if(coz==0){
 //"type";
-}
+add(type);}
 if(coz==1){
 //"VOID";
-}
+add(voidStr);}
 }
 }

@@ -14,9 +14,9 @@ this.semiStr=t;
 public void visit(){
 if(coz==0){
 //"block";
-}
+add(block);}
 if(coz==1){
 //"SEMI";
-}
+add(semiStr);}
 }
 }

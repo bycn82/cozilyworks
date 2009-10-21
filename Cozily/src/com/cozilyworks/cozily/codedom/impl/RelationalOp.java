@@ -24,9 +24,9 @@ if(coz==1){
 }
 if(coz==2){
 //"LT";
-}
+add(ltStr);}
 if(coz==3){
 //"GT";
-}
+add(gtStr);}
 }
 }

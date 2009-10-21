@@ -14,9 +14,9 @@ this.annotationtypedeclaration=t;
 public void visit(){
 if(coz==0){
 //"normalInterfaceDeclaration";
-}
+add(normalinterfacedeclaration);}
 if(coz==1){
 //"annotationTypeDeclaration";
-}
+add(annotationtypedeclaration);}
 }
 }

@@ -18,12 +18,12 @@ this.elementvaluearrayinitializer=t;
 public void visit(){
 if(coz==0){
 //"conditionalExpression";
-}
+add(conditionalexpression);}
 if(coz==1){
 //"annotation";
-}
+add(annotation);}
 if(coz==2){
 //"elementValueArrayInitializer";
-}
+add(elementvaluearrayinitializer);}
 }
 }

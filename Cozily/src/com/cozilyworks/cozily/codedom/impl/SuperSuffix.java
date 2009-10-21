@@ -18,7 +18,7 @@ this.identifierStr=t;
 public void visit(){
 if(coz==0){
 //"arguments";
-}
+add(arguments);}
 if(coz==1){
 //"'.' typeArguments? IDENTIFIER arguments?";
 }

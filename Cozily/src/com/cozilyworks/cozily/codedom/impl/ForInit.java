@@ -14,9 +14,9 @@ this.expressionlist=t;
 public void visit(){
 if(coz==0){
 //"localVariableDeclaration";
-}
+add(localvariabledeclaration);}
 if(coz==1){
 //"expressionList";
-}
+add(expressionlist);}
 }
 }

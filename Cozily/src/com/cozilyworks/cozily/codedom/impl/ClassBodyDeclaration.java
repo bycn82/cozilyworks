@@ -24,6 +24,6 @@ if(coz==1){
 }
 if(coz==2){
 //"memberDecl";
-}
+add(memberdecl);}
 }
 }

@@ -512,7 +512,7 @@ annotations
 
 
 annotation 
-    :   '@' qualifiedName (   '(' elementOfAnno?  ')' )?
+    :   '@' qualifiedName (   LPAREN elementOfAnno?  RPAREN )?
     ;
 
 elementOfAnno

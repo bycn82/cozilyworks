@@ -14,9 +14,9 @@ this.subStr=t;
 public void visit(){
 if(coz==0){
 //"PLUS";
-}
+add(plusStr);}
 if(coz==1){
 //"SUB";
-}
+add(subStr);}
 }
 }

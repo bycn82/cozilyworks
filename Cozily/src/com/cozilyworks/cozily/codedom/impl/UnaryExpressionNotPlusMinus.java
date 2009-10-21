@@ -32,7 +32,7 @@ if(coz==1){
 }
 if(coz==2){
 //"castExpression";
-}
+add(castexpression);}
 if(coz==3){
 //"primary selector* doublePlusMinus?";
 }

@@ -14,9 +14,9 @@ this.bangeqStr=t;
 public void visit(){
 if(coz==0){
 //"EQEQ";
-}
+add(eqeqStr);}
 if(coz==1){
 //"BANGEQ";
-}
+add(bangeqStr);}
 }
 }

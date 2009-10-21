@@ -42,7 +42,7 @@ this.bracketss.add(t);
 public void visit(){
 if(coz==0){
 //"parExpression";
-}
+add(parexpression);}
 if(coz==1){
 //"'this' ('.' IDENTIFIER)* identifierSuffix?";
 }
@@ -54,10 +54,10 @@ if(coz==3){
 }
 if(coz==4){
 //"literal";
-}
+add(literal);}
 if(coz==5){
 //"creator";
-}
+add(creator);}
 if(coz==6){
 //"primitiveType (BRACKETS)* '.' 'class'";
 }

@@ -36,7 +36,7 @@ if(coz==1){
 }
 if(coz==2){
 //"arguments";
-}
+add(arguments);}
 if(coz==3){
 //"'.' 'class'";
 }
@@ -51,6 +51,6 @@ if(coz==6){
 }
 if(coz==7){
 //"innerCreator";
-}
+add(innercreator);}
 }
 }

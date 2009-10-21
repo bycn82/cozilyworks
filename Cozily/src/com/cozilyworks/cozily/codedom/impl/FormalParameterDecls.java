@@ -18,7 +18,7 @@ this.normalparameterdecls.add(t);
 public void visit(){
 if(coz==0){
 //"ellipsisParameterDecl";
-}
+add(ellipsisparameterdecl);}
 if(coz==1){
 //"normalParameterDecl (',' normalParameterDecl)*";
 }
