@@ -26,18 +26,18 @@ this.semiStr=t;
 public void visit(){
 if(coz==0){
 //"interfaceFieldDeclaration";
-}
+add(interfacefielddeclaration);}
 if(coz==1){
 //"interfaceMethodDeclaration";
-}
+add(interfacemethoddeclaration);}
 if(coz==2){
 //"interfaceDeclaration";
-}
+add(interfacedeclaration);}
 if(coz==3){
 //"classDeclaration";
-}
+add(classdeclaration);}
 if(coz==4){
 //"SEMI";
-}
+add(semiStr);}
 }
 }

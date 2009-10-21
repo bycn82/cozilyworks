@@ -42,7 +42,7 @@ this.semiStr=t;
 public void visit(){
 if(coz==0){
 //"block";
-}
+add(block);}
 if(coz==1){
 //"'assert'  expression (':' expression)? ';'";
 }
@@ -51,7 +51,7 @@ if(coz==2){
 }
 if(coz==3){
 //"forstatement";
-}
+add(forstatement);}
 if(coz==4){
 //"'while' parExpression statement";
 }
@@ -60,7 +60,7 @@ if(coz==5){
 }
 if(coz==6){
 //"trystatement";
-}
+add(trystatement);}
 if(coz==7){
 //"'switch' parExpression '{' switchBlockStatementGroups '}'";
 }
@@ -87,6 +87,6 @@ if(coz==14){
 }
 if(coz==15){
 //"SEMI";
-}
+add(semiStr);}
 }
 }

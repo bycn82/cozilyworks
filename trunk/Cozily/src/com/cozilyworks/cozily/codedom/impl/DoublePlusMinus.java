@@ -14,9 +14,9 @@ this.subsubStr=t;
 public void visit(){
 if(coz==0){
 //"PLUSPLUS";
-}
+add(plusplusStr);}
 if(coz==1){
 //"SUBSUB";
-}
+add(subsubStr);}
 }
 }

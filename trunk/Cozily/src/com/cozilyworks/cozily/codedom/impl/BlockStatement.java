@@ -18,12 +18,12 @@ this.statement=t;
 public void visit(){
 if(coz==0){
 //"localVariableDeclarationStatement";
-}
+add(localvariabledeclarationstatement);}
 if(coz==1){
 //"classOrInterfaceDeclaration";
-}
+add(classorinterfacedeclaration);}
 if(coz==2){
 //"statement";
-}
+add(statement);}
 }
 }

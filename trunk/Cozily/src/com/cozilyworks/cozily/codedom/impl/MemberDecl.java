@@ -22,15 +22,15 @@ this.interfacedeclaration=t;
 public void visit(){
 if(coz==0){
 //"fieldDeclaration";
-}
+add(fielddeclaration);}
 if(coz==1){
 //"methodDeclaration";
-}
+add(methoddeclaration);}
 if(coz==2){
 //"classDeclaration";
-}
+add(classdeclaration);}
 if(coz==3){
 //"interfaceDeclaration";
-}
+add(interfacedeclaration);}
 }
 }

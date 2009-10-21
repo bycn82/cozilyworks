@@ -14,9 +14,9 @@ this.expression=t;
 public void visit(){
 if(coz==0){
 //"arrayInitializer";
-}
+add(arrayinitializer);}
 if(coz==1){
 //"expression";
-}
+add(expression);}
 }
 }

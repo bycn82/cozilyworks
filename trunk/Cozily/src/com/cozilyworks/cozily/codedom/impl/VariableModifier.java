@@ -14,9 +14,9 @@ this.finalStr=t;
 public void visit(){
 if(coz==0){
 //"annotation";
-}
+add(annotation);}
 if(coz==1){
 //"FINAL";
-}
+add(finalStr);}
 }
 }

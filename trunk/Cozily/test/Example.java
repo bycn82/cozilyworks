@@ -1,4 +1,5 @@
-package com.google;
+@Google
+
 
 import java.applet.*;
 import java.applet.*;

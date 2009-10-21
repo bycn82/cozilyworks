@@ -14,9 +14,9 @@ this.primitivetype=t;
 public void visit(){
 if(coz==0){
 //"classOrInterfaceType";
-}
+add(classorinterfacetype);}
 if(coz==1){
 //"primitiveType";
-}
+add(primitivetype);}
 }
 }

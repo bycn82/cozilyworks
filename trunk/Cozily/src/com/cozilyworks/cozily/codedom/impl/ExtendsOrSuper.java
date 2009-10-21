@@ -14,9 +14,9 @@ this.superStr=t;
 public void visit(){
 if(coz==0){
 //"EXTENDS";
-}
+add(extendsStr);}
 if(coz==1){
 //"SUPER";
-}
+add(superStr);}
 }
 }

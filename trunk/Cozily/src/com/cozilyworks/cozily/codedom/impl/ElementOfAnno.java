@@ -14,9 +14,9 @@ this.elementvalue=t;
 public void visit(){
 if(coz==0){
 //"elementValuePairs";
-}
+add(elementvaluepairs);}
 if(coz==1){
 //"elementValue";
-}
+add(elementvalue);}
 }
 }

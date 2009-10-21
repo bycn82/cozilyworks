@@ -18,12 +18,12 @@ this.percentStr=t;
 public void visit(){
 if(coz==0){
 //"STAR";
-}
+add(starStr);}
 if(coz==1){
 //"SLASH";
-}
+add(slashStr);}
 if(coz==2){
 //"PERCENT";
-}
+add(percentStr);}
 }
 }

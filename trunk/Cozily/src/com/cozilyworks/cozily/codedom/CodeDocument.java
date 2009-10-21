@@ -19,19 +19,19 @@ public class CodeDocument{
 		visit();
 		return ctrlOutput();
 	}
-	public void add(Object obj){
+	protected void add(Object obj){
 		if(obj!=null){
 			sb.append(obj.toString());
 		}
 	}
-	public void adds(List objs){
+	protected void adds(List objs){
 		if(objs!=null){
 			for(int i=0;i<objs.size();i++){
 				add(objs.get(i));
 			}
 		}
 	}
-	public void format(String formatStr,Object... args){
+	protected void format(String formatStr,Object... args){
 		int size=args.length;
 		for(int i=0;i<size;i++){
 			if(args[i]==null){
@@ -40,7 +40,7 @@ public class CodeDocument{
 		}
 		add(String.format(formatStr,args));
 	}
-	public void formats(String formatStr,List... lists){
+	protected void formats(String formatStr,List... lists){
 		if(lists!=null){
 			int size=lists[0].size();
 			for(int i=0;i<size;i++){

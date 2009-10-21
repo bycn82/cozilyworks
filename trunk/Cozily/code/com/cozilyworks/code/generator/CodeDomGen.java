@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import com.cozilyworks.cozily.util.StringUtil;
 import com.cozilyworks.cozily.util.StringUtilPlus;
 
 public class CodeDomGen{
@@ -60,7 +61,15 @@ public class CodeDomGen{
 					int k=0;
 					for(String format:clz.getFormats()){
 						w.write(String.format("if(coz==%d){\n",k));
-						w.write(String.format("//\"%s\";\n",cutHead(clz.getFormats().get(k))));
+						String formatStr=cutHead(clz.getFormats().get(k));
+						w.write(String.format("//\"%s\";\n",formatStr));
+						if(simple(formatStr)){
+							if(StringUtil.isUpperCase(formatStr)){
+								w.write("add("+formatStr.toLowerCase()+"Str);");
+							}else{
+								w.write("add("+formatStr.toLowerCase()+");");
+							}
+						}
 						w.write("}\n");
 						k++;
 					}
@@ -74,7 +83,24 @@ public class CodeDomGen{
 			e.printStackTrace();
 		}
 	}
-	private static Object cutHead(String format){
+	private static boolean simple(String str){
+		if(str.contains(" "))
+			return false;
+		if(str.contains("?"))
+			return false;
+		if(str.contains("+"))
+			return false;
+		if(str.contains("*"))
+			return false;
+		if(str.contains("("))
+			return false;
+		if(str.contains(")"))
+			return false;
+		if(str.contains(";"))
+			return false;
+		return true;
+	}
+	private static String cutHead(String format){
 		return format.substring(1).trim();
 	}
 	private static boolean notRepeat(Med med){
