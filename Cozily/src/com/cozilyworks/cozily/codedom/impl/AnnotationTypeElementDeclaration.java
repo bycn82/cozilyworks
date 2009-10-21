@@ -6,54 +6,48 @@ public class AnnotationTypeElementDeclaration extends CodeDocument{
 private AnnotationMethodDeclaration annotationmethoddeclaration;
 public void setAnnotationMethodDeclaration(AnnotationMethodDeclaration t){
 this.annotationmethoddeclaration=t;
-if(single.get("annotationmethoddeclaration")==null){single.put("annotationmethoddeclaration",annotationmethoddeclaration);}
 }
 private InterfaceFieldDeclaration interfacefielddeclaration;
 public void setInterfaceFieldDeclaration(InterfaceFieldDeclaration t){
 this.interfacefielddeclaration=t;
-if(single.get("interfacefielddeclaration")==null){single.put("interfacefielddeclaration",interfacefielddeclaration);}
 }
 private NormalClassDeclaration normalclassdeclaration;
 public void setNormalClassDeclaration(NormalClassDeclaration t){
 this.normalclassdeclaration=t;
-if(single.get("normalclassdeclaration")==null){single.put("normalclassdeclaration",normalclassdeclaration);}
 }
 private NormalInterfaceDeclaration normalinterfacedeclaration;
 public void setNormalInterfaceDeclaration(NormalInterfaceDeclaration t){
 this.normalinterfacedeclaration=t;
-if(single.get("normalinterfacedeclaration")==null){single.put("normalinterfacedeclaration",normalinterfacedeclaration);}
 }
 private EnumDeclaration enumdeclaration;
 public void setEnumDeclaration(EnumDeclaration t){
 this.enumdeclaration=t;
-if(single.get("enumdeclaration")==null){single.put("enumdeclaration",enumdeclaration);}
 }
 private AnnotationTypeDeclaration annotationtypedeclaration;
 public void setAnnotationTypeDeclaration(AnnotationTypeDeclaration t){
 this.annotationtypedeclaration=t;
-if(single.get("annotationtypedeclaration")==null){single.put("annotationtypedeclaration",annotationtypedeclaration);}
 }
 public void visit(){
 if(coz==0){
-format="annotationMethodDeclaration";
+//"annotationMethodDeclaration";
 }
 if(coz==1){
-format="interfaceFieldDeclaration";
+//"interfaceFieldDeclaration";
 }
 if(coz==2){
-format="normalClassDeclaration";
+//"normalClassDeclaration";
 }
 if(coz==3){
-format="normalInterfaceDeclaration";
+//"normalInterfaceDeclaration";
 }
 if(coz==4){
-format="enumDeclaration";
+//"enumDeclaration";
 }
 if(coz==5){
-format="annotationTypeDeclaration";
+//"annotationTypeDeclaration";
 }
 if(coz==6){
-format="';'";
+//"';'";
 }
 }
 }

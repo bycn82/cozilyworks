@@ -6,24 +6,21 @@ public class Type extends CodeDocument{
 private ClassOrInterfaceType classorinterfacetype;
 public void setClassOrInterfaceType(ClassOrInterfaceType t){
 this.classorinterfacetype=t;
-if(single.get("classorinterfacetype")==null){single.put("classorinterfacetype",classorinterfacetype);}
 }
 private List<String> bracketss=new ArrayList<String>();
 public void addBRACKETS(String t){
 this.bracketss.add(t);
-if(multi.get("brackets")==null){multi.put("brackets",bracketss);}
 }
 private PrimitiveType primitivetype;
 public void setPrimitiveType(PrimitiveType t){
 this.primitivetype=t;
-if(single.get("primitivetype")==null){single.put("primitivetype",primitivetype);}
 }
 public void visit(){
 if(coz==0){
-format="classOrInterfaceType BRACKETS*";
+//"classOrInterfaceType BRACKETS*";
 }
 if(coz==1){
-format="primitiveType BRACKETS*";
+//"primitiveType BRACKETS*";
 }
 }
 }

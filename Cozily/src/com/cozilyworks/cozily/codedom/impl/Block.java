@@ -6,11 +6,10 @@ public class Block extends CodeDocument{
 private List<BlockStatement> blockstatements=new ArrayList<BlockStatement>();
 public void addBlockStatement(BlockStatement t){
 this.blockstatements.add(t);
-if(multi.get("blockstatement")==null){multi.put("blockstatement",blockstatements);}
 }
 public void visit(){
 if(coz==0){
-format="'{' blockStatement* '}'";
+//"'{' blockStatement* '}'";
 }
 }
 }

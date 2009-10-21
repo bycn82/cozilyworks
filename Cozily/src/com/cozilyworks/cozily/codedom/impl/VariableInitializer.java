@@ -6,19 +6,17 @@ public class VariableInitializer extends CodeDocument{
 private ArrayInitializer arrayinitializer;
 public void setArrayInitializer(ArrayInitializer t){
 this.arrayinitializer=t;
-if(single.get("arrayinitializer")==null){single.put("arrayinitializer",arrayinitializer);}
 }
 private Expression expression;
 public void setExpression(Expression t){
 this.expression=t;
-if(single.get("expression")==null){single.put("expression",expression);}
 }
 public void visit(){
 if(coz==0){
-format="arrayInitializer";
+//"arrayInitializer";
 }
 if(coz==1){
-format="expression";
+//"expression";
 }
 }
 }

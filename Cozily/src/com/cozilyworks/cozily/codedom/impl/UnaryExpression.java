@@ -6,28 +6,26 @@ public class UnaryExpression extends CodeDocument{
 private UnaryExpression unaryexpression;
 public void setUnaryExpression(UnaryExpression t){
 this.unaryexpression=t;
-if(single.get("unaryexpression")==null){single.put("unaryexpression",unaryexpression);}
 }
 private UnaryExpressionNotPlusMinus unaryexpressionnotplusminus;
 public void setUnaryExpressionNotPlusMinus(UnaryExpressionNotPlusMinus t){
 this.unaryexpressionnotplusminus=t;
-if(single.get("unaryexpressionnotplusminus")==null){single.put("unaryexpressionnotplusminus",unaryexpressionnotplusminus);}
 }
 public void visit(){
 if(coz==0){
-format="'+'  unaryExpression";
+//"'+'  unaryExpression";
 }
 if(coz==1){
-format="'-' unaryExpression";
+//"'-' unaryExpression";
 }
 if(coz==2){
-format="'++' unaryExpression";
+//"'++' unaryExpression";
 }
 if(coz==3){
-format="'--' unaryExpression";
+//"'--' unaryExpression";
 }
 if(coz==4){
-format="unaryExpressionNotPlusMinus";
+//"unaryExpressionNotPlusMinus";
 }
 }
 }
