@@ -18,7 +18,9 @@ public class ConditionalExpression extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			// "conditionalOrExpression ('?' expression ':' conditionalExpression)?";
-			format("%s ? %s : %s",this.conditionalorexpression,this.expression,this.conditionalexpression);
+			add(this.conditionalorexpression);
+			add("? %s : %s",this.expression);
+			add(this.conditionalexpression);
 		}
 	}
 }

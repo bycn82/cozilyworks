@@ -8,10 +8,11 @@ public class Block extends CodeDocument{
 		this.blockstatements.add(t);
 	}
 	public void visit(){
+
 		if(coz==0){
 			// "'{' blockStatement* '}'";
 			add("{");
-			add(this.blockstatements);
+			formats("%s",this.blockstatements);
 			add("}");
 		}
 	}

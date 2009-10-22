@@ -10,7 +10,7 @@ public class VariableModifiers extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			// "variableModifier*";
-			add(this.variablemodifiers);
+			adds(this.variablemodifiers);
 		}
 	}
 }
