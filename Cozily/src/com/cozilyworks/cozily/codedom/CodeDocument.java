@@ -10,7 +10,7 @@ import com.cozilyworks.cozily.util.StringUtilPlus;
 
 @SuppressWarnings("unchecked")
 public class CodeDocument{
-	public boolean developing=true;
+	public static boolean developing=false;
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	public void visit(){
