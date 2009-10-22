@@ -3,17 +3,18 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 public class ElementValuePair extends CodeDocument{
-private String identifierStr;
-public void setIDENTIFIER(String t){
-this.identifierStr=t;
-}
-private ElementValue elementvalue;
-public void setElementValue(ElementValue t){
-this.elementvalue=t;
-}
-public void visit(){
-if(coz==0){
-//"IDENTIFIER '=' elementValue";
-}
-}
+	private String identifierStr;
+	public void setIDENTIFIER(String t){
+		this.identifierStr=t;
+	}
+	private ElementValue elementvalue;
+	public void setElementValue(ElementValue t){
+		this.elementvalue=t;
+	}
+	public void visit(){
+		if(coz==0){
+			// "IDENTIFIER '=' elementValue";
+			format("%s=%s",this.identifierStr,this.elementvalue);
+		}
+	}
 }

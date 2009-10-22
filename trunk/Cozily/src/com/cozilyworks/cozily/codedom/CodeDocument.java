@@ -19,15 +19,39 @@ public class CodeDocument{
 		visit();
 		return ctrlOutput();
 	}
+	/*
+	 * 添加最简单的单个对象,
+	 */
 	protected void add(Object obj){
 		if(obj!=null){
 			sb.append(obj.toString());
 		}
 	}
+	/*
+	 * 添加最简单的多个对象
+	 */
 	protected void adds(List objs){
 		if(objs!=null){
 			for(int i=0;i<objs.size();i++){
 				add(objs.get(i));
+			}
+		}
+	}
+	/*
+	 * 如果存在,就把format里的一起添加
+	 */
+	protected void add(String format,Object obj){
+		if(obj!=null){
+			sb.append(String.format(format,obj));
+		}
+	}
+	/*
+	 *支持多个
+	 */
+	protected void adds(String format,List objs){
+		if(objs!=null){
+			for(int i=0;i<objs.size();i++){
+				add(format,objs.get(i));
 			}
 		}
 	}

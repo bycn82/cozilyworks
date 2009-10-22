@@ -3,13 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 public class Annotations extends CodeDocument{
-private List<Annotation> annotations=new ArrayList<Annotation>();
-public void addAnnotation(Annotation t){
-this.annotations.add(t);
-}
-public void visit(){
-if(coz==0){
-//"annotation+";
-}
-}
+	private List<Annotation> annotations=new ArrayList<Annotation>();
+	public void addAnnotation(Annotation t){
+		this.annotations.add(t);
+	}
+	public void visit(){
+		if(coz==0){
+			// "annotation+";
+			adds(this.annotations);
+		}
+	}
 }

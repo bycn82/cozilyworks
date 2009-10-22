@@ -383,8 +383,8 @@ localVariableDeclaration returns[LocalVariableDeclaration rtn]
 statement returns[Statement rtn]
 @init{rtn=new Statement();}
 :^(STATEMENT0{rtn.coz=0;}    (x0=block{rtn.setBlock(x0);}))
-|^(STATEMENT1{rtn.coz=1;}      (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression(x2);}))?)
-|^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement(x5);}))?)
+|^(STATEMENT1{rtn.coz=1;}      (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression2(x2);}))?)
+|^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement2(x5);}))?)
 |^(STATEMENT3{rtn.coz=3;}    (x6=forstatement{rtn.setForstatement(x6);}))
 |^(STATEMENT4{rtn.coz=4;}     (x7=parExpression{rtn.setParExpression(x7);}) (x8=statement{rtn.setStatement(x8);}))
 |^(STATEMENT5{rtn.coz=5;}     (x9=statement{rtn.setStatement(x9);})  (x10=parExpression{rtn.setParExpression(x10);}))
@@ -418,9 +418,9 @@ switchLabel returns[SwitchLabel rtn]
 
 trystatement returns[Trystatement rtn]
 @init{rtn=new Trystatement();}
-:^(TRYSTATEMENT0{rtn.coz=0;}     (x0=block{rtn.setBlock(x0);})   (x1=catches{rtn.setCatches(x1);})  (x2=block{rtn.setBlock(x2);}))
+:^(TRYSTATEMENT0{rtn.coz=0;}     (x0=block{rtn.setBlock(x0);})   (x1=catches{rtn.setCatches(x1);})  (x2=block{rtn.setBlock2(x2);}))
 |^(TRYSTATEMENT1{rtn.coz=1;}   (x3=block{rtn.setBlock(x3);})  (x4=catches{rtn.setCatches(x4);}))
-|^(TRYSTATEMENT2{rtn.coz=2;}   (x5=block{rtn.setBlock(x5);})   (x6=block{rtn.setBlock(x6);}))
+|^(TRYSTATEMENT2{rtn.coz=2;}   (x5=block{rtn.setBlock(x5);})   (x6=block{rtn.setBlock2(x6);}))
 ;
 
 catches returns[Catches rtn]

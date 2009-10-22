@@ -3,17 +3,19 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 public class SwitchBlockStatementGroup extends CodeDocument{
-private SwitchLabel switchlabel;
-public void setSwitchLabel(SwitchLabel t){
-this.switchlabel=t;
-}
-private List<BlockStatement> blockstatements=new ArrayList<BlockStatement>();
-public void addBlockStatement(BlockStatement t){
-this.blockstatements.add(t);
-}
-public void visit(){
-if(coz==0){
-//"switchLabel blockStatement*";
-}
-}
+	private SwitchLabel switchlabel;
+	public void setSwitchLabel(SwitchLabel t){
+		this.switchlabel=t;
+	}
+	private List<BlockStatement> blockstatements=new ArrayList<BlockStatement>();
+	public void addBlockStatement(BlockStatement t){
+		this.blockstatements.add(t);
+	}
+	public void visit(){
+		if(coz==0){
+			// "switchLabel blockStatement*";
+			add(this.switchlabel);
+			adds(this.blockstatements);
+		}
+	}
 }
