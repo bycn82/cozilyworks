@@ -15,7 +15,7 @@ public class InstanceOfExpression extends CodeDocument{
 		if(coz==0){
 			// "relationalExpression ('instanceof' type )?";
 			add(this.relationalexpression);
-			add("instanceof %s",this.type);
+			add(" instanceof %s",this.type);
 		}
 	}
 }

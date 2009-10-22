@@ -24,6 +24,7 @@ public class AnnotationMethodDeclaration extends CodeDocument{
 			// "modifiers type IDENTIFIER '(' ')' ('default' elementValue)? ';'";
 			format("%s %s %s()",this.modifiers,this.type,this.identifierStr);
 			add("default %s ;\n",this.elementvalue);
+			add(";\n");
 		}
 	}
 }
