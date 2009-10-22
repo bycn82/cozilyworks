@@ -8,12 +8,14 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
+import com.cozilyworks.cozily.codedom.CodeDocument;
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws RecognitionException{
+		CodeDocument.developing=true;
 		String path="test\\Example.java";
 		// path="D:\\workspace";
 		File f=new File(path);
