@@ -3,13 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 public class PackageDeclaration extends CodeDocument{
-private QualifiedName qualifiedname;
-public void setQualifiedName(QualifiedName t){
-this.qualifiedname=t;
-}
-public void visit(){
-if(coz==0){
-//"'package' qualifiedName ';'";
-}
-}
+	private QualifiedName qualifiedname;
+	public void setQualifiedName(QualifiedName t){
+		this.qualifiedname=t;
+	}
+	public void visit(){
+		if(coz==0){
+			// "'package' qualifiedName ';'";
+			add("package %s;\n",this.qualifiedname);
+		}
+	}
 }
