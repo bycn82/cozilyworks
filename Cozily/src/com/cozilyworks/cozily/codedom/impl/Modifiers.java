@@ -10,7 +10,7 @@ public class Modifiers extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			// "modifier*";
-			adds(this.modifiers);
+			adds("%s ",this.modifiers);
 		}
 	}
 }

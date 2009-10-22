@@ -15,7 +15,7 @@ public class QualifiedName extends CodeDocument{
 		if(coz==0){
 			// "IDENTIFIER ('.' IDENTIFIER)*";
 			add(this.identifierStr);
-			add(".%s",this.identifiers);
+			adds(".%s",this.identifiers);
 		}
 	}
 }

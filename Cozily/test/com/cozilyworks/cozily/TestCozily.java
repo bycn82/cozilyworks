@@ -1,6 +1,9 @@
 package com.cozilyworks.cozily;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.runtime.ANTLRInputStream;
@@ -15,13 +18,13 @@ import com.cozilyworks.cozily.parser.CozilyTreeParser;
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws RecognitionException{
-		CodeDocument.developing=true;
 		String path="test\\Example.java";
 		// path="D:\\workspace";
 		File f=new File(path);
 		getAllJava(f);
 		for(File file:files){
-			trace(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+			writeJAVA(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+			writeXML(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
 		}
 	}
 	private static void getAllJava(File f){
@@ -41,7 +44,7 @@ public class TestCozily{
 			CommonTokenStream tokens=new CommonTokenStream(lexer);
 			return new CozilyParser(tokens);
 		}catch(Exception e){
-			trace(e);
+
 		}
 		return null;
 	}
@@ -49,7 +52,27 @@ public class TestCozily{
 		CommonTreeNodeStream nodes=new CommonTreeNodeStream((CommonTree)o);
 		return new CozilyTreeParser(nodes);
 	}
-	public static void trace(Object o){
+	public static void writeJAVA(Object o){
+		CodeDocument.developing=false;
 		System.out.println(o);
+		File outputjava=new File("output.java");
+		try{
+			BufferedWriter w=new BufferedWriter(new FileWriter(outputjava));
+			w.write(o.toString());
+			w.flush();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	public static void writeXML(Object o){
+		CodeDocument.developing=true;
+		File f=new File("output.xml");
+		try{
+			BufferedWriter w=new BufferedWriter(new FileWriter(f));
+			w.write(o.toString());
+			w.flush();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 }

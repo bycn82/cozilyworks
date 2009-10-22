@@ -44,6 +44,7 @@ public class MethodDeclaration extends CodeDocument{
 		this.blockorcomma=t;
 	}
 	public void visit(){
+
 		if(coz==0){
 			// "modifiers typeParameters? IDENTIFIER formalParameters ('throws' qualifiedNameList)? '{' explicitConstructorInvocation? blockStatement* '}'";
 			format("%s %s %s %s",this.modifiers,this.typeparameters,this.identifierStr,this.formalparameters);
@@ -56,10 +57,11 @@ public class MethodDeclaration extends CodeDocument{
 		}
 		if(coz==1){
 			// "modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? blockOrComma";
-			format("%s %s %s %s",this.modifiers,this.typeparameters,this.returntype,this.formalparameters);
+			format("%s %s %s %s %s",this.modifiers,this.typeparameters,this.returntype,this.identifierStr,this.formalparameters);
 			adds(this.bracketss);
 			add("throw %s",this.qualifiednamelist);
 			add(this.blockorcomma);
 		}
 	}
+
 }
