@@ -10,7 +10,7 @@ public class Arguments extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			// "'(' expressionList? ')'";
-			add("( %s )",this.expressionlist);
+			format("( %s )",this.expressionlist);
 		}
 	}
 }

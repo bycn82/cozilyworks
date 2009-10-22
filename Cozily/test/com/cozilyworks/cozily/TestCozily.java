@@ -1,4 +1,6 @@
 package com.cozilyworks.cozily;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,16 +17,26 @@ import com.cozilyworks.cozily.codedom.CodeDocument;
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
+
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
-	public static void main(String[] args) throws RecognitionException{
-		String path="test\\Example.java";
+	public static void main(String[] args) throws RecognitionException,IOException{
+		String path="D:\\WORKSPACES\\WORKS\\BasicSkill\\src";
 		// path="D:\\workspace";
 		File f=new File(path);
 		getAllJava(f);
+		BufferedInputStream ins=new BufferedInputStream(System.in);
 		for(File file:files){
-			writeJAVA(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
-			writeXML(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+			while(true){
+				int i=ins.read();
+				if((char)i=='A'){
+					break;
+				}else{
+					System.out.println(file.getPath());
+					writeJAVA(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+					writeXML(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+				}
+			}
 		}
 	}
 	private static void getAllJava(File f){
@@ -44,7 +56,6 @@ public class TestCozily{
 			CommonTokenStream tokens=new CommonTokenStream(lexer);
 			return new CozilyParser(tokens);
 		}catch(Exception e){
-
 		}
 		return null;
 	}
