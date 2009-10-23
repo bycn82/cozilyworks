@@ -221,15 +221,18 @@ typeArguments
 
 typeArgument 
     :   type
-    |   '?' (('extends'|'super') type )?
+    |   '?' (extendsOrSuper type )?
     ;
-
+extendsOrSuper
+	:	'extends'
+	|	'super'
+	;
 qualifiedNameList 
     :   qualifiedName (',' qualifiedName)*
     ;
 
 formalParameters 
-    :   '(' (formalParameterDecls)? ')'
+    :   '(' formalParameterDecls? ')'
     ;
 
 formalParameterDecls 
@@ -248,21 +251,31 @@ ellipsisParameterDecl
 
 
 explicitConstructorInvocation 
-    :   (nonWildcardTypeArguments)? ('this'|'super') arguments ';'
-    |   primary '.' (nonWildcardTypeArguments)? 'super' arguments ';'
+    :   nonWildcardTypeArguments? thisOrSuper arguments ';'
+    |   primary '.' nonWildcardTypeArguments? 'super' arguments ';'
     ;
+
+thisOrSuper
+	:	'this'
+	|	'super'
+	;
 
 qualifiedName 
     :   IDENTIFIER ('.' IDENTIFIER)*
     ;
 
 annotations 
-    :   (annotation)+
+    :   annotation+
     ;
 
 annotation 
-    :   '@' qualifiedName ( '('(   elementValuePairs | elementValue)? ')' )?
+    :   '@' qualifiedName ('(' elementValueOrPairs? ')' )?
     ;
+
+elementValueOrPairs
+	:	elementValuePairs 
+	|	elementValue
+	;
 
 elementValuePairs 
     :   elementValuePair (',' elementValuePair)*
@@ -279,8 +292,12 @@ elementValue
     ;
 
 elementValueArrayInitializer 
-    :   '{'(elementValue (',' elementValue)* )? COMMA? '}'
+    :   '{' elementValueList? COMMA? '}'
     ;
+
+elementValueList
+	:	elementValue (',' elementValue)*
+	;
 
 
 annotationTypeDeclaration 
