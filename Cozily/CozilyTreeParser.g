@@ -13,9 +13,9 @@ import com.cozilyworks.cozily.codedom.impl.*;
 
 //rules begin
 
-fileDeclaration returns[FileDeclaration rtn]
-@init{rtn=new FileDeclaration();}
-:^(FILEDECLARATION0{rtn.coz=0;} 	((x0=annotations{rtn.setAnnotations(x0);})? (x1=packageDeclaration{rtn.setPackageDeclaration(x1);}))? (x2=importDeclaration{rtn.addImportDeclaration(x2);})* (x3=typeDeclaration{rtn.addTypeDeclaration(x3);})*)
+compilationUnit returns[CompilationUnit rtn]
+@init{rtn=new CompilationUnit();}
+:^(COMPILATIONUNIT0{rtn.coz=0;}    ((x0=annotations{rtn.setAnnotations(x0);})? (x1=packageDeclaration{rtn.setPackageDeclaration(x1);}))? (x2=importDeclaration{rtn.addImportDeclaration(x2);})* (x3=typeDeclaration{rtn.addTypeDeclaration(x3);})*)
 ;
 
 packageDeclaration returns[PackageDeclaration rtn]
@@ -31,6 +31,7 @@ importDeclaration returns[ImportDeclaration rtn]
 typeDeclaration returns[TypeDeclaration rtn]
 @init{rtn=new TypeDeclaration();}
 :^(TYPEDECLARATION0{rtn.coz=0;}    (x0=classOrInterfaceDeclaration{rtn.setClassOrInterfaceDeclaration(x0);}))
+|^(TYPEDECLARATION1{rtn.coz=1;} )
 ;
 
 classOrInterfaceDeclaration returns[ClassOrInterfaceDeclaration rtn]
@@ -41,34 +42,34 @@ classOrInterfaceDeclaration returns[ClassOrInterfaceDeclaration rtn]
 
 modifiers returns[Modifiers rtn]
 @init{rtn=new Modifiers();}
-:^(MODIFIERS0{rtn.coz=0;}  	(x0=modifier{rtn.addModifier(x0);})*)
+:^(MODIFIERS0{rtn.coz=0;} 	(x0=annoOrKeywords{rtn.addAnnoOrKeywords(x0);})*)
 ;
 
-modifier returns[Modifier rtn]
-@init{rtn=new Modifier();}
-:^(MODIFIER0{rtn.coz=0;} 	 (x0=annotation{rtn.setAnnotation(x0);}))
-|^(MODIFIER1{rtn.coz=1;}    (x1=PUBLIC{rtn.setPUBLIC($x1.text);}))
-|^(MODIFIER2{rtn.coz=2;}    (x2=PROTECTED{rtn.setPROTECTED($x2.text);}))
-|^(MODIFIER3{rtn.coz=3;}    (x3=PRIVATE{rtn.setPRIVATE($x3.text);}))
-|^(MODIFIER4{rtn.coz=4;}    (x4=STATIC{rtn.setSTATIC($x4.text);}))
-|^(MODIFIER5{rtn.coz=5;}    (x5=ABSTRACT{rtn.setABSTRACT($x5.text);}))
-|^(MODIFIER6{rtn.coz=6;}    (x6=FINAL{rtn.setFINAL($x6.text);}))
-|^(MODIFIER7{rtn.coz=7;}    (x7=NATIVE{rtn.setNATIVE($x7.text);}))
-|^(MODIFIER8{rtn.coz=8;}    (x8=SYNCHRONIZED{rtn.setSYNCHRONIZED($x8.text);}))
-|^(MODIFIER9{rtn.coz=9;}    (x9=TRANSIENT{rtn.setTRANSIENT($x9.text);}))
-|^(MODIFIER10{rtn.coz=10;}    (x10=VOLATILE{rtn.setVOLATILE($x10.text);}))
-|^(MODIFIER11{rtn.coz=11;}    (x11=STRICTFP{rtn.setSTRICTFP($x11.text);}))
+annoOrKeywords returns[AnnoOrKeywords rtn]
+@init{rtn=new AnnoOrKeywords();}
+:^(ANNOORKEYWORDS0{rtn.coz=0;} 	(x0=annotation{rtn.setAnnotation(x0);}))
+|^(ANNOORKEYWORDS1{rtn.coz=1;} )
+|^(ANNOORKEYWORDS2{rtn.coz=2;} )
+|^(ANNOORKEYWORDS3{rtn.coz=3;} )
+|^(ANNOORKEYWORDS4{rtn.coz=4;} )
+|^(ANNOORKEYWORDS5{rtn.coz=5;} )
+|^(ANNOORKEYWORDS6{rtn.coz=6;} )
+|^(ANNOORKEYWORDS7{rtn.coz=7;} )
+|^(ANNOORKEYWORDS8{rtn.coz=8;} )
+|^(ANNOORKEYWORDS9{rtn.coz=9;} )
+|^(ANNOORKEYWORDS10{rtn.coz=10;} )
+|^(ANNOORKEYWORDS11{rtn.coz=11;} )
 ;
 
 variableModifiers returns[VariableModifiers rtn]
 @init{rtn=new VariableModifiers();}
-:^(VARIABLEMODIFIERS0{rtn.coz=0;}    (x0=variableModifier{rtn.addVariableModifier(x0);})*)
+:^(VARIABLEMODIFIERS0{rtn.coz=0;}    (x0=finalOrAnno{rtn.addFinalOrAnno(x0);})*)
 ;
 
-variableModifier returns[VariableModifier rtn]
-@init{rtn=new VariableModifier();}
-:^(VARIABLEMODIFIER0{rtn.coz=0;} 	(x0=annotation{rtn.setAnnotation(x0);}))
-|^(VARIABLEMODIFIER1{rtn.coz=1;} 	(x1=FINAL{rtn.setFINAL($x1.text);}))
+finalOrAnno returns[FinalOrAnno rtn]
+@init{rtn=new FinalOrAnno();}
+:^(FINALORANNO0{rtn.coz=0;} )
+|^(FINALORANNO1{rtn.coz=1;} 	(x0=annotation{rtn.setAnnotation(x0);}))
 ;
 
 classDeclaration returns[ClassDeclaration rtn]
@@ -104,7 +105,7 @@ enumDeclaration returns[EnumDeclaration rtn]
 
 enumBody returns[EnumBody rtn]
 @init{rtn=new EnumBody();}
-:^(ENUMBODY0{rtn.coz=0;}     (x0=enumConstants{rtn.setEnumConstants(x0);})? (x1=COMMA{rtn.setCOMMA($x1.text);})? ((x2=enumBodyDeclarations{rtn.setEnumBodyDeclarations(x2);}))?)
+:^(ENUMBODY0{rtn.coz=0;}     (x0=enumConstants{rtn.setEnumConstants(x0);})? (x1=COMMA{rtn.setCOMMA($x1.text);})? (x2=enumBodyDeclarations{rtn.setEnumBodyDeclarations(x2);})?)
 ;
 
 enumConstants returns[EnumConstants rtn]
@@ -130,7 +131,7 @@ interfaceDeclaration returns[InterfaceDeclaration rtn]
 
 normalInterfaceDeclaration returns[NormalInterfaceDeclaration rtn]
 @init{rtn=new NormalInterfaceDeclaration();}
-:^(NORMALINTERFACEDECLARATION0{rtn.coz=0;}    (x0=modifiers{rtn.setModifiers(x0);})  (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeParameters{rtn.setTypeParameters(x2);})?  ( (x3=typeList{rtn.setTypeList(x3);}))? (x4=interfaceBody{rtn.setInterfaceBody(x4);}))
+:^(NORMALINTERFACEDECLARATION0{rtn.coz=0;}    (x0=modifiers{rtn.setModifiers(x0);})  (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeParameters{rtn.setTypeParameters(x2);})? ( (x3=typeList{rtn.setTypeList(x3);}))? (x4=interfaceBody{rtn.setInterfaceBody(x4);}))
 ;
 
 typeList returns[TypeList rtn]
@@ -166,19 +167,19 @@ memberDecl returns[MemberDecl rtn]
 methodDeclaration returns[MethodDeclaration rtn]
 @init{rtn=new MethodDeclaration();}
 :^(METHODDECLARATION0{rtn.coz=0;}    (x0=modifiers{rtn.setModifiers(x0);}) (x1=typeParameters{rtn.setTypeParameters(x1);})? (x2=IDENTIFIER{rtn.setIDENTIFIER($x2.text);}) (x3=formalParameters{rtn.setFormalParameters(x3);}) ( (x4=qualifiedNameList{rtn.setQualifiedNameList(x4);}))?  (x5=explicitConstructorInvocation{rtn.setExplicitConstructorInvocation(x5);})? (x6=blockStatement{rtn.addBlockStatement(x6);})*)
-|^(METHODDECLARATION1{rtn.coz=1;}    (x7=modifiers{rtn.setModifiers(x7);}) (x8=typeParameters{rtn.setTypeParameters(x8);})? (x9=returnType{rtn.setReturnType(x9);}) (x10=IDENTIFIER{rtn.setIDENTIFIER($x10.text);}) (x11=formalParameters{rtn.setFormalParameters(x11);}) (x12=BRACKETS{rtn.addBRACKETS($x12.text);})* ( (x13=qualifiedNameList{rtn.setQualifiedNameList(x13);}))? (x14=blockOrComma{rtn.setBlockOrComma(x14);}))
+|^(METHODDECLARATION1{rtn.coz=1;}    (x7=modifiers{rtn.setModifiers(x7);}) (x8=typeParameters{rtn.setTypeParameters(x8);})? (x9=returnType{rtn.setReturnType(x9);}) (x10=IDENTIFIER{rtn.setIDENTIFIER($x10.text);}) (x11=formalParameters{rtn.setFormalParameters(x11);}) (x12=BRACKETS{rtn.addBRACKETS($x12.text);})* ( (x13=qualifiedNameList{rtn.setQualifiedNameList(x13);}))? (x14=blockOrSemi{rtn.setBlockOrSemi(x14);}))
 ;
 
-blockOrComma returns[BlockOrComma rtn]
-@init{rtn=new BlockOrComma();}
-:^(BLOCKORCOMMA0{rtn.coz=0;} 	(x0=block{rtn.setBlock(x0);}))
-|^(BLOCKORCOMMA1{rtn.coz=1;}    (x1=SEMI{rtn.setSEMI($x1.text);}))
+blockOrSemi returns[BlockOrSemi rtn]
+@init{rtn=new BlockOrSemi();}
+:^(BLOCKORSEMI0{rtn.coz=0;} 	(x0=block{rtn.setBlock(x0);}))
+|^(BLOCKORSEMI1{rtn.coz=1;} )
 ;
 
 returnType returns[ReturnType rtn]
 @init{rtn=new ReturnType();}
 :^(RETURNTYPE0{rtn.coz=0;} 	(x0=type{rtn.setType(x0);}))
-|^(RETURNTYPE1{rtn.coz=1;} 	(x1=VOID{rtn.setVOID($x1.text);}))
+|^(RETURNTYPE1{rtn.coz=1;} )
 ;
 
 fieldDeclaration returns[FieldDeclaration rtn]
@@ -197,7 +198,7 @@ interfaceBodyDeclaration returns[InterfaceBodyDeclaration rtn]
 |^(INTERFACEBODYDECLARATION1{rtn.coz=1;}    (x1=interfaceMethodDeclaration{rtn.setInterfaceMethodDeclaration(x1);}))
 |^(INTERFACEBODYDECLARATION2{rtn.coz=2;}    (x2=interfaceDeclaration{rtn.setInterfaceDeclaration(x2);}))
 |^(INTERFACEBODYDECLARATION3{rtn.coz=3;}    (x3=classDeclaration{rtn.setClassDeclaration(x3);}))
-|^(INTERFACEBODYDECLARATION4{rtn.coz=4;}    (x4=SEMI{rtn.setSEMI($x4.text);}))
+|^(INTERFACEBODYDECLARATION4{rtn.coz=4;} )
 ;
 
 interfaceMethodDeclaration returns[InterfaceMethodDeclaration rtn]
@@ -223,14 +224,14 @@ classOrInterfaceType returns[ClassOrInterfaceType rtn]
 
 primitiveType returns[PrimitiveType rtn]
 @init{rtn=new PrimitiveType();}
-:^(PRIMITIVETYPE0{rtn.coz=0;}    (x0=BOOLEAN{rtn.setBOOLEAN($x0.text);}))
-|^(PRIMITIVETYPE1{rtn.coz=1;}    (x1=CHAR{rtn.setCHAR($x1.text);}))
-|^(PRIMITIVETYPE2{rtn.coz=2;}    (x2=BYTE{rtn.setBYTE($x2.text);}))
-|^(PRIMITIVETYPE3{rtn.coz=3;}    (x3=SHORT{rtn.setSHORT($x3.text);}))
-|^(PRIMITIVETYPE4{rtn.coz=4;}    (x4=INT{rtn.setINT($x4.text);}))
-|^(PRIMITIVETYPE5{rtn.coz=5;}    (x5=LONG{rtn.setLONG($x5.text);}))
-|^(PRIMITIVETYPE6{rtn.coz=6;}    (x6=FLOAT{rtn.setFLOAT($x6.text);}))
-|^(PRIMITIVETYPE7{rtn.coz=7;}    (x7=DOUBLE{rtn.setDOUBLE($x7.text);}))
+:^(PRIMITIVETYPE0{rtn.coz=0;} )
+|^(PRIMITIVETYPE1{rtn.coz=1;} )
+|^(PRIMITIVETYPE2{rtn.coz=2;} )
+|^(PRIMITIVETYPE3{rtn.coz=3;} )
+|^(PRIMITIVETYPE4{rtn.coz=4;} )
+|^(PRIMITIVETYPE5{rtn.coz=5;} )
+|^(PRIMITIVETYPE6{rtn.coz=6;} )
+|^(PRIMITIVETYPE7{rtn.coz=7;} )
 ;
 
 typeArguments returns[TypeArguments rtn]
@@ -241,23 +242,23 @@ typeArguments returns[TypeArguments rtn]
 typeArgument returns[TypeArgument rtn]
 @init{rtn=new TypeArgument();}
 :^(TYPEARGUMENT0{rtn.coz=0;}    (x0=type{rtn.setType(x0);}))
-|^(TYPEARGUMENT1{rtn.coz=1;}     ( (x1=extendsOrSuper{rtn.setExtendsOrSuper(x1);}) (x2=type{rtn.setType(x2);}) )?)
+|^(TYPEARGUMENT1{rtn.coz=1;}     ((x1=extendsOrSuper{rtn.setExtendsOrSuper(x1);}) (x2=type{rtn.setType(x2);}) )?)
 ;
 
 extendsOrSuper returns[ExtendsOrSuper rtn]
 @init{rtn=new ExtendsOrSuper();}
-:^(EXTENDSORSUPER0{rtn.coz=0;} 	(x0=EXTENDS{rtn.setEXTENDS($x0.text);}))
-|^(EXTENDSORSUPER1{rtn.coz=1;} 	(x1=SUPER{rtn.setSUPER($x1.text);}))
+:^(EXTENDSORSUPER0{rtn.coz=0;} )
+|^(EXTENDSORSUPER1{rtn.coz=1;} )
 ;
 
 qualifiedNameList returns[QualifiedNameList rtn]
 @init{rtn=new QualifiedNameList();}
-:^(QUALIFIEDNAMELIST0{rtn.coz=0;}     ( (x0=qualifiedName{rtn.addQualifiedName(x0);}))*)
+:^(QUALIFIEDNAMELIST0{rtn.coz=0;}    (x0=qualifiedName{rtn.setQualifiedName(x0);}) ( (x1=qualifiedName{rtn.addQualifiedName(x1);}))*)
 ;
 
 formalParameters returns[FormalParameters rtn]
 @init{rtn=new FormalParameters();}
-:^(FORMALPARAMETERS0{rtn.coz=0;}    (x0=formalParameterDecls{rtn.setFormalParameterDecls(x0);})?)
+:^(FORMALPARAMETERS0{rtn.coz=0;}     (x0=formalParameterDecls{rtn.setFormalParameterDecls(x0);})?)
 ;
 
 formalParameterDecls returns[FormalParameterDecls rtn]
@@ -285,8 +286,8 @@ explicitConstructorInvocation returns[ExplicitConstructorInvocation rtn]
 
 thisOrSuper returns[ThisOrSuper rtn]
 @init{rtn=new ThisOrSuper();}
-:^(THISORSUPER0{rtn.coz=0;} 	(x0=THIS{rtn.setTHIS($x0.text);}))
-|^(THISORSUPER1{rtn.coz=1;} 	(x1=SUPER{rtn.setSUPER($x1.text);}))
+:^(THISORSUPER0{rtn.coz=0;} )
+|^(THISORSUPER1{rtn.coz=1;} )
 ;
 
 qualifiedName returns[QualifiedName rtn]
@@ -301,13 +302,13 @@ annotations returns[Annotations rtn]
 
 annotation returns[Annotation rtn]
 @init{rtn=new Annotation();}
-:^(ANNOTATION0{rtn.coz=0;}     (x0=qualifiedName{rtn.setQualifiedName(x0);}) (    (x1=elementOfAnno{rtn.setElementOfAnno(x1);})?   )?)
+:^(ANNOTATION0{rtn.coz=0;}     (x0=qualifiedName{rtn.setQualifiedName(x0);}) ( (x1=elementValueOrPairs{rtn.setElementValueOrPairs(x1);})?  )?)
 ;
 
-elementOfAnno returns[ElementOfAnno rtn]
-@init{rtn=new ElementOfAnno();}
-:^(ELEMENTOFANNO0{rtn.coz=0;} 	(x0=elementValuePairs{rtn.setElementValuePairs(x0);}))
-|^(ELEMENTOFANNO1{rtn.coz=1;} 	(x1=elementValue{rtn.setElementValue(x1);}))
+elementValueOrPairs returns[ElementValueOrPairs rtn]
+@init{rtn=new ElementValueOrPairs();}
+:^(ELEMENTVALUEORPAIRS0{rtn.coz=0;} 	(x0=elementValuePairs{rtn.setElementValuePairs(x0);}))
+|^(ELEMENTVALUEORPAIRS1{rtn.coz=1;} 	(x1=elementValue{rtn.setElementValue(x1);}))
 ;
 
 elementValuePairs returns[ElementValuePairs rtn]
@@ -329,7 +330,12 @@ elementValue returns[ElementValue rtn]
 
 elementValueArrayInitializer returns[ElementValueArrayInitializer rtn]
 @init{rtn=new ElementValueArrayInitializer();}
-:^(ELEMENTVALUEARRAYINITIALIZER0{rtn.coz=0;}    ((x0=elementValue{rtn.setElementValue(x0);})  ( (x1=elementValue{rtn.addElementValue(x1);}))*  )? (x2=COMMA{rtn.setCOMMA($x2.text);})?)
+:^(ELEMENTVALUEARRAYINITIALIZER0{rtn.coz=0;}     (x0=elementValueList{rtn.setElementValueList(x0);})? (x1=COMMA{rtn.setCOMMA($x1.text);})?)
+;
+
+elementValueList returns[ElementValueList rtn]
+@init{rtn=new ElementValueList();}
+:^(ELEMENTVALUELIST0{rtn.coz=0;} 	(x0=elementValue{rtn.setElementValue(x0);}) ( (x1=elementValue{rtn.addElementValue(x1);}))*)
 ;
 
 annotationTypeDeclaration returns[AnnotationTypeDeclaration rtn]
@@ -383,8 +389,8 @@ localVariableDeclaration returns[LocalVariableDeclaration rtn]
 statement returns[Statement rtn]
 @init{rtn=new Statement();}
 :^(STATEMENT0{rtn.coz=0;}    (x0=block{rtn.setBlock(x0);}))
-|^(STATEMENT1{rtn.coz=1;}      (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression2(x2);}))?)
-|^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement2(x5);}))?)
+|^(STATEMENT1{rtn.coz=1;}     (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression(x2);}))?)
+|^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement(x5);}))?)
 |^(STATEMENT3{rtn.coz=3;}    (x6=forstatement{rtn.setForstatement(x6);}))
 |^(STATEMENT4{rtn.coz=4;}     (x7=parExpression{rtn.setParExpression(x7);}) (x8=statement{rtn.setStatement(x8);}))
 |^(STATEMENT5{rtn.coz=5;}     (x9=statement{rtn.setStatement(x9);})  (x10=parExpression{rtn.setParExpression(x10);}))
@@ -393,11 +399,11 @@ statement returns[Statement rtn]
 |^(STATEMENT8{rtn.coz=8;}     (x14=parExpression{rtn.setParExpression(x14);}) (x15=block{rtn.setBlock(x15);}))
 |^(STATEMENT9{rtn.coz=9;}     (x16=expression{rtn.setExpression(x16);})?)
 |^(STATEMENT10{rtn.coz=10;}     (x17=expression{rtn.setExpression(x17);}))
-|^(STATEMENT11{rtn.coz=11;}     (x18=IDENTIFIER{rtn.setIDENTIFIER($x18.text);})?)
-|^(STATEMENT12{rtn.coz=12;}    (x19=IDENTIFIER{rtn.setIDENTIFIER($x19.text);})?)
+|^(STATEMENT11{rtn.coz=11;}    (x18=IDENTIFIER{rtn.setIDENTIFIER($x18.text);})?)
+|^(STATEMENT12{rtn.coz=12;}     (x19=IDENTIFIER{rtn.setIDENTIFIER($x19.text);})?)
 |^(STATEMENT13{rtn.coz=13;}    (x20=expression{rtn.setExpression(x20);}))
 |^(STATEMENT14{rtn.coz=14;}    (x21=IDENTIFIER{rtn.setIDENTIFIER($x21.text);})  (x22=statement{rtn.setStatement(x22);}))
-|^(STATEMENT15{rtn.coz=15;}    (x23=SEMI{rtn.setSEMI($x23.text);}))
+|^(STATEMENT15{rtn.coz=15;} )
 ;
 
 switchBlockStatementGroups returns[SwitchBlockStatementGroups rtn]
@@ -412,15 +418,15 @@ switchBlockStatementGroup returns[SwitchBlockStatementGroup rtn]
 
 switchLabel returns[SwitchLabel rtn]
 @init{rtn=new SwitchLabel();}
-:^(SWITCHLABEL0{rtn.coz=0;}    (x0=CASE{rtn.setCASE($x0.text);}) (x1=expression{rtn.setExpression(x1);}))
-|^(SWITCHLABEL1{rtn.coz=1;}    (x2=DEFAULT{rtn.setDEFAULT($x2.text);}))
+:^(SWITCHLABEL0{rtn.coz=0;}     (x0=expression{rtn.setExpression(x0);}))
+|^(SWITCHLABEL1{rtn.coz=1;} )
 ;
 
 trystatement returns[Trystatement rtn]
 @init{rtn=new Trystatement();}
-:^(TRYSTATEMENT0{rtn.coz=0;}     (x0=block{rtn.setBlock(x0);})   (x1=catches{rtn.setCatches(x1);})  (x2=block{rtn.setBlock2(x2);}))
-|^(TRYSTATEMENT1{rtn.coz=1;}   (x3=block{rtn.setBlock(x3);})  (x4=catches{rtn.setCatches(x4);}))
-|^(TRYSTATEMENT2{rtn.coz=2;}   (x5=block{rtn.setBlock(x5);})   (x6=block{rtn.setBlock2(x6);}))
+:^(TRYSTATEMENT0{rtn.coz=0;} 	 (x0=block{rtn.setBlock(x0);}) (x1=catches{rtn.setCatches(x1);})  (x2=block{rtn.setBlock(x2);}))
+|^(TRYSTATEMENT1{rtn.coz=1;} 	 (x3=block{rtn.setBlock(x3);}) (x4=catches{rtn.setCatches(x4);}))
+|^(TRYSTATEMENT2{rtn.coz=2;} 	 (x5=block{rtn.setBlock(x5);})  (x6=block{rtn.setBlock(x6);}))
 ;
 
 catches returns[Catches rtn]
@@ -462,23 +468,23 @@ expressionList returns[ExpressionList rtn]
 
 expression returns[Expression rtn]
 @init{rtn=new Expression();}
-:^(EXPRESSION0{rtn.coz=0;}    (x0=conditionalExpression{rtn.setConditionalExpression(x0);}) ((x1=assignmentOperator{rtn.setAssignmentOperator(x1);}) (x2=expression{rtn.setExpression(x2);}))?)
+:^(EXPRESSION0{rtn.coz=0;}    (x0=conditionalExpression{rtn.setConditionalExpression(x0);}) ((x1=assignmentOperator{rtn.setAssignmentOperator(x1);}) (x2=expression{rtn.setExpression(x2);}) )?)
 ;
 
 assignmentOperator returns[AssignmentOperator rtn]
 @init{rtn=new AssignmentOperator();}
-:^(ASSIGNMENTOPERATOR0{rtn.coz=0;}    (x0=EQ{rtn.setEQ($x0.text);}))
-|^(ASSIGNMENTOPERATOR1{rtn.coz=1;}    (x1=PLUSEQ{rtn.setPLUSEQ($x1.text);}))
-|^(ASSIGNMENTOPERATOR2{rtn.coz=2;}    (x2=SUBEQ{rtn.setSUBEQ($x2.text);}))
-|^(ASSIGNMENTOPERATOR3{rtn.coz=3;}    (x3=STAREQ{rtn.setSTAREQ($x3.text);}))
-|^(ASSIGNMENTOPERATOR4{rtn.coz=4;}    (x4=SLASHEQ{rtn.setSLASHEQ($x4.text);}))
-|^(ASSIGNMENTOPERATOR5{rtn.coz=5;}    (x5=AMPEQ{rtn.setAMPEQ($x5.text);}))
-|^(ASSIGNMENTOPERATOR6{rtn.coz=6;}    (x6=BAREQ{rtn.setBAREQ($x6.text);}))
-|^(ASSIGNMENTOPERATOR7{rtn.coz=7;}    (x7=CARETEQ{rtn.setCARETEQ($x7.text);}))
-|^(ASSIGNMENTOPERATOR8{rtn.coz=8;}    (x8=PERCENTEQ{rtn.setPERCENTEQ($x8.text);}))
-|^(ASSIGNMENTOPERATOR9{rtn.coz=9;}    (x9=LT{rtn.setLT($x9.text);}) (x10=LT{rtn.setLT($x10.text);}) (x11=EQ{rtn.setEQ($x11.text);}))
-|^(ASSIGNMENTOPERATOR10{rtn.coz=10;}    (x12=GT{rtn.setGT($x12.text);}) (x13=GT{rtn.setGT($x13.text);}) (x14=GT{rtn.setGT($x14.text);}) (x15=EQ{rtn.setEQ($x15.text);}))
-|^(ASSIGNMENTOPERATOR11{rtn.coz=11;}    (x16=GT{rtn.setGT($x16.text);}) (x17=GT{rtn.setGT($x17.text);}) (x18=EQ{rtn.setEQ($x18.text);}))
+:^(ASSIGNMENTOPERATOR0{rtn.coz=0;} )
+|^(ASSIGNMENTOPERATOR1{rtn.coz=1;} )
+|^(ASSIGNMENTOPERATOR2{rtn.coz=2;} )
+|^(ASSIGNMENTOPERATOR3{rtn.coz=3;} )
+|^(ASSIGNMENTOPERATOR4{rtn.coz=4;} )
+|^(ASSIGNMENTOPERATOR5{rtn.coz=5;} )
+|^(ASSIGNMENTOPERATOR6{rtn.coz=6;} )
+|^(ASSIGNMENTOPERATOR7{rtn.coz=7;} )
+|^(ASSIGNMENTOPERATOR8{rtn.coz=8;} )
+|^(ASSIGNMENTOPERATOR9{rtn.coz=9;} )
+|^(ASSIGNMENTOPERATOR10{rtn.coz=10;} )
+|^(ASSIGNMENTOPERATOR11{rtn.coz=11;} )
 ;
 
 conditionalExpression returns[ConditionalExpression rtn]
@@ -513,18 +519,18 @@ andExpression returns[AndExpression rtn]
 
 equalityExpression returns[EqualityExpression rtn]
 @init{rtn=new EqualityExpression();}
-:^(EQUALITYEXPRESSION0{rtn.coz=0;}    (x0=instanceOfExpression{rtn.setInstanceOfExpression(x0);}) ( (x1=equalOrNotequal{rtn.addEqualOrNotequal(x1);}) (x2=instanceOfExpression{rtn.addInstanceOfExpression(x2);}))*)
+:^(EQUALITYEXPRESSION0{rtn.coz=0;}    (x0=instanceOfExpression{rtn.setInstanceOfExpression(x0);}) ( (x1=eqOrNot{rtn.addEqOrNot(x1);}) (x2=instanceOfExpression{rtn.addInstanceOfExpression(x2);}) )*)
 ;
 
-equalOrNotequal returns[EqualOrNotequal rtn]
-@init{rtn=new EqualOrNotequal();}
-:^(EQUALORNOTEQUAL0{rtn.coz=0;} 	(x0=EQEQ{rtn.setEQEQ($x0.text);}))
-|^(EQUALORNOTEQUAL1{rtn.coz=1;} 	(x1=BANGEQ{rtn.setBANGEQ($x1.text);}))
+eqOrNot returns[EqOrNot rtn]
+@init{rtn=new EqOrNot();}
+:^(EQORNOT0{rtn.coz=0;} )
+|^(EQORNOT1{rtn.coz=1;} )
 ;
 
 instanceOfExpression returns[InstanceOfExpression rtn]
 @init{rtn=new InstanceOfExpression();}
-:^(INSTANCEOFEXPRESSION0{rtn.coz=0;}    (x0=relationalExpression{rtn.setRelationalExpression(x0);}) ( (x1=type{rtn.setType(x1);}) )?)
+:^(INSTANCEOFEXPRESSION0{rtn.coz=0;}    (x0=relationalExpression{rtn.setRelationalExpression(x0);}) ( (x1=type{rtn.setType(x1);}))?)
 ;
 
 relationalExpression returns[RelationalExpression rtn]
@@ -534,10 +540,10 @@ relationalExpression returns[RelationalExpression rtn]
 
 relationalOp returns[RelationalOp rtn]
 @init{rtn=new RelationalOp();}
-:^(RELATIONALOP0{rtn.coz=0;}    (x0=LT{rtn.setLT($x0.text);}) (x1=EQ{rtn.setEQ($x1.text);}))
-|^(RELATIONALOP1{rtn.coz=1;}    (x2=GT{rtn.setGT($x2.text);}) (x3=EQ{rtn.setEQ($x3.text);}))
-|^(RELATIONALOP2{rtn.coz=2;}    (x4=LT{rtn.setLT($x4.text);}))
-|^(RELATIONALOP3{rtn.coz=3;}    (x5=GT{rtn.setGT($x5.text);}))
+:^(RELATIONALOP0{rtn.coz=0;} )
+|^(RELATIONALOP1{rtn.coz=1;} )
+|^(RELATIONALOP2{rtn.coz=2;} )
+|^(RELATIONALOP3{rtn.coz=3;} )
 ;
 
 shiftExpression returns[ShiftExpression rtn]
@@ -547,9 +553,9 @@ shiftExpression returns[ShiftExpression rtn]
 
 shiftOp returns[ShiftOp rtn]
 @init{rtn=new ShiftOp();}
-:^(SHIFTOP0{rtn.coz=0;}     (x0=LT{rtn.setLT($x0.text);}) (x1=LT{rtn.setLT($x1.text);}))
-|^(SHIFTOP1{rtn.coz=1;}     (x2=GT{rtn.setGT($x2.text);}) (x3=GT{rtn.setGT($x3.text);}))
-|^(SHIFTOP2{rtn.coz=2;}     (x4=GT{rtn.setGT($x4.text);}) (x5=GT{rtn.setGT($x5.text);}) (x6=GT{rtn.setGT($x6.text);}))
+:^(SHIFTOP0{rtn.coz=0;} )
+|^(SHIFTOP1{rtn.coz=1;} )
+|^(SHIFTOP2{rtn.coz=2;} )
 ;
 
 additiveExpression returns[AdditiveExpression rtn]
@@ -559,20 +565,20 @@ additiveExpression returns[AdditiveExpression rtn]
 
 plusOrMinus returns[PlusOrMinus rtn]
 @init{rtn=new PlusOrMinus();}
-:^(PLUSORMINUS0{rtn.coz=0;} 	(x0=PLUS{rtn.setPLUS($x0.text);}))
-|^(PLUSORMINUS1{rtn.coz=1;} 	(x1=SUB{rtn.setSUB($x1.text);}))
+:^(PLUSORMINUS0{rtn.coz=0;} )
+|^(PLUSORMINUS1{rtn.coz=1;} )
 ;
 
 multiplicativeExpression returns[MultiplicativeExpression rtn]
 @init{rtn=new MultiplicativeExpression();}
-:^(MULTIPLICATIVEEXPRESSION0{rtn.coz=0;} 	(x0=unaryExpression{rtn.setUnaryExpression(x0);}) ( (x1=timesDivide{rtn.addTimesDivide(x1);}) (x2=unaryExpression{rtn.addUnaryExpression(x2);}))*)
+:^(MULTIPLICATIVEEXPRESSION0{rtn.coz=0;}    (x0=unaryExpression{rtn.setUnaryExpression(x0);}) ((x1=starSlashPercent{rtn.addStarSlashPercent(x1);}) (x2=unaryExpression{rtn.addUnaryExpression(x2);}) )*)
 ;
 
-timesDivide returns[TimesDivide rtn]
-@init{rtn=new TimesDivide();}
-:^(TIMESDIVIDE0{rtn.coz=0;} 	(x0=STAR{rtn.setSTAR($x0.text);}))
-|^(TIMESDIVIDE1{rtn.coz=1;} 	(x1=SLASH{rtn.setSLASH($x1.text);}))
-|^(TIMESDIVIDE2{rtn.coz=2;} 	(x2=PERCENT{rtn.setPERCENT($x2.text);}))
+starSlashPercent returns[StarSlashPercent rtn]
+@init{rtn=new StarSlashPercent();}
+:^(STARSLASHPERCENT0{rtn.coz=0;} )
+|^(STARSLASHPERCENT1{rtn.coz=1;} )
+|^(STARSLASHPERCENT2{rtn.coz=2;} )
 ;
 
 unaryExpression returns[UnaryExpression rtn]
@@ -589,13 +595,13 @@ unaryExpressionNotPlusMinus returns[UnaryExpressionNotPlusMinus rtn]
 :^(UNARYEXPRESSIONNOTPLUSMINUS0{rtn.coz=0;}     (x0=unaryExpression{rtn.setUnaryExpression(x0);}))
 |^(UNARYEXPRESSIONNOTPLUSMINUS1{rtn.coz=1;}     (x1=unaryExpression{rtn.setUnaryExpression(x1);}))
 |^(UNARYEXPRESSIONNOTPLUSMINUS2{rtn.coz=2;}    (x2=castExpression{rtn.setCastExpression(x2);}))
-|^(UNARYEXPRESSIONNOTPLUSMINUS3{rtn.coz=3;}    (x3=primary{rtn.setPrimary(x3);}) (x4=selector{rtn.addSelector(x4);})* (x5=doublePlusMinus{rtn.setDoublePlusMinus(x5);})?)
+|^(UNARYEXPRESSIONNOTPLUSMINUS3{rtn.coz=3;}    (x3=primary{rtn.setPrimary(x3);}) (x4=selector{rtn.addSelector(x4);})* (x5=plusPlusOrMinusMinus{rtn.setPlusPlusOrMinusMinus(x5);})?)
 ;
 
-doublePlusMinus returns[DoublePlusMinus rtn]
-@init{rtn=new DoublePlusMinus();}
-:^(DOUBLEPLUSMINUS0{rtn.coz=0;} 	(x0=PLUSPLUS{rtn.setPLUSPLUS($x0.text);}))
-|^(DOUBLEPLUSMINUS1{rtn.coz=1;} 	(x1=SUBSUB{rtn.setSUBSUB($x1.text);}))
+plusPlusOrMinusMinus returns[PlusPlusOrMinusMinus rtn]
+@init{rtn=new PlusPlusOrMinusMinus();}
+:^(PLUSPLUSORMINUSMINUS0{rtn.coz=0;} )
+|^(PLUSPLUSORMINUSMINUS1{rtn.coz=1;} )
 ;
 
 castExpression returns[CastExpression rtn]
@@ -607,12 +613,12 @@ castExpression returns[CastExpression rtn]
 primary returns[Primary rtn]
 @init{rtn=new Primary();}
 :^(PRIMARY0{rtn.coz=0;}    (x0=parExpression{rtn.setParExpression(x0);}))
-|^(PRIMARY1{rtn.coz=1;}     ( (x1=IDENTIFIER{rtn.addIDENTIFIER($x1.text);}))* (x2=identifierSuffix{rtn.setIdentifierSuffix(x2);})?)
+|^(PRIMARY1{rtn.coz=1;}     ( (x1=IDENTIFIER{rtn.addIDENTIFIER($x1.text);}) )* (x2=identifierSuffix{rtn.setIdentifierSuffix(x2);})?)
 |^(PRIMARY2{rtn.coz=2;}    (x3=IDENTIFIER{rtn.setIDENTIFIER($x3.text);}) ( (x4=IDENTIFIER{rtn.addIDENTIFIER($x4.text);}))* (x5=identifierSuffix{rtn.setIdentifierSuffix(x5);})?)
 |^(PRIMARY3{rtn.coz=3;}     (x6=superSuffix{rtn.setSuperSuffix(x6);}))
 |^(PRIMARY4{rtn.coz=4;}    (x7=literal{rtn.setLiteral(x7);}))
 |^(PRIMARY5{rtn.coz=5;}    (x8=creator{rtn.setCreator(x8);}))
-|^(PRIMARY6{rtn.coz=6;}    (x9=primitiveType{rtn.setPrimitiveType(x9);}) ((x10=BRACKETS{rtn.addBRACKETS($x10.text);}))*)
+|^(PRIMARY6{rtn.coz=6;}    (x9=primitiveType{rtn.setPrimitiveType(x9);}) (x10=BRACKETS{rtn.addBRACKETS($x10.text);})*)
 |^(PRIMARY7{rtn.coz=7;} )
 ;
 
@@ -625,7 +631,7 @@ superSuffix returns[SuperSuffix rtn]
 identifierSuffix returns[IdentifierSuffix rtn]
 @init{rtn=new IdentifierSuffix();}
 :^(IDENTIFIERSUFFIX0{rtn.coz=0;}    (x0=BRACKETS{rtn.addBRACKETS($x0.text);})+)
-|^(IDENTIFIERSUFFIX1{rtn.coz=1;}    ( (x1=expression{rtn.addExpression(x1);})  )+)
+|^(IDENTIFIERSUFFIX1{rtn.coz=1;}    ( (x1=expression{rtn.addExpression(x1);}) )+)
 |^(IDENTIFIERSUFFIX2{rtn.coz=2;}    (x2=arguments{rtn.setArguments(x2);}))
 |^(IDENTIFIERSUFFIX3{rtn.coz=3;} )
 |^(IDENTIFIERSUFFIX4{rtn.coz=4;}     (x3=nonWildcardTypeArguments{rtn.setNonWildcardTypeArguments(x3);}) (x4=IDENTIFIER{rtn.setIDENTIFIER($x4.text);}) (x5=arguments{rtn.setArguments(x5);}))
@@ -653,7 +659,7 @@ creator returns[Creator rtn]
 arrayCreator returns[ArrayCreator rtn]
 @init{rtn=new ArrayCreator();}
 :^(ARRAYCREATOR0{rtn.coz=0;}     (x0=createdName{rtn.setCreatedName(x0);}) (x1=BRACKETS{rtn.addBRACKETS($x1.text);})+ (x2=arrayInitializer{rtn.setArrayInitializer(x2);}))
-|^(ARRAYCREATOR1{rtn.coz=1;}     (x3=createdName{rtn.setCreatedName(x3);})  (x4=expression{rtn.setExpression(x4);})  (    (x5=expression{rtn.addExpression(x5);}) )* (x6=BRACKETS{rtn.addBRACKETS($x6.text);})*)
+|^(ARRAYCREATOR1{rtn.coz=1;}     (x3=createdName{rtn.setCreatedName(x3);}) ( (x4=expression{rtn.addExpression(x4);}) )+ (x5=BRACKETS{rtn.addBRACKETS($x5.text);})*)
 ;
 
 variableInitializer returns[VariableInitializer rtn]
@@ -664,7 +670,12 @@ variableInitializer returns[VariableInitializer rtn]
 
 arrayInitializer returns[ArrayInitializer rtn]
 @init{rtn=new ArrayInitializer();}
-:^(ARRAYINITIALIZER0{rtn.coz=0;}     ((x0=variableInitializer{rtn.setVariableInitializer(x0);}) ( (x1=variableInitializer{rtn.addVariableInitializer(x1);}) )* )? ((x2=COMMA{rtn.setCOMMA($x2.text);}))?)
+:^(ARRAYINITIALIZER0{rtn.coz=0;}     (x0=arrayInitializerList{rtn.setArrayInitializerList(x0);})? (x1=COMMA{rtn.setCOMMA($x1.text);})?)
+;
+
+arrayInitializerList returns[ArrayInitializerList rtn]
+@init{rtn=new ArrayInitializerList();}
+:^(ARRAYINITIALIZERLIST0{rtn.coz=0;} 	 (x0=variableInitializer{rtn.setVariableInitializer(x0);}) ( (x1=variableInitializer{rtn.addVariableInitializer(x1);}))*)
 ;
 
 createdName returns[CreatedName rtn]
@@ -675,7 +686,7 @@ createdName returns[CreatedName rtn]
 
 innerCreator returns[InnerCreator rtn]
 @init{rtn=new InnerCreator();}
-:^(INNERCREATOR0{rtn.coz=0;}      (x0=nonWildcardTypeArguments{rtn.setNonWildcardTypeArguments(x0);})? (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeArguments{rtn.setTypeArguments(x2);})?  (x3=classCreatorRest{rtn.setClassCreatorRest(x3);}))
+:^(INNERCREATOR0{rtn.coz=0;}      (x0=nonWildcardTypeArguments{rtn.setNonWildcardTypeArguments(x0);})? (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeArguments{rtn.setTypeArguments(x2);})? (x3=classCreatorRest{rtn.setClassCreatorRest(x3);}))
 ;
 
 classCreatorRest returns[ClassCreatorRest rtn]
@@ -705,6 +716,7 @@ literal returns[Literal rtn]
 |^(LITERAL7{rtn.coz=7;}    (x7=FALSE{rtn.setFALSE($x7.text);}))
 |^(LITERAL8{rtn.coz=8;}    (x8=NULL{rtn.setNULL($x8.text);}))
 ;
+
 
 
 
