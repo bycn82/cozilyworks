@@ -574,8 +574,12 @@ variableInitializer
     ;
 
 arrayInitializer 
-    :   '{' (variableInitializer (',' variableInitializer)* )? COMMA? '}'
+    :   '{' arrayInitializerList? COMMA? '}'
     ;
+
+arrayInitializerList
+	:	 variableInitializer (',' variableInitializer)*
+	;
 
 
 createdName 
@@ -584,12 +588,12 @@ createdName
     ;
 
 innerCreator  
-    :   '.' 'new' (nonWildcardTypeArguments)? IDENTIFIER (typeArguments)? classCreatorRest
+    :   '.' 'new' nonWildcardTypeArguments? IDENTIFIER typeArguments? classCreatorRest
     ;
 
 
 classCreatorRest 
-    :   arguments (classBody)?
+    :   arguments classBody?
     ;
 
 
@@ -598,7 +602,7 @@ nonWildcardTypeArguments
     ;
 
 arguments 
-    :   '(' (expressionList)? ')'
+    :   '(' expressionList? ')'
     ;
 
 literal 
