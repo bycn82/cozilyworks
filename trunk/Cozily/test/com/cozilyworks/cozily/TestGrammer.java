@@ -13,6 +13,7 @@ public class TestGrammer{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws Exception{
 		String path="E:\\TEMP\\org";
+		//path="E:\\TEMP\\org\\springframework\\aop\\aspectj\\autoproxy\\AspectJPrecedenceComparator.java";
 		File f=new File(path);
 		getAllJava(f);
 		for(File file:files){
@@ -30,7 +31,7 @@ public class TestGrammer{
 		}
 	}
 	public static void test(String path) throws Exception{
-		System.out.println(path.replace("\\","\\\\"));
+		//System.out.println(path.replace("\\","\\\\"));
 		CozilyLexer lex=new CozilyLexer(new ANTLRFileStream(path));
 		CommonTokenStream tokens=new CommonTokenStream(lex);
 		CozilyParser g=new CozilyParser(tokens);
