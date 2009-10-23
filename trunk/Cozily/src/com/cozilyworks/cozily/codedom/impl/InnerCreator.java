@@ -7,13 +7,9 @@ private NonWildcardTypeArguments nonwildcardtypearguments;
 public void setNonWildcardTypeArguments(NonWildcardTypeArguments t){
 this.nonwildcardtypearguments=t;
 }
-private String identifierStr;
-public void setIDENTIFIER(String t){
-this.identifierStr=t;
-}
-private TypeArguments typearguments;
-public void setTypeArguments(TypeArguments t){
-this.typearguments=t;
+private IdentifierArgs identifierargs;
+public void setIdentifierArgs(IdentifierArgs t){
+this.identifierargs=t;
 }
 private ClassCreatorRest classcreatorrest;
 public void setClassCreatorRest(ClassCreatorRest t){
@@ -21,7 +17,7 @@ this.classcreatorrest=t;
 }
 public void visit(){
 if(coz==0){
-//"'.' 'new' nonWildcardTypeArguments? IDENTIFIER typeArguments? classCreatorRest";
+//"'.' 'new' nonWildcardTypeArguments? identifierArgs classCreatorRest";
 }
 }
 }

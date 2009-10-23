@@ -2,7 +2,7 @@
 
 
      
-compilationUnit 
+fileDeclaration 
     :   (annotations? packageDeclaration)? importDeclaration* typeDeclaration*
     ;
 
@@ -183,8 +183,12 @@ type
 
 
 classOrInterfaceType 
-    :   IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments? )*
+    :   identifierArgs ('.' identifierArgs )*
     ;
+
+identifierArgs
+	:	IDENTIFIER typeArguments?
+	;
 
 primitiveType  
     :   'boolean'
@@ -590,7 +594,7 @@ createdName
     ;
 
 innerCreator  
-    :   '.' 'new' nonWildcardTypeArguments? IDENTIFIER typeArguments? classCreatorRest
+    :   '.' 'new' nonWildcardTypeArguments? identifierArgs classCreatorRest
     ;
 
 

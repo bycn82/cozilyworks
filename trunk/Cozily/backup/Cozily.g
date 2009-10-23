@@ -20,7 +20,7 @@ import com.cozilyworks.cozily.codedom.impl.*;
 
 
      
-compilationUnit 
+fileDeclaration 
     :   (annotations? packageDeclaration)? importDeclaration* typeDeclaration*
     ;
 
@@ -59,7 +59,7 @@ annoOrKeywords
     |   'synchronized'
     |   'transient'
     |   'volatile'
-    |   'strictfp'
+    |   'trictfp'
 	;
 
 
@@ -201,8 +201,12 @@ type
 
 
 classOrInterfaceType 
-    :   IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments? )*
+    :   identifierArgs ('.' identifierArgs )*
     ;
+
+identifierArgs
+	:	IDENTIFIER typeArguments?
+	;
 
 primitiveType  
     :   'boolean'
@@ -608,7 +612,7 @@ createdName
     ;
 
 innerCreator  
-    :   '.' 'new' nonWildcardTypeArguments? IDENTIFIER typeArguments? classCreatorRest
+    :   '.' 'new' nonWildcardTypeArguments? identifierArgs classCreatorRest
     ;
 
 

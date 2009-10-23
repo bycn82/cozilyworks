@@ -13,9 +13,9 @@ import com.cozilyworks.cozily.codedom.impl.*;
 
 //rules begin
 
-compilationUnit returns[CompilationUnit rtn]
-@init{rtn=new CompilationUnit();}
-:^(COMPILATIONUNIT0{rtn.coz=0;}    ((x0=annotations{rtn.setAnnotations(x0);})? (x1=packageDeclaration{rtn.setPackageDeclaration(x1);}))? (x2=importDeclaration{rtn.addImportDeclaration(x2);})* (x3=typeDeclaration{rtn.addTypeDeclaration(x3);})*)
+fileDeclaration returns[FileDeclaration rtn]
+@init{rtn=new FileDeclaration();}
+:^(FILEDECLARATION0{rtn.coz=0;}    ((x0=annotations{rtn.setAnnotations(x0);})? (x1=packageDeclaration{rtn.setPackageDeclaration(x1);}))? (x2=importDeclaration{rtn.addImportDeclaration(x2);})* (x3=typeDeclaration{rtn.addTypeDeclaration(x3);})*)
 ;
 
 packageDeclaration returns[PackageDeclaration rtn]
@@ -219,7 +219,12 @@ type returns[Type rtn]
 
 classOrInterfaceType returns[ClassOrInterfaceType rtn]
 @init{rtn=new ClassOrInterfaceType();}
-:^(CLASSORINTERFACETYPE0{rtn.coz=0;}    (x0=IDENTIFIER{rtn.setIDENTIFIER($x0.text);}) (x1=typeArguments{rtn.setTypeArguments(x1);})? ( (x2=IDENTIFIER{rtn.addIDENTIFIER($x2.text);}) (x3=typeArguments{rtn.addTypeArguments(x3);})? )*)
+:^(CLASSORINTERFACETYPE0{rtn.coz=0;}    (x0=identifierArgs{rtn.setIdentifierArgs(x0);}) ( (x1=identifierArgs{rtn.addIdentifierArgs(x1);}) )*)
+;
+
+identifierArgs returns[IdentifierArgs rtn]
+@init{rtn=new IdentifierArgs();}
+:^(IDENTIFIERARGS0{rtn.coz=0;} 	(x0=IDENTIFIER{rtn.setIDENTIFIER($x0.text);}) (x1=typeArguments{rtn.setTypeArguments(x1);})?)
 ;
 
 primitiveType returns[PrimitiveType rtn]
@@ -389,8 +394,8 @@ localVariableDeclaration returns[LocalVariableDeclaration rtn]
 statement returns[Statement rtn]
 @init{rtn=new Statement();}
 :^(STATEMENT0{rtn.coz=0;}    (x0=block{rtn.setBlock(x0);}))
-|^(STATEMENT1{rtn.coz=1;}     (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression(x2);}))?)
-|^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement(x5);}))?)
+|^(STATEMENT1{rtn.coz=1;}     (x1=expression{rtn.setExpression(x1);}) ( (x2=expression{rtn.setExpression2(x2);}))?)
+|^(STATEMENT2{rtn.coz=2;}     (x3=parExpression{rtn.setParExpression(x3);}) (x4=statement{rtn.setStatement(x4);}) ( (x5=statement{rtn.setStatement2(x5);}))?)
 |^(STATEMENT3{rtn.coz=3;}    (x6=forstatement{rtn.setForstatement(x6);}))
 |^(STATEMENT4{rtn.coz=4;}     (x7=parExpression{rtn.setParExpression(x7);}) (x8=statement{rtn.setStatement(x8);}))
 |^(STATEMENT5{rtn.coz=5;}     (x9=statement{rtn.setStatement(x9);})  (x10=parExpression{rtn.setParExpression(x10);}))
@@ -686,7 +691,7 @@ createdName returns[CreatedName rtn]
 
 innerCreator returns[InnerCreator rtn]
 @init{rtn=new InnerCreator();}
-:^(INNERCREATOR0{rtn.coz=0;}      (x0=nonWildcardTypeArguments{rtn.setNonWildcardTypeArguments(x0);})? (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeArguments{rtn.setTypeArguments(x2);})? (x3=classCreatorRest{rtn.setClassCreatorRest(x3);}))
+:^(INNERCREATOR0{rtn.coz=0;}      (x0=nonWildcardTypeArguments{rtn.setNonWildcardTypeArguments(x0);})? (x1=identifierArgs{rtn.setIdentifierArgs(x1);}) (x2=classCreatorRest{rtn.setClassCreatorRest(x2);}))
 ;
 
 classCreatorRest returns[ClassCreatorRest rtn]
