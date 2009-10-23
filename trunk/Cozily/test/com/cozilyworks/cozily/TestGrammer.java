@@ -12,7 +12,7 @@ import com.cozilyworks.cozily.parser.CozilyParser;
 public class TestGrammer{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws Exception{
-		String path="E:\\ws";
+		String path="E:\\TEMP\\org";
 		File f=new File(path);
 		getAllJava(f);
 		for(File file:files){

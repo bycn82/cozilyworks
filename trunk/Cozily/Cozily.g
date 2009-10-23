@@ -1,19 +1,27 @@
 grammar Cozily;
-
-
 options {
 	memoize=true;
 	backtrack=true;
 	output=AST;
 	ASTLabelType=CommonTree;
 }
+tokens{
+VAR;
+}
+@header {
+package com.cozilyworks.cozily.parser;
+}
+@lexer::header {
+package com.cozilyworks.cozily.parser;
+import com.cozilyworks.cozily.codedom.*;
+import com.cozilyworks.cozily.codedom.impl.*;
+}
+//rules begin
 
-/********************************************************************************************
-                          Parser section
-*********************************************************************************************/
-           
+
+     
 compilationUnit 
-    :   ((annotations)? packageDeclaration)? (importDeclaration)* (typeDeclaration)*
+    :   (annotations? packageDeclaration)? importDeclaration* typeDeclaration*
     ;
 
 packageDeclaration 
@@ -21,12 +29,7 @@ packageDeclaration
     ;
 
 importDeclaration  
-    :   'import' ('static')? IDENTIFIER '.' '*' ';'       
-    |   'import' ('static')? IDENTIFIER ('.' IDENTIFIER)+ ('.' '*')? ';'
-    ;
-
-qualifiedImportName 
-    :   IDENTIFIER ('.' IDENTIFIER)*
+    :   'import' STATIC? qualifiedName DOTSTAR? ';'       
     ;
 
 typeDeclaration 
@@ -41,8 +44,11 @@ classOrInterfaceDeclaration
     
   
 modifiers  
-    :
-    (    annotation
+    :	annoOrKeywords*
+    ;
+
+annoOrKeywords
+	:	annotation
     |   'public'
     |   'protected'
     |   'private'
@@ -54,13 +60,18 @@ modifiers
     |   'transient'
     |   'volatile'
     |   'strictfp'
-    )*
-    ;
+	;
 
 
 variableModifiers 
-    :   (   'final'  |   annotation )*
+    :   finalOrAnno*
     ;
+
+finalOrAnno
+	:	'final'
+	|	annotation
+	;
+
     
 
 classDeclaration 
@@ -69,7 +80,7 @@ classDeclaration
     ;
 
 normalClassDeclaration 
-    :   modifiers  'class' IDENTIFIER (typeParameters)? ('extends' type)? ('implements' typeList)? classBody
+    :   modifiers  'class' IDENTIFIER typeParameters? ('extends' type)? ('implements' typeList)? classBody
     ;
 
 
@@ -88,30 +99,23 @@ typeBound
 
 
 enumDeclaration 
-    :   modifiers ('enum') IDENTIFIER ('implements' typeList)? enumBody
+    :   modifiers 'enum' IDENTIFIER ('implements' typeList)? enumBody
     ;
     
 
 enumBody 
-    :   '{' (enumConstants)? ','? (enumBodyDeclarations)? '}'
+    :   '{' enumConstants? COMMA? enumBodyDeclarations? '}'
     ;
 
 enumConstants 
     :   enumConstant (',' enumConstant)*
     ;
-
-/**
- * NOTE: here differs from the javac grammar, missing TypeArguments.
- * EnumeratorDeclaration = AnnotationsOpt [TypeArguments] IDENTIFIER [ Arguments ] [ "{" ClassBody "}" ]
- */
 enumConstant 
-    :   (annotations)? IDENTIFIER (arguments)? (classBody)?
-        /* TODO: $GScope::name = names.empty. enum constant body is actually
-        an anonymous class, where constructor isn't allowed, have to add this check*/
+    :   annotations? IDENTIFIER arguments? classBody?
     ;
 
 enumBodyDeclarations 
-    :   ';' (classBodyDeclaration)*
+    :   ';' classBodyDeclaration*
     ;
 
 interfaceDeclaration 
@@ -120,7 +124,7 @@ interfaceDeclaration
     ;
     
 normalInterfaceDeclaration 
-    :   modifiers 'interface' IDENTIFIER (typeParameters)? ('extends' typeList)? interfaceBody
+    :   modifiers 'interface' IDENTIFIER typeParameters? ('extends' typeList)? interfaceBody
     ;
 
 typeList 
@@ -128,16 +132,16 @@ typeList
     ;
 
 classBody 
-    :   '{' (classBodyDeclaration)* '}'
+    :   '{' classBodyDeclaration* '}'
     ;
 
 interfaceBody 
-    :   '{' (interfaceBodyDeclaration )* '}'
+    :   '{' interfaceBodyDeclaration* '}'
     ;
 
 classBodyDeclaration 
     :   ';'
-    |   ('static')? block
+    |   STATIC? block
     |   memberDecl
     ;
 
@@ -150,9 +154,19 @@ memberDecl
 
 
 methodDeclaration 
-    :   modifiers (typeParameters)? IDENTIFIER formalParameters ('throws' qualifiedNameList)? '{' (explicitConstructorInvocation)? (blockStatement)* '}'
-    |   modifiers (typeParameters)? (type|'void') IDENTIFIER formalParameters ('[' ']')* ('throws' qualifiedNameList)? (block|';')
+    :   modifiers typeParameters? IDENTIFIER formalParameters ('throws' qualifiedNameList)? '{' explicitConstructorInvocation? blockStatement* '}'
+    |   modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? blockOrSemi
     ;
+
+blockOrSemi
+	:	block
+	|	';'
+	;
+
+returnType
+	:	type
+	|	'void'
+	;
 
 
 fieldDeclaration 
@@ -160,12 +174,9 @@ fieldDeclaration
     ;
 
 variableDeclarator 
-    :   IDENTIFIER ('[' ']')* ('=' variableInitializer)?
+    :   IDENTIFIER BRACKETS* ('=' variableInitializer)?
     ;
-
-/**
- *TODO: add predicates
- */
+    
 interfaceBodyDeclaration 
     :   interfaceFieldDeclaration
     |   interfaceMethodDeclaration
@@ -175,22 +186,17 @@ interfaceBodyDeclaration
     ;
 
 interfaceMethodDeclaration 
-    :   modifiers (typeParameters)? (type|'void') IDENTIFIER formalParameters ('[' ']')* ('throws' qualifiedNameList)? ';'
+    :   modifiers (typeParameters)? (type|'void') IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? ';'
     ;
 
-/**
- * NOTE, should not use variableDeclarator here, as it doesn't necessary require
- * an initializer, while an interface field does, or judge by the returned value.
- * But this gives better diagnostic message, or antlr won't predict this rule.
- */
 interfaceFieldDeclaration 
     :   modifiers type variableDeclarator (',' variableDeclarator)* ';'
     ;
 
 
 type 
-    :   classOrInterfaceType ('[' ']')*
-    |   primitiveType ('[' ']')*
+    :   classOrInterfaceType BRACKETS*
+    |   primitiveType BRACKETS*
     ;
 
 
@@ -233,7 +239,7 @@ formalParameterDecls
     ;
 
 normalParameterDecl 
-    :   variableModifiers type IDENTIFIER ('[' ']')*
+    :   variableModifiers type IDENTIFIER BRACKETS*
     ;
 
 ellipsisParameterDecl 
@@ -254,10 +260,6 @@ annotations
     :   (annotation)+
     ;
 
-/**
- *  Using an annotation. 
- * '@' is flaged in modifier
- */
 annotation 
     :   '@' qualifiedName ( '('(   elementValuePairs | elementValue)? ')' )?
     ;
@@ -277,25 +279,20 @@ elementValue
     ;
 
 elementValueArrayInitializer 
-    :   '{'(elementValue (',' elementValue)* )? (',')? '}'
+    :   '{'(elementValue (',' elementValue)* )? COMMA? '}'
     ;
 
 
-/**
- * Annotation declaration.
- */
 annotationTypeDeclaration 
     :   modifiers '@' 'interface' IDENTIFIER annotationTypeBody
     ;
 
 
 annotationTypeBody 
-    :   '{' (annotationTypeElementDeclaration)* '}'
+    :   '{' annotationTypeElementDeclaration* '}'
     ;
 
-/**
- * NOTE: here use interfaceFieldDeclaration for field declared inside annotation. they are sytactically the same.
- */
+
 annotationTypeElementDeclaration 
     :   annotationMethodDeclaration
     |   interfaceFieldDeclaration
@@ -311,7 +308,7 @@ annotationMethodDeclaration
     ;
 
 block 
-    :   '{' (blockStatement)* '}'
+    :   '{' blockStatement* '}'
     ;
 
 
@@ -340,21 +337,21 @@ statement
     |   trystatement
     |   'switch' parExpression '{' switchBlockStatementGroups '}'
     |   'synchronized' parExpression block
-    |   'return' (expression )? ';'
+    |   'return' expression? ';'
     |   'throw' expression ';'
-    |   'break'(IDENTIFIER)? ';'
-    |   'continue' (IDENTIFIER)? ';'
+    |   'break'IDENTIFIER? ';'
+    |   'continue' IDENTIFIER? ';'
     |   expression  ';'     
     |   IDENTIFIER ':' statement
     |   ';'
     ;
 
 switchBlockStatementGroups 
-    :   (switchBlockStatementGroup )*
+    :   switchBlockStatementGroup*
     ;
 
 switchBlockStatementGroup 
-    :   switchLabel (blockStatement)*
+    :   switchLabel blockStatement*
     ;
 
 switchLabel 
@@ -364,11 +361,13 @@ switchLabel
 
 
 trystatement 
-    :   'try' block (   catches 'finally' block  |   catches   |   'finally' block   )
-     ;
+    :	'try' block catches 'finally' block
+    |	'try' block catches
+    |	'try' block 'finally' block
+    ;
 
 catches 
-    :   catchClause (catchClause)*
+    :   catchClause+
     ;
 
 catchClause 
@@ -376,12 +375,12 @@ catchClause
     ;
 
 formalParameter 
-    :   variableModifiers type IDENTIFIER ('[' ']')*
+    :   variableModifiers type IDENTIFIER BRACKETS*
     ;
 
 forstatement 
     :   'for' '(' variableModifiers type IDENTIFIER ':' expression ')' statement         
-    |   'for' '(' (forInit)? ';' (expression)? ';' (expressionList)? ')' statement
+    |   'for' '(' forInit? ';' expression? ';' expressionList? ')' statement
     ;
 
 forInit 
@@ -510,7 +509,7 @@ primary
     |   'super' superSuffix
     |   literal
     |   creator
-    |   primitiveType ('[' ']')* '.' 'class'
+    |   primitiveType BRACKETS* '.' 'class'
     |   'void' '.' 'class'
     ;
     
@@ -522,7 +521,7 @@ superSuffix
 
 
 identifierSuffix 
-    :   ('[' ']')+ '.' 'class'
+    :   BRACKETS+ '.' 'class'
     |   ('[' expression ']')+
     |   arguments
     |   '.' 'class'
@@ -548,8 +547,8 @@ creator
     ;
 
 arrayCreator 
-    :   'new' createdName '[' ']' ('[' ']')* arrayInitializer
-    |   'new' createdName '[' expression ']' (   '[' expression ']' )* ('[' ']')*
+    :   'new' createdName BRACKETS+ arrayInitializer
+    |   'new' createdName ('[' expression ']')+ BRACKETS*
     ;
 
 variableInitializer 
@@ -558,7 +557,7 @@ variableInitializer
     ;
 
 arrayInitializer 
-    :   '{' (variableInitializer (',' variableInitializer)* )? (',')? '}'
+    :   '{' (variableInitializer (',' variableInitializer)* )? COMMA? '}'
     ;
 
 
@@ -599,9 +598,8 @@ literal
 
 
 
-/********************************************************************************************
-                  Lexer section
-*********************************************************************************************/
+//rules end
+//tokens begin
 
 LONGLITERAL
     :   IntegerNumber LongSuffix
@@ -983,6 +981,10 @@ LBRACE
 RBRACE
     :   '}'
     ;
+    
+BRACKETS
+  	:	LBRACKET RBRACKET
+   	;
 
 LBRACKET
     :   '['
@@ -1055,6 +1057,10 @@ PLUS
 SUB
     :   '-'
     ;
+    
+DOTSTAR
+	:	DOT STAR
+	;
 
 STAR
     :   '*'
