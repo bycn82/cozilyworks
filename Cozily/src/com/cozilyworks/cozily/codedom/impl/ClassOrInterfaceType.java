@@ -3,25 +3,17 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 public class ClassOrInterfaceType extends CodeDocument{
-private String identifierStr;
-public void setIDENTIFIER(String t){
-this.identifierStr=t;
+private IdentifierArgs identifierargs;
+public void setIdentifierArgs(IdentifierArgs t){
+this.identifierargs=t;
 }
-private TypeArguments typearguments;
-public void setTypeArguments(TypeArguments t){
-this.typearguments=t;
-}
-private List<String> identifiers=new ArrayList<String>();
-public void addIDENTIFIER(String t){
-this.identifiers.add(t);
-}
-private List<TypeArguments> typeargumentss=new ArrayList<TypeArguments>();
-public void addTypeArguments(TypeArguments t){
-this.typeargumentss.add(t);
+private List<IdentifierArgs> identifierargss=new ArrayList<IdentifierArgs>();
+public void addIdentifierArgs(IdentifierArgs t){
+this.identifierargss.add(t);
 }
 public void visit(){
 if(coz==0){
-//"IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments? )*";
+//"identifierArgs ('.' identifierArgs )*";
 }
 }
 }

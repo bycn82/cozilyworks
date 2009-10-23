@@ -1,5 +1,4 @@
 package com.cozilyworks.cozily;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,26 +16,18 @@ import com.cozilyworks.cozily.codedom.CodeDocument;
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
-
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws RecognitionException,IOException{
-		String path="D:\\WORKSPACES\\WORKS\\BasicSkill\\src";
-		// path="D:\\workspace";
+		String path="E:\\TEMP\\org";
+		 path="test\\Example.java";
 		File f=new File(path);
 		getAllJava(f);
 		BufferedInputStream ins=new BufferedInputStream(System.in);
 		for(File file:files){
-			while(true){
-				int i=ins.read();
-				if((char)i=='A'){
-					break;
-				}else{
-					System.out.println(file.getPath());
-					writeJAVA(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
-					writeXML(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
-				}
-			}
+			System.out.println(file.getPath());
+			writeJAVA(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+			writeXML(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
 		}
 	}
 	private static void getAllJava(File f){
@@ -55,8 +46,7 @@ public class TestCozily{
 			CozilyLexer lexer=new CozilyLexer(input);
 			CommonTokenStream tokens=new CommonTokenStream(lexer);
 			return new CozilyParser(tokens);
-		}catch(Exception e){
-		}
+		}catch(Exception e){}
 		return null;
 	}
 	public static CozilyTreeParser getParser(Object o){
@@ -66,14 +56,14 @@ public class TestCozily{
 	public static void writeJAVA(Object o){
 		CodeDocument.developing=false;
 		System.out.println(o);
-		File outputjava=new File("output.java");
-		try{
-			BufferedWriter w=new BufferedWriter(new FileWriter(outputjava));
-			w.write(o.toString());
-			w.flush();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+//		File outputjava=new File("output.java");
+//		try{
+//			BufferedWriter w=new BufferedWriter(new FileWriter(outputjava));
+//			w.write(o.toString());
+//			w.flush();
+//		}catch(IOException e){
+//			e.printStackTrace();
+//		}
 	}
 	public static void writeXML(Object o){
 		CodeDocument.developing=true;

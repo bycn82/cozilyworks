@@ -7,7 +7,7 @@ options {
 }
 tokens{
 
-COMPILATIONUNIT0;
+FILEDECLARATION0;
 PACKAGEDECLARATION0;
 IMPORTDECLARATION0;
 TYPEDECLARATION0;
@@ -72,6 +72,7 @@ INTERFACEFIELDDECLARATION0;
 TYPE0;
 TYPE1;
 CLASSORINTERFACETYPE0;
+IDENTIFIERARGS0;
 PRIMITIVETYPE0;
 PRIMITIVETYPE1;
 PRIMITIVETYPE2;
@@ -256,6 +257,9 @@ LITERAL6;
 LITERAL7;
 LITERAL8;
 
+
+
+
 }
 @header {
 package com.cozilyworks.cozily.parser;
@@ -267,9 +271,10 @@ import com.cozilyworks.cozily.codedom.impl.*;
 }
 //rules begin
 
-compilationUnit 
+
+fileDeclaration 
     :   (annotations? packageDeclaration)? importDeclaration* typeDeclaration*
-->^(COMPILATIONUNIT0    (annotations? packageDeclaration)? importDeclaration* typeDeclaration*)
+->^(FILEDECLARATION0    (annotations? packageDeclaration)? importDeclaration* typeDeclaration*)
     ;
 packageDeclaration 
     :   'package' qualifiedName ';'
@@ -991,6 +996,8 @@ literal
     |   NULL
 ->^(LITERAL8    NULL)
     ;
+
+
 
 
 

@@ -36,7 +36,7 @@ public class TestGrammer{
 		CommonTokenStream tokens=new CommonTokenStream(lex);
 		CozilyParser g=new CozilyParser(tokens);
 		try{
-			g.compilationUnit();
+			g.fileDeclaration();
 		}catch(RecognitionException e){
 			e.printStackTrace();
 		}
