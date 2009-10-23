@@ -186,7 +186,7 @@ interfaceBodyDeclaration
     ;
 
 interfaceMethodDeclaration 
-    :   modifiers (typeParameters)? (type|'void') IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? ';'
+    :   modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? ';'
     ;
 
 interfaceFieldDeclaration 
@@ -201,7 +201,7 @@ type
 
 
 classOrInterfaceType 
-    :   IDENTIFIER (typeArguments)? ('.' IDENTIFIER (typeArguments)?)*
+    :   IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments? )*
     ;
 
 primitiveType  
@@ -460,8 +460,13 @@ andExpression
     ;
 
 equalityExpression 
-    :   instanceOfExpression ( ('=='|   '!=' ) instanceOfExpression )*
+    :   instanceOfExpression ( eqOrNot instanceOfExpression )*
     ;
+
+eqOrNot
+	:	'=='
+	|   '!=' 
+	;
 
 instanceOfExpression 
     :   relationalExpression ('instanceof' type)?
@@ -491,13 +496,23 @@ shiftOp
 
 
 additiveExpression 
-    :   multiplicativeExpression (   (   '+'|   '-') multiplicativeExpression)*
+    :   multiplicativeExpression ( plusOrMinus multiplicativeExpression)*
     ;
 
+plusOrMinus
+	:	'+'
+	|   '-'
+	;
+
 multiplicativeExpression 
-    :
-        unaryExpression (   (   '*'|   '/'|   '%') unaryExpression )*
+    :   unaryExpression (starSlashPercent unaryExpression )*
     ;
+
+starSlashPercent
+	:	'*'
+	|   '/'
+	|   '%'
+	;
 
 unaryExpression 
     :   '+'  unaryExpression
@@ -511,8 +526,13 @@ unaryExpressionNotPlusMinus
     :   '~' unaryExpression
     |   '!' unaryExpression
     |   castExpression
-    |   primary (selector)* (   '++' |   '--' )?
+    |   primary selector* plusPlusOrMinusMinus?
     ;
+
+plusPlusOrMinusMinus
+	:	'++' 
+	|   '--'
+	;
 
 castExpression 
     :   '(' primitiveType ')' unaryExpression
@@ -521,8 +541,8 @@ castExpression
 
 primary 
     :   parExpression            
-    |   'this' ('.' IDENTIFIER )* (identifierSuffix)?
-    |   IDENTIFIER ('.' IDENTIFIER)* (identifierSuffix)? 
+    |   'this' ('.' IDENTIFIER )* identifierSuffix?
+    |   IDENTIFIER ('.' IDENTIFIER)* identifierSuffix? 
     |   'super' superSuffix
     |   literal
     |   creator
@@ -533,7 +553,7 @@ primary
 
 superSuffix  
     :   arguments
-    |   '.' (typeArguments)? IDENTIFIER (arguments)?
+    |   '.' typeArguments? IDENTIFIER arguments?
     ;
 
 
@@ -550,7 +570,7 @@ identifierSuffix
 
 
 selector  
-    :   '.' IDENTIFIER (arguments)?
+    :   '.' IDENTIFIER arguments?
     |   '.' 'this'
     |   '.' 'super' superSuffix
     |   innerCreator

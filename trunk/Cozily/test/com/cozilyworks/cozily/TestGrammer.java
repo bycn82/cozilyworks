@@ -31,7 +31,7 @@ public class TestGrammer{
 		}
 	}
 	public static void test(String path) throws Exception{
-		//System.out.println(path.replace("\\","\\\\"));
+		System.out.println(path.replace("\\","\\\\"));
 		CozilyLexer lex=new CozilyLexer(new ANTLRFileStream(path));
 		CommonTokenStream tokens=new CommonTokenStream(lex);
 		CozilyParser g=new CozilyParser(tokens);
