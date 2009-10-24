@@ -19,7 +19,7 @@ import com.cozilyworks.cozily.parser.CozilyTreeParser;
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws RecognitionException,IOException{
-		String path="D:\\WORKSPACES\\WORKS\\BasicSkill\\src\\com\\cozilyworks\\annotation\\TestNotation.java";
+		String path="D:\\WORKSPACES\\WORKS\\NewWhitesand\\core\\org\\apache\\struts\\action\\ActionForm.java";
 		//path="test\\Example.java";
 		File f=new File(path);
 		getAllJava(f);
