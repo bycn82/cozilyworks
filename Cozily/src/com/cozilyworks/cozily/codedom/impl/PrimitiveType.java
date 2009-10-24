@@ -1,39 +1,41 @@
 package com.cozilyworks.cozily.codedom.impl;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
+
 public class PrimitiveType extends CodeDocument{
 	public void visit(){
 		if(coz==0){
-			// "'boolean'";
+			//"'boolean'";
 			add("boolean");
 		}
 		if(coz==1){
-			// "'char'";
+			//"'char'";
 			add("char");
 		}
 		if(coz==2){
-			// "'byte'";
+			//"'byte'";
 			add("byte");
 		}
 		if(coz==3){
-			// "'short'";
+			//"'short'";
 			add("short");
 		}
 		if(coz==4){
-			// "'int'";
+			//"'int'";
 			add("int");
 		}
 		if(coz==5){
-			// "'long'";
+			//"'long'";
 			add("long");
 		}
 		if(coz==6){
-			// "'float'";
+			//"'float'";
 			add("float");
 		}
 		if(coz==7){
-			// "'double'";
+			//"'double'";
 			add("double");
 		}
 	}

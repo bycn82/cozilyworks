@@ -1,7 +1,9 @@
 package com.cozilyworks.cozily.codedom.impl;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
+
 public class FinalOrAnno extends CodeDocument{
 	private Annotation annotation;
 	public void setAnnotation(Annotation t){
@@ -9,11 +11,11 @@ public class FinalOrAnno extends CodeDocument{
 	}
 	public void visit(){
 		if(coz==0){
-			// "'final'";
+			//"'final'";
 			add("final");
 		}
 		if(coz==1){
-			// "annotation";
+			//"annotation";
 			add(annotation);
 		}
 	}

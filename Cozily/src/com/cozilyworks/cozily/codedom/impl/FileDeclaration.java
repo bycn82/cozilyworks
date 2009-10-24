@@ -1,7 +1,9 @@
 package com.cozilyworks.cozily.codedom.impl;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
+
 public class FileDeclaration extends CodeDocument{
 	private Annotations annotations;
 	public void setAnnotations(Annotations t){
@@ -21,10 +23,10 @@ public class FileDeclaration extends CodeDocument{
 	}
 	public void visit(){
 		if(coz==0){
-			// "(annotations? packageDeclaration)? importDeclaration* typeDeclaration*";
-			format("%s %s",annotations,packagedeclaration);
-			adds(importdeclarations);
-			adds(typedeclarations);
+			//"(annotations? packageDeclaration)? importDeclaration* typeDeclaration*";
+			format("%s %s",this.annotations,this.packagedeclaration);
+			adds(this.importdeclarations);
+			adds(this.typedeclarations);
 		}
 	}
 }

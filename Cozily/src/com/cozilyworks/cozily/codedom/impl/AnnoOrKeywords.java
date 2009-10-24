@@ -1,7 +1,9 @@
 package com.cozilyworks.cozily.codedom.impl;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
+
 public class AnnoOrKeywords extends CodeDocument{
 	private Annotation annotation;
 	public void setAnnotation(Annotation t){
@@ -9,51 +11,51 @@ public class AnnoOrKeywords extends CodeDocument{
 	}
 	public void visit(){
 		if(coz==0){
-			// "annotation";
+			//"annotation";
 			add(annotation);
 		}
 		if(coz==1){
-			// "'public'";
+			//"'public'";
 			add("public");
 		}
 		if(coz==2){
-			// "'protected'";
+			//"'protected'";
 			add("protected");
 		}
 		if(coz==3){
-			// "'private'";
+			//"'private'";
 			add("private");
 		}
 		if(coz==4){
-			// "'static'";
+			//"'static'";
 			add("static");
 		}
 		if(coz==5){
-			// "'abstract'";
+			//"'abstract'";
 			add("abstract");
 		}
 		if(coz==6){
-			// "'final'";
+			//"'final'";
 			add("final");
 		}
 		if(coz==7){
-			// "'native'";
+			//"'native'";
 			add("native");
 		}
 		if(coz==8){
-			// "'synchronized'";
+			//"'synchronized'";
 			add("synchronized");
 		}
 		if(coz==9){
-			// "'transient'";
+			//"'transient'";
 			add("transient");
 		}
 		if(coz==10){
-			// "'volatile'";
+			//"'volatile'";
 			add("volatile");
 		}
 		if(coz==11){
-			// "'strictfp'";
+			//"'strictfp'";
 			add("strictfp");
 		}
 	}
