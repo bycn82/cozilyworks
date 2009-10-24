@@ -471,9 +471,13 @@ type
 ->^(TYPE1    primitiveType BRACKETS*)
     ;
 classOrInterfaceType 
-    :   IDENTIFIER typeArguments? ('.' IDENTIFIER typeArguments? )*
-->^(CLASSORINTERFACETYPE0    IDENTIFIER typeArguments? ( IDENTIFIER typeArguments? )*)
+    :   identifierArgs ('.' identifierArgs )*
+->^(CLASSORINTERFACETYPE0    identifierArgs ( identifierArgs )*)
     ;
+identifierArgs
+	:	IDENTIFIER typeArguments?
+->^(IDENTIFIERARGS0 	IDENTIFIER typeArguments?)
+	;
 primitiveType  
     :   'boolean'
 ->^(PRIMITIVETYPE0 )
@@ -961,8 +965,8 @@ createdName
 ->^(CREATEDNAME1    primitiveType)
     ;
 innerCreator  
-    :   '.' 'new' nonWildcardTypeArguments? IDENTIFIER typeArguments? classCreatorRest
-->^(INNERCREATOR0      nonWildcardTypeArguments? IDENTIFIER typeArguments? classCreatorRest)
+    :   '.' 'new' nonWildcardTypeArguments? identifierArgs classCreatorRest
+->^(INNERCREATOR0      nonWildcardTypeArguments? identifierArgs classCreatorRest)
     ;
 classCreatorRest 
     :   arguments classBody?
@@ -996,7 +1000,6 @@ literal
     |   NULL
 ->^(LITERAL8    NULL)
     ;
-
 
 
 

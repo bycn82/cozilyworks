@@ -19,8 +19,8 @@ import com.cozilyworks.cozily.parser.CozilyTreeParser;
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws RecognitionException,IOException{
-		String path="E:\\TEMP\\org";
-		 path="test\\Example.java";
+		String path="D:\\WORKSPACES\\WORKS\\BasicSkill\\src\\com\\cozilyworks\\annotation\\TestNotation.java";
+		//path="test\\Example.java";
 		File f=new File(path);
 		getAllJava(f);
 		BufferedInputStream ins=new BufferedInputStream(System.in);

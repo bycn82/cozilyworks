@@ -12,9 +12,8 @@ public class CodeDocument{
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	public void visit(){}
-	public void coz(){
-		System.err.println(coz);
-	}
+	public void coz(){System.err.println(coz);}
+	public void mark(){sb.append("COZILY");}
 	public String toString(){
 		visit();
 		return ctrlOutput();
