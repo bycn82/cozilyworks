@@ -17,7 +17,7 @@ public class TypeBound extends CodeDocument{
 		if(coz==0){
 			//"type ('&' type)*";
 			add(this.type);
-			adds("& %",this.types);
+			adds("& %s",this.types);
 		}
 	}
 }
