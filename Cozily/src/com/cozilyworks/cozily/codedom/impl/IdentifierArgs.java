@@ -16,7 +16,8 @@ public class IdentifierArgs extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"IDENTIFIER typeArguments?";
-			format("%s %s",this.identifierStr,this.typearguments);
+			add(this.identifierStr);
+			add(this.typearguments);
 		}
 	}
 }
