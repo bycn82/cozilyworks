@@ -1,7 +1,9 @@
 package com.cozilyworks.cozily.codedom.impl;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
+
 public class ReturnType extends CodeDocument{
 	private Type type;
 	public void setType(Type t){
@@ -9,11 +11,11 @@ public class ReturnType extends CodeDocument{
 	}
 	public void visit(){
 		if(coz==0){
-			// "type";
+			//"type";
 			add(type);
 		}
 		if(coz==1){
-			// "'void'";
+			//"'void'";
 			add("void");
 		}
 	}

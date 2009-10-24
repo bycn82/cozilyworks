@@ -1,7 +1,9 @@
 package com.cozilyworks.cozily.codedom.impl;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
+
 public class Statement extends CodeDocument{
 	private Block block;
 	public void setBlock(Block t){
@@ -11,6 +13,10 @@ public class Statement extends CodeDocument{
 	public void setExpression(Expression t){
 		this.expression=t;
 	}
+	private Expression expression2;
+	public void setExpression2(Expression x2){
+		this.expression2=x2;
+	}
 	private ParExpression parexpression;
 	public void setParExpression(ParExpression t){
 		this.parexpression=t;
@@ -18,10 +24,6 @@ public class Statement extends CodeDocument{
 	private Statement statement;
 	public void setStatement(Statement t){
 		this.statement=t;
-	}
-	private Expression expression2;
-	public void setExpression2(Expression x2){
-		this.expression2=x2;
 	}
 	private Statement statement2;
 	public void setStatement2(Statement x5){
@@ -45,57 +47,71 @@ public class Statement extends CodeDocument{
 	}
 	public void visit(){
 		if(coz==0){
-			// "block";
+			//"block";
 			add(block);
 		}
 		if(coz==1){
-			// "'assert' expression (':' expression)? ';'";
-			format("assert %s : %s ;",this.expression,this.expression2);
+			//"'assert' expression (':' expression)? ';'";
+			format("assert %s",this.expression);
+			add(": %s",this.expression2);
+			add(";");
 		}
 		if(coz==2){
-			// "'if' parExpression statement ('else' statement)?";
-
+			//"'if' parExpression statement ('else' statement)?";
+			format("if %s %s",this.parexpression,this.statement);
+			add("else %s",this.statement2);
 		}
 		if(coz==3){
-			// "forstatement";
+			//"forstatement";
 			add(forstatement);
 		}
 		if(coz==4){
-			// "'while' parExpression statement";
+			//"'while' parExpression statement";
+			format("while %s %s",this.parexpression,this.statement);
 		}
 		if(coz==5){
-			// "'do' statement 'while' parExpression ';'";
+			//"'do' statement 'while' parExpression ';'";
+			format("do %s while %s ;",this.statement,this.parexpression);
 		}
 		if(coz==6){
-			// "trystatement";
+			//"trystatement";
 			add(trystatement);
 		}
 		if(coz==7){
-			// "'switch' parExpression '{' switchBlockStatementGroups '}'";
+			//"'switch' parExpression '{' switchBlockStatementGroups '}'";
+			format("switch %s{ %s }",this.parexpression,this.switchblockstatementgroups);
 		}
 		if(coz==8){
-			// "'synchronized' parExpression block";
+			//"'synchronized' parExpression block";
+			format("synchronized %s %s",this.parexpression,this.block);
 		}
 		if(coz==9){
-			// "'return' expression? ';'";
+			//"'return' expression? ';'";
+			format("return %s;",this.expression);
 		}
 		if(coz==10){
-			// "'throw' expression ';'";
+			//"'throw' expression ';'";
+			format("throw %s;",this.expression);
 		}
 		if(coz==11){
-			// "'break'IDENTIFIER? ';'";
+			//"'break'IDENTIFIER? ';'";
+			format("break %s;",this.identifierStr);
 		}
 		if(coz==12){
-			// "'continue' IDENTIFIER? ';'";
+			//"'continue' IDENTIFIER? ';'";
+			format("contine %s;",this.identifierStr);
 		}
 		if(coz==13){
-			// "expression  ';'";
+			//"expression  ';'";
+			format("%s;",this.expression);
 		}
 		if(coz==14){
-			// "IDENTIFIER ':' statement";
+			//"IDENTIFIER ':' statement";
+			format("%s:%s;",this.identifierStr,this.statement);
 		}
 		if(coz==15){
-			// "';'";
+			//"';'";
+			add(";");
 		}
 	}
 }

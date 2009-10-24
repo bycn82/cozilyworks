@@ -12,7 +12,7 @@ import com.cozilyworks.cozily.parser.CozilyParser;
 public class TestGrammer{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws Exception{
-		String path="E:\\TEMP\\org";
+		String path="D:\\WORKSPACES\\WORKS\\WalmartDal\\src";
 		//path="E:\\TEMP\\org\\springframework\\aop\\aspectj\\autoproxy\\AspectJPrecedenceComparator.java";
 		File f=new File(path);
 		getAllJava(f);

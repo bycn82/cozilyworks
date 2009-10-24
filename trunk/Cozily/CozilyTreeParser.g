@@ -429,9 +429,9 @@ switchLabel returns[SwitchLabel rtn]
 
 trystatement returns[Trystatement rtn]
 @init{rtn=new Trystatement();}
-:^(TRYSTATEMENT0{rtn.coz=0;} 	 (x0=block{rtn.setBlock(x0);}) (x1=catches{rtn.setCatches(x1);})  (x2=block{rtn.setBlock(x2);}))
+:^(TRYSTATEMENT0{rtn.coz=0;} 	 (x0=block{rtn.setBlock(x0);}) (x1=catches{rtn.setCatches(x1);})  (x2=block{rtn.setBlock2(x2);}))
 |^(TRYSTATEMENT1{rtn.coz=1;} 	 (x3=block{rtn.setBlock(x3);}) (x4=catches{rtn.setCatches(x4);}))
-|^(TRYSTATEMENT2{rtn.coz=2;} 	 (x5=block{rtn.setBlock(x5);})  (x6=block{rtn.setBlock(x6);}))
+|^(TRYSTATEMENT2{rtn.coz=2;} 	 (x5=block{rtn.setBlock(x5);})  (x6=block{rtn.setBlock2(x6);}))
 ;
 
 catches returns[Catches rtn]
