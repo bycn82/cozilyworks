@@ -20,7 +20,7 @@ public class ImportDeclaration extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"'import' STATIC? qualifiedName DOTSTAR? ';'";
-			format("import %s %s %s;",this.staticStr,this.qualifiedname,this.dotstarStr);
+			format("import %s %s%s;",this.staticStr,this.qualifiedname,this.dotstarStr);
 		}
 	}
 }
