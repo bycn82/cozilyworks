@@ -8,6 +8,7 @@ public class IdentifierArgs extends CodeDocument{
 	private String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
+		this.symbol(t);
 	}
 	private TypeArguments typearguments;
 	public void setTypeArguments(TypeArguments t){

@@ -13,6 +13,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import com.cozilyworks.cozily.codedom.CodeDocument;
+import com.cozilyworks.cozily.codedom.impl.FileDeclaration;
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
@@ -26,8 +27,14 @@ public class TestCozily{
 		BufferedInputStream ins=new BufferedInputStream(System.in);
 		for(File file:files){
 			System.out.println(file.getPath());
-			writeJAVA(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
-			writeXML(getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration());
+			FileDeclaration fdec=getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration();
+			List<String> symbols=fdec.symbolTable;
+			for(String symbol:symbols){
+				System.err.println(symbol);
+			}
+			System.out.println(symbols.size());
+			writeJAVA(fdec);
+			writeXML(fdec);
 		}
 	}
 	private static void getAllJava(File f){
@@ -56,14 +63,6 @@ public class TestCozily{
 	public static void writeJAVA(Object o){
 		CodeDocument.developing=false;
 		System.out.println(o);
-//		File outputjava=new File("output.java");
-//		try{
-//			BufferedWriter w=new BufferedWriter(new FileWriter(outputjava));
-//			w.write(o.toString());
-//			w.flush();
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}
 	}
 	public static void writeXML(Object o){
 		CodeDocument.developing=true;
