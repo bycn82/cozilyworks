@@ -1,4 +1,4 @@
-package com.cozilyworks.cozily.codedom.impl;
+ package com.cozilyworks.cozily.codedom.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,47 +16,47 @@ public class AnnoOrKeywords extends CodeDocument{
 		}
 		if(coz==1){
 			//"'public'";
-			add("public");
+			add("public ");
 		}
 		if(coz==2){
 			//"'protected'";
-			add("protected");
+			add("protected ");
 		}
 		if(coz==3){
 			//"'private'";
-			add("private");
+			add("private ");
 		}
 		if(coz==4){
 			//"'static'";
-			add("static");
+			add("static ");
 		}
 		if(coz==5){
 			//"'abstract'";
-			add("abstract");
+			add("abstract ");
 		}
 		if(coz==6){
 			//"'final'";
-			add("final");
+			add("final ");
 		}
 		if(coz==7){
 			//"'native'";
-			add("native");
+			add("native ");
 		}
 		if(coz==8){
 			//"'synchronized'";
-			add("synchronized");
+			add("synchronized ");
 		}
 		if(coz==9){
 			//"'transient'";
-			add("transient");
+			add("transient ");
 		}
 		if(coz==10){
 			//"'volatile'";
-			add("volatile");
+			add("volatile ");
 		}
 		if(coz==11){
 			//"'strictfp'";
-			add("strictfp");
+			add("strictfp ");
 		}
 	}
 }

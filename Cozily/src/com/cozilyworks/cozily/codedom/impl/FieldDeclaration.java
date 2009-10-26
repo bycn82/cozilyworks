@@ -24,7 +24,7 @@ public class FieldDeclaration extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"modifiers type variableDeclarator (',' variableDeclarator)* ';'";
-			format("%s %s %s",this.modifiers,this.type,this.variabledeclarator);
+			format("%s %s %s;",this.modifiers,this.type,this.variabledeclarator);
 		}
 	}
 }
