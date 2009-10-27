@@ -20,7 +20,6 @@ public class Primary extends CodeDocument{
 	private String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
-		this.symbol(t);
 	}
 	private SuperSuffix supersuffix;
 	public void setSuperSuffix(SuperSuffix t){

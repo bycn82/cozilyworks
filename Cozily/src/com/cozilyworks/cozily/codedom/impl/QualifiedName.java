@@ -8,7 +8,6 @@ public class QualifiedName extends CodeDocument{
 	private String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
-		this.symbol(t);
 	}
 	private List<String> identifiers=new ArrayList<String>();
 	public void addIDENTIFIER(String t){

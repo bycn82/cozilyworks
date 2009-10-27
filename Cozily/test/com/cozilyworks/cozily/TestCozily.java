@@ -28,11 +28,6 @@ public class TestCozily{
 		for(File file:files){
 			System.out.println(file.getPath());
 			FileDeclaration fdec=getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration();
-			List<String> symbols=fdec.symbolTable;
-			for(String symbol:symbols){
-				System.err.println(symbol);
-			}
-			System.out.println(symbols.size());
 			writeJAVA(fdec);
 			writeXML(fdec);
 		}

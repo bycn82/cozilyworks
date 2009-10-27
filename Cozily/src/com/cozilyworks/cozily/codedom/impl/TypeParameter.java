@@ -8,7 +8,6 @@ public class TypeParameter extends CodeDocument{
 	private String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
-		this.symbol(t);
 	}
 	private TypeBound typebound;
 	public void setTypeBound(TypeBound t){
