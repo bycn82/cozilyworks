@@ -17,7 +17,7 @@ public class ClassOrInterfaceType extends CodeDocument{
 		if(coz==0){
 			//"identifierArgs ('.' identifierArgs )*";
 			add(this.identifierargs);
-			formats(". %s",this.identifierargss);
+			formats(".%s",this.identifierargss);
 		}
 	}
 }

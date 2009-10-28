@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.cozilyworks.cozily.sources.SourceDescription;
 import com.cozilyworks.cozily.util.StringUtil;
 import com.cozilyworks.cozily.util.StringUtilPlus;
 
@@ -14,8 +15,12 @@ public class CodeDocument{
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	public void visit(){}
-	public void coz(){
-		System.err.println(coz);
+	public void coz(){System.err.println(coz);}
+	public static SourceDescription source=new SourceDescription();
+	public SourceDescription getSourceDescription(){
+		SourceDescription returnSource=source;
+		source=new SourceDescription();
+		return returnSource;
 	}
 	public void mark(){
 		sb.append("COZILY");

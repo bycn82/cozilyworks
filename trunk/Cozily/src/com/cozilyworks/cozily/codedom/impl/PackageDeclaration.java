@@ -12,7 +12,9 @@ public class PackageDeclaration extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"'package' qualifiedName ';'";
-			add("package %s;",this.qualifiedname);
+			String packageName=this.qualifiedname.toString();
+			source.setPackageName(packageName);
+			add("package %s;",packageName);
 		}
 	}
 }

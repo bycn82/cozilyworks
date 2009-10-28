@@ -1,0 +1,18 @@
+<project name="Cozily">
+	<property name="lib" location="lib"/>
+    <property name="build" location="build"/>
+    <property name="src" location="src"/>
+	<target name="compile">
+		<delete file="build/Cozily.jar"></delete>
+	     <javac srcdir="${src}" destdir="${build}"  verbose="false" debug="on"
+             debuglevel="lines,source">
+
+                <classpath>
+                    <fileset dir="${lib}/">
+                        <include name="**/*.jar"/>
+                    </fileset>
+                </classpath>
+         </javac>
+		<jar jarfile="${build}/Cozily.jar" basedir="${build}"/>
+	</target>
+</project>

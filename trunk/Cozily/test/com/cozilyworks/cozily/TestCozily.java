@@ -1,4 +1,5 @@
 package com.cozilyworks.cozily;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,10 +18,11 @@ import com.cozilyworks.cozily.codedom.impl.FileDeclaration;
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
+
 public class TestCozily{
 	public static List<File> files=new ArrayList<File>();
 	public static void main(String[] args) throws RecognitionException,IOException{
-		String path="D:\\WORKSPACES\\WORKS\\NewWhitesand\\core\\org\\apache\\struts\\action\\ActionForm.java";
+		String path="D:\\WORKSPACES\\WORKS\\NewWhitesand\\core\\org\\apache\\struts\\action";
 		path="test\\Example.java";
 		File f=new File(path);
 		getAllJava(f);
@@ -29,6 +31,8 @@ public class TestCozily{
 			System.out.println(file.getPath());
 			FileDeclaration fdec=getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration();
 			writeJAVA(fdec);
+			System.err.println(fdec.source);
+			fdec=getParser(readFile(file).fileDeclaration().getTree()).fileDeclaration();
 			writeXML(fdec);
 		}
 	}
@@ -48,7 +52,8 @@ public class TestCozily{
 			CozilyLexer lexer=new CozilyLexer(input);
 			CommonTokenStream tokens=new CommonTokenStream(lexer);
 			return new CozilyParser(tokens);
-		}catch(Exception e){}
+		}catch(Exception e){
+		}
 		return null;
 	}
 	public static CozilyTreeParser getParser(Object o){

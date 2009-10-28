@@ -24,13 +24,18 @@ public class ArrayCreator extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"'new' createdName BRACKETS+ arrayInitializer";
-			add("new %s",this.createdname);
+			String createdName=this.createdname.toString();
+			source.addSymbols(createdName);
+			//
+			add("new %s",createdName);
 			adds(this.bracketss);
 			add(this.arrayinitializer);
 		}
 		if(coz==1){
 			//"'new' createdName ('[' expression ']')+ BRACKETS*";
-			add("new %s",this.createdname);
+			String createdName=this.createdname.toString();
+			source.addSymbols(createdName);
+			add("new %s",createdName);
 			formats("[ %s ]",this.expressions);
 			adds(this.bracketss);
 		}

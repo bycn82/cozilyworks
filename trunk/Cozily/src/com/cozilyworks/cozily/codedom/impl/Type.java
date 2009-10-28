@@ -20,7 +20,10 @@ public class Type extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"classOrInterfaceType BRACKETS*";
-			add(this.classorinterfacetype);
+			String classOrInterfaceType=this.classorinterfacetype.toString();
+			source.addSymbols(classOrInterfaceType);
+			//
+			add(classOrInterfaceType);
 			adds(this.bracketss);
 		}
 		if(coz==1){

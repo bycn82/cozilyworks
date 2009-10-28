@@ -48,8 +48,13 @@ public class MethodDeclaration extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"modifiers typeParameters? IDENTIFIER formalParameters ('throws' qualifiedNameList)? '{' explicitConstructorInvocation? blockStatement* '}'";
+			String qualifiedNameList=this.qualifiednamelist.toString();
+			for(String symbol:qualifiedNameList.split(",")){
+				source.addSymbols(symbol);
+			}
+			//
 			format("%s %s %s %s",this.modifiers,this.typeparameters,this.identifierStr,this.formalparameters);
-			add("throws %s",this.qualifiednamelist);
+			add("throws %s",qualifiedNameList);
 			add("{");
 			add(this.explicitconstructorinvocation);
 			adds(this.blockstatements);
@@ -57,10 +62,18 @@ public class MethodDeclaration extends CodeDocument{
 		}
 		if(coz==1){
 			//"modifiers typeParameters? returnType IDENTIFIER formalParameters BRACKETS* ('throws' qualifiedNameList)? blockOrSemi";
+			String qualifiedNameList=null;
+			if(this.qualifiednamelist!=null){
+				qualifiedNameList=this.qualifiednamelist.toString();
+				for(String symbol:qualifiedNameList.split(",")){
+					source.addSymbols(symbol);
+				}
+			}
+			//
 			format("%s %s %s %s %s",this.modifiers,this.typeparameters,this.returntype,this.identifierStr,
 				this.formalparameters);
 			adds(this.bracketss);
-			add("throws %s",this.qualifiednamelist);
+			add("throws %s",qualifiedNameList);
 			add(this.blockorsemi);
 		}
 	}
