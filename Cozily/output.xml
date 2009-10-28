@@ -1,95 +1,276 @@
 
-<FileDeclaration> public  class Example {public  Integer nice;public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}} 
-<TypeDeclaration>public  class Example {public  Integer nice;public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}}
-<ClassOrInterfaceDeclaration>public  class Example {public  Integer nice;public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}}
-<ClassDeclaration>public  class Example {public  Integer nice;public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}}
-<NormalClassDeclaration>public  class Example {public  Integer nice;public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}}
-<Modifiers>public 
-<AnnoOrKeywords>public public 
+<FileDeclaration> 
+<PackageDeclaration>package 
+<QualifiedName>com.cozilywork.goole
+</QualifiedName>;
+</PackageDeclaration>
+<ImportDeclaration>import  
+<QualifiedName>com.cozilyworks.nice
+</QualifiedName>.*;
+</ImportDeclaration>
+<ImportDeclaration>import  
+<QualifiedName>com.google.util.Nice
+</QualifiedName>;
+</ImportDeclaration>
+<TypeDeclaration>
+<ClassOrInterfaceDeclaration>
+<ClassDeclaration>
+<NormalClassDeclaration>
+<Modifiers>
+<AnnoOrKeywords>public 
 </AnnoOrKeywords>
 </Modifiers> class Example 
-<ClassBody>{public  Integer nice;public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}}{
-<ClassBodyDeclaration>public  Integer nice;
-<MemberDecl>public  Integer nice;
-<FieldDeclaration>public  Integer nice;
-<Modifiers>public 
-<AnnoOrKeywords>public public 
+<ClassBody>{
+<ClassBodyDeclaration>
+<MemberDecl>
+<FieldDeclaration>
+<Modifiers>
+<AnnoOrKeywords>private 
 </AnnoOrKeywords>
 </Modifiers> 
-<Type>Integer
-<ClassOrInterfaceType>Integer
-<IdentifierArgs>IntegerInteger
+<Type>
+<ClassOrInterfaceType>
+<IdentifierArgs>java
+</IdentifierArgs>.
+<IdentifierArgs>sql
+</IdentifierArgs>.
+<IdentifierArgs>Date
 </IdentifierArgs>
 </ClassOrInterfaceType>
 </Type> 
-<VariableDeclarator>nicenice
+<VariableDeclarator>d
 </VariableDeclarator>;
 </FieldDeclaration>
 </MemberDecl>
 </ClassBodyDeclaration>
-<ClassBodyDeclaration>public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}
-<MemberDecl>public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}
-<MethodDeclaration>public static   void main (  String[] arg )throws Exception{ String i= new A (  )   ;}
-<Modifiers>public static 
-<AnnoOrKeywords>public public 
+<ClassBodyDeclaration>
+<MemberDecl>
+<FieldDeclaration>
+<Modifiers>
+<AnnoOrKeywords>public 
 </AnnoOrKeywords>
-<AnnoOrKeywords>static static 
-</AnnoOrKeywords>
-</Modifiers>  
-<ReturnType>voidvoid
-</ReturnType> main 
-<FormalParameters>(  String[] arg )( 
-<FormalParameterDecls> String[] arg
-<NormalParameterDecl> String[] arg[VariableModifiers] 
-<Type>String[]
-<ClassOrInterfaceType>String
-<IdentifierArgs>StringString
-</IdentifierArgs>
-</ClassOrInterfaceType>[]
-</Type> arg
-</NormalParameterDecl>
-</FormalParameterDecls> )
-</FormalParameters>throws 
-<QualifiedNameList>Exception
-<QualifiedName>ExceptionException
-</QualifiedName>
-</QualifiedNameList>
-<BlockOrSemi>{ String i= new A (  )   ;}
-<Block>{ String i= new A (  )   ;}{
-<BlockStatement> String i= new A (  )   ;
-<LocalVariableDeclarationStatement> String i= new A (  )   ;
-<LocalVariableDeclaration> String i= new A (  )   [VariableModifiers] 
-<Type>String
-<ClassOrInterfaceType>String
-<IdentifierArgs>StringString
+</Modifiers> 
+<Type>
+<ClassOrInterfaceType>
+<IdentifierArgs>String
 </IdentifierArgs>
 </ClassOrInterfaceType>
 </Type> 
-<VariableDeclarator>i= new A (  )   i= 
-<VariableInitializer>new A (  )   
-<Expression>new A (  )   
-<ConditionalExpression>new A (  ) 
-<ConditionalOrExpression>new A (  ) 
-<ConditionalAndExpression>new A (  ) 
-<InclusiveOrExpression>new A (  ) 
-<ExclusiveOrExpression>new A (  ) 
-<AndExpression>new A (  ) 
-<EqualityExpression>new A (  ) 
-<InstanceOfExpression>new A (  ) 
-<RelationalExpression>new A (  ) 
-<ShiftExpression>new A (  ) 
-<AdditiveExpression>new A (  ) 
-<MultiplicativeExpression>new A (  ) 
-<UnaryExpression>new A (  ) 
-<UnaryExpressionNotPlusMinus>new A (  ) 
-<Primary>new A (  ) 
-<Creator>new A (  ) new 
-<ClassOrInterfaceType>A
-<IdentifierArgs>AA
+<VariableDeclarator>nic= 
+<VariableInitializer>
+<Expression>
+<ConditionalExpression>
+<ConditionalOrExpression>
+<ConditionalAndExpression>
+<InclusiveOrExpression>
+<ExclusiveOrExpression>
+<AndExpression>
+<EqualityExpression>
+<InstanceOfExpression>
+<RelationalExpression>
+<ShiftExpression>
+<AdditiveExpression>
+<MultiplicativeExpression>
+<UnaryExpression>
+<UnaryExpressionNotPlusMinus>
+<Primary>
+<Creator>new 
+<ClassOrInterfaceType>
+<IdentifierArgs>Integer
 </IdentifierArgs>
 </ClassOrInterfaceType> 
-<ClassCreatorRest>(  ) 
-<Arguments>(  )(  )
+<ClassCreatorRest>
+<Arguments>(  )
+</Arguments> 
+</ClassCreatorRest>
+</Creator>
+</Primary>
+<Selector>.toString 
+<Arguments>(  )
+</Arguments>
+</Selector>
+</UnaryExpressionNotPlusMinus>
+</UnaryExpression>
+</MultiplicativeExpression>
+</AdditiveExpression>
+</ShiftExpression>
+</RelationalExpression>
+</InstanceOfExpression>
+</EqualityExpression>
+</AndExpression>
+</ExclusiveOrExpression>
+</InclusiveOrExpression>
+</ConditionalAndExpression>
+</ConditionalOrExpression>
+</ConditionalExpression>  
+</Expression>
+</VariableInitializer>
+</VariableDeclarator>;
+</FieldDeclaration>
+</MemberDecl>
+</ClassBodyDeclaration>
+<ClassBodyDeclaration>
+<MemberDecl>
+<MethodDeclaration>
+<Modifiers>
+<AnnoOrKeywords>public 
+</AnnoOrKeywords>
+<AnnoOrKeywords>static 
+</AnnoOrKeywords>
+</Modifiers>  
+<ReturnType>void
+</ReturnType> main 
+<FormalParameters>( 
+<FormalParameterDecls>
+<NormalParameterDecl>[VariableModifiers] 
+<Type>
+<ClassOrInterfaceType>
+<IdentifierArgs>Nice
+</IdentifierArgs>
+</ClassOrInterfaceType>[][]
+</Type> n
+</NormalParameterDecl>
+</FormalParameterDecls> )
+</FormalParameters>throws 
+<QualifiedNameList>
+<QualifiedName>OK
+</QualifiedName>
+</QualifiedNameList>
+<BlockOrSemi>
+<Block>{}
+</Block>
+</BlockOrSemi>
+</MethodDeclaration>
+</MemberDecl>
+</ClassBodyDeclaration>
+<ClassBodyDeclaration>
+<MemberDecl>
+<MethodDeclaration>
+<Modifiers>
+<AnnoOrKeywords>public 
+</AnnoOrKeywords>
+</Modifiers>  
+<ReturnType>void
+</ReturnType> nice 
+<FormalParameters>( 
+<FormalParameterDecls>
+<NormalParameterDecl>[VariableModifiers] 
+<Type>
+<ClassOrInterfaceType>
+<IdentifierArgs>jis
+</IdentifierArgs>
+</ClassOrInterfaceType>
+</Type> s
+</NormalParameterDecl>
+</FormalParameterDecls> )
+</FormalParameters>throws 
+<QualifiedNameList>
+<QualifiedName>NO.Yes
+</QualifiedName>
+</QualifiedNameList>
+<BlockOrSemi>
+<Block>{
+<BlockStatement>
+<Statement>
+<Trystatement>try 
+<Block>{
+<BlockStatement>
+<LocalVariableDeclarationStatement>
+<LocalVariableDeclaration>[VariableModifiers] 
+<Type>
+<ClassOrInterfaceType>
+<IdentifierArgs>String
+</IdentifierArgs>
+</ClassOrInterfaceType>
+</Type> 
+<VariableDeclarator>s
+</VariableDeclarator>
+</LocalVariableDeclaration>;
+</LocalVariableDeclarationStatement>
+</BlockStatement>}
+</Block> 
+<Catches>
+<CatchClause>catch( 
+<FormalParameter>[VariableModifiers] 
+<Type>
+<ClassOrInterfaceType>
+<IdentifierArgs>Exception
+</IdentifierArgs>
+</ClassOrInterfaceType>
+</Type> e
+</FormalParameter> ) 
+<Block>{
+<BlockStatement>
+<Statement>
+<Expression>
+<ConditionalExpression>
+<ConditionalOrExpression>
+<ConditionalAndExpression>
+<InclusiveOrExpression>
+<ExclusiveOrExpression>
+<AndExpression>
+<EqualityExpression>
+<InstanceOfExpression>
+<RelationalExpression>
+<ShiftExpression>
+<AdditiveExpression>
+<MultiplicativeExpression>
+<UnaryExpression>
+<UnaryExpressionNotPlusMinus>
+<Primary>e.println
+<IdentifierSuffix>
+<Arguments>(  )
+</Arguments>
+</IdentifierSuffix>
+</Primary>
+</UnaryExpressionNotPlusMinus>
+</UnaryExpression>
+</MultiplicativeExpression>
+</AdditiveExpression>
+</ShiftExpression>
+</RelationalExpression>
+</InstanceOfExpression>
+</EqualityExpression>
+</AndExpression>
+</ExclusiveOrExpression>
+</InclusiveOrExpression>
+</ConditionalAndExpression>
+</ConditionalOrExpression>
+</ConditionalExpression>  
+</Expression>;
+</Statement>
+</BlockStatement>}
+</Block>
+</CatchClause>
+</Catches>
+</Trystatement>
+</Statement>
+</BlockStatement>
+<BlockStatement>
+<Statement>throw 
+<Expression>
+<ConditionalExpression>
+<ConditionalOrExpression>
+<ConditionalAndExpression>
+<InclusiveOrExpression>
+<ExclusiveOrExpression>
+<AndExpression>
+<EqualityExpression>
+<InstanceOfExpression>
+<RelationalExpression>
+<ShiftExpression>
+<AdditiveExpression>
+<MultiplicativeExpression>
+<UnaryExpression>
+<UnaryExpressionNotPlusMinus>
+<Primary>
+<Creator>new 
+<ClassOrInterfaceType>
+<IdentifierArgs>NOKK
+</IdentifierArgs>
+</ClassOrInterfaceType> 
+<ClassCreatorRest>
+<Arguments>(  )
 </Arguments> 
 </ClassCreatorRest>
 </Creator>
@@ -108,11 +289,8 @@
 </ConditionalAndExpression>
 </ConditionalOrExpression>
 </ConditionalExpression>  
-</Expression>
-</VariableInitializer>
-</VariableDeclarator>
-</LocalVariableDeclaration>;
-</LocalVariableDeclarationStatement>
+</Expression>;
+</Statement>
 </BlockStatement>}
 </Block>
 </BlockOrSemi>

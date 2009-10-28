@@ -24,11 +24,17 @@ public class Creator extends CodeDocument{
 	public void visit(){
 		if(coz==0){
 			//"'new' nonWildcardTypeArguments classOrInterfaceType classCreatorRest";
-			format("new %s %s %s",this.nonwildcardtypearguments,this.classorinterfacetype,this.classcreatorrest);
+			String classOrInterfaceType=this.classorinterfacetype.toString();
+			source.addSymbols(classOrInterfaceType);
+			//
+			format("new %s %s %s",this.nonwildcardtypearguments,classOrInterfaceType,this.classcreatorrest);
 		}
 		if(coz==1){
 			//"'new' classOrInterfaceType classCreatorRest";
-			format("new %s %s",this.classorinterfacetype,this.classcreatorrest);
+			String classOrInterfaceType=this.classorinterfacetype.toString();
+			source.addSymbols(classOrInterfaceType);
+			//
+			format("new %s %s",classOrInterfaceType,this.classcreatorrest);
 		}
 		if(coz==2){
 			//"arrayCreator";

@@ -1,0 +1,1 @@
+java -classpath "./build/Cozily.jar:./lib/antlr-3.2.jar" com.cozilyworks.cozily.compiler.CozilyCompiler $1

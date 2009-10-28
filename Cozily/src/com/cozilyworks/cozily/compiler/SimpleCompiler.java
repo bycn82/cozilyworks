@@ -27,12 +27,12 @@ import com.cozilyworks.cozily.parser.CozilyTreeParser;
 
 public class SimpleCompiler{
 	public static String path="test\\Example.java";
-	public static void main(String args[]) throws IOException, RecognitionException{
+	public static void main(String args[]) throws IOException,RecognitionException{
 		File f=new File(path);
 		String str=getParser(readFile(f).fileDeclaration().getTree()).fileDeclaration().toString();
 		JavaCompiler compiler=ToolProvider.getSystemJavaCompiler();
 		DiagnosticCollector<JavaFileObject> diagnostics=new DiagnosticCollector<JavaFileObject>();
-		JavaFileObject file=new JavaSourceFromString("Example",str);
+		JavaFileObject file=new StringSource("Example",str);
 		Iterable<? extends JavaFileObject> compilationUnits=Arrays.asList(file);
 		CompilationTask task=compiler.getTask(null,null,diagnostics,null,null,compilationUnits);
 		boolean success=task.call();
@@ -64,17 +64,5 @@ public class SimpleCompiler{
 	}
 	public static void trace(Object o){
 		System.out.println(o);
-	}
-}
-
-class JavaSourceFromString extends SimpleJavaFileObject{
-	final String code;
-	JavaSourceFromString(String name,String code){
-		super(URI.create("string:///"+name.replace('.','/')+Kind.SOURCE.extension),Kind.SOURCE);
-		this.code=code;
-	}
-	@Override
-	public CharSequence getCharContent(boolean ignoreEncodingErrors){
-		return code;
 	}
 }
