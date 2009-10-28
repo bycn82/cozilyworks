@@ -24,6 +24,7 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 import com.cozilyworks.cozily.parser.CozilyLexer;
 import com.cozilyworks.cozily.parser.CozilyParser;
 import com.cozilyworks.cozily.parser.CozilyTreeParser;
+import com.cozilyworks.cozily.sources.StringSource;
 
 public class SimpleCompiler{
 	public static String path="test\\Example.java";

@@ -14,6 +14,7 @@ import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 import com.cozilyworks.cozily.sources.Source;
 import com.cozilyworks.cozily.sources.SourceManager;
+import com.cozilyworks.cozily.sources.StringSource;
 
 /**
  * my compiler class ,which can compiler a source manager
@@ -26,7 +27,7 @@ public class CozilyCompiler{
 		File file=new File(args[0]);
 		source.setSourceFile(file);
 		source.setTypeName(args[0]);
-		
+
 		SourceManager sourceManager=new SourceManager();
 		sourceManager.newDepends(source);
 		List<Source> sources=sourceManager.getSources();
@@ -57,14 +58,3 @@ public class CozilyCompiler{
 	}
 }
 
-class StringSource extends SimpleJavaFileObject{
-	final String code;
-	StringSource(String name,String code){
-		super(URI.create("string:///"+name.replace('.','/')+Kind.SOURCE.extension),Kind.SOURCE);
-		this.code=code;
-	}
-	@Override
-	public CharSequence getCharContent(boolean ignoreEncodingErrors){
-		return code;
-	}
-}
