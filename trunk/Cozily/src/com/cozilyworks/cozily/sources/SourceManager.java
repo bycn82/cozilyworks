@@ -21,7 +21,6 @@ public class SourceManager{
 	public void push(Source source){
 		//1st, it's a new one for this manager
 		if(!checkAlreadyHas(source)){
-
 			append(source);
 		}
 	}
@@ -51,9 +50,22 @@ public class SourceManager{
 			FileDeclaration fdec=parse(source);
 			source.setContent(fdec.toString());
 			sources.add(source);
+			checkDependence(fdec.source);
 		}catch(RecognitionException e){
 			e.printStackTrace();
 		}
+	}
+	private void checkDependence(SourceDescription desc){
+		System.err.println(desc);
+		SourceFinder locator=new SourceFinder();
+		List<String> paths=locator.findSource(desc);
+		for(String path:paths){
+			Source source=new Source();
+			source.setSourceFile(new File(path));
+			source.setTypeName(path.replace(".java",""));
+			push(source);
+		}
+		
 	}
 	/**
 	 * parse the file with CozilyTreeParser and get the dependences
