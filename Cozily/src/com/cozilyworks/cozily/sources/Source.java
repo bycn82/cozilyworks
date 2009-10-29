@@ -1,5 +1,10 @@
 package com.cozilyworks.cozily.sources;
 import java.io.File;
+/**
+ * it's an
+ * @author billyuan
+ *
+ */
 public class Source{
 	private File sourceFile;
 	private String typeName;
