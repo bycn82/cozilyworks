@@ -1,5 +1,4 @@
 package com.cozilyworks.cozily.compiler;
-
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,25 +12,25 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 import com.cozilyworks.cozily.sources.Source;
+import com.cozilyworks.cozily.sources.SourceDescription;
 import com.cozilyworks.cozily.sources.SourceManager;
 import com.cozilyworks.cozily.sources.StringSource;
-
 /**
  * my compiler class ,which can compiler a source manager
  */
 public class CozilyCompiler{
 	public static void main(String[] args){
-		System.out.println("Compiling..."+args[0]);
-		Source source=new Source();
-		//
-		File file=new File(args[0]);
-		source.setSourceFile(file);
-		source.setTypeName(args[0]);
-
 		SourceManager sourceManager=new SourceManager();
-		sourceManager.newDepends(source);
+		for(String str:args){
+			System.out.println("<<"+str);
+			Source source=new Source();
+			File file=new File(str);
+			source.setSourceFile(file);
+			source.setTypeName(str.replace(".java",""));
+			sourceManager.push(source);
+		}
+		System.out.println("Starting Cozily Compiler...");
 		List<Source> sources=sourceManager.getSources();
-		System.out.println(sources.size());
 		compileSources(sources);
 	}
 	public static void compileSources(List<Source> sources){
@@ -39,8 +38,8 @@ public class CozilyCompiler{
 		DiagnosticCollector<JavaFileObject> diagnostics=new DiagnosticCollector<JavaFileObject>();
 		List<StringSource> compilationUnits=new ArrayList<StringSource>();
 		for(Source source:sources){
-			System.out.println(source.getContent());
-			StringSource unit=new StringSource("A",source.getContent());
+			System.out.println("------"+source.getContent());
+			StringSource unit=new StringSource(source.getTypeName(),source.getContent());
 			compilationUnits.add(unit);
 		}
 		CompilationTask task=compiler.getTask(null,null,diagnostics,null,null,compilationUnits);
@@ -57,4 +56,3 @@ public class CozilyCompiler{
 		System.out.println("Success: "+success);
 	}
 }
-
