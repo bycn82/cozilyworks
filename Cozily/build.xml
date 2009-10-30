@@ -15,4 +15,13 @@
          </javac>
 		<jar jarfile="${build}/Cozily.jar" basedir="${build}"/>
 	</target>
+
+
+	<taskdef name="cozily" classname="com.cozilyworks.cozily.task.CozilyCompileTask" classpath="build" />
+	<target name="ant">
+		<cozily/>
+	</target>
+
+
+
 </project>
