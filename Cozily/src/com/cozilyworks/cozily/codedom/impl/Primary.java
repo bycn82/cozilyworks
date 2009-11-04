@@ -5,39 +5,39 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Primary extends CodeDocument{
-	private ParExpression parexpression;
+	public ParExpression parexpression;
 	public void setParExpression(ParExpression t){
 		this.parexpression=t;
 	}
-	private List<String> identifiers=new ArrayList<String>();
+	public List<String> identifiers=new ArrayList<String>();
 	public void addIDENTIFIER(String t){
 		this.identifiers.add(t);
 	}
-	private IdentifierSuffix identifiersuffix;
+	public IdentifierSuffix identifiersuffix;
 	public void setIdentifierSuffix(IdentifierSuffix t){
 		this.identifiersuffix=t;
 	}
-	private String identifierStr;
+	public String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
 	}
-	private SuperSuffix supersuffix;
+	public SuperSuffix supersuffix;
 	public void setSuperSuffix(SuperSuffix t){
 		this.supersuffix=t;
 	}
-	private Literal literal;
+	public Literal literal;
 	public void setLiteral(Literal t){
 		this.literal=t;
 	}
-	private Creator creator;
+	public Creator creator;
 	public void setCreator(Creator t){
 		this.creator=t;
 	}
-	private PrimitiveType primitivetype;
+	public PrimitiveType primitivetype;
 	public void setPrimitiveType(PrimitiveType t){
 		this.primitivetype=t;
 	}
-	private List<String> bracketss=new ArrayList<String>();
+	public List<String> bracketss=new ArrayList<String>();
 	public void addBRACKETS(String t){
 		this.bracketss.add(t);
 	}

@@ -5,23 +5,23 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class UnaryExpressionNotPlusMinus extends CodeDocument{
-	private UnaryExpression unaryexpression;
+	public UnaryExpression unaryexpression;
 	public void setUnaryExpression(UnaryExpression t){
 		this.unaryexpression=t;
 	}
-	private CastExpression castexpression;
+	public CastExpression castexpression;
 	public void setCastExpression(CastExpression t){
 		this.castexpression=t;
 	}
-	private Primary primary;
+	public Primary primary;
 	public void setPrimary(Primary t){
 		this.primary=t;
 	}
-	private List<Selector> selectors=new ArrayList<Selector>();
+	public List<Selector> selectors=new ArrayList<Selector>();
 	public void addSelector(Selector t){
 		this.selectors.add(t);
 	}
-	private PlusPlusOrMinusMinus plusplusorminusminus;
+	public PlusPlusOrMinusMinus plusplusorminusminus;
 	public void setPlusPlusOrMinusMinus(PlusPlusOrMinusMinus t){
 		this.plusplusorminusminus=t;
 	}

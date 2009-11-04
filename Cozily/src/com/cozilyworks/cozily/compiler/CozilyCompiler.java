@@ -1,18 +1,14 @@
 package com.cozilyworks.cozily.compiler;
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
-import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 import com.cozilyworks.cozily.sources.Source;
-import com.cozilyworks.cozily.sources.SourceDescription;
 import com.cozilyworks.cozily.sources.SourceManager;
 import com.cozilyworks.cozily.sources.StringSource;
 /**
@@ -29,8 +25,9 @@ public class CozilyCompiler{
 			source.setTypeName(str.replace(".java",""));
 			sourceManager.push(source);
 		}
-		System.out.println("Starting Cozily Compiler...");
+		System.out.println("Collecting the sources...");
 		List<Source> sources=sourceManager.getSources();
+		System.out.println("Starting Cozily Compiler...");
 		compileSources(sources);
 	}
 	public static void compileSources(List<Source> sources){

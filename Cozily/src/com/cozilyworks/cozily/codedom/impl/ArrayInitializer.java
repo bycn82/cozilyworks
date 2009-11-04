@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ArrayInitializer extends CodeDocument{
-	private ArrayInitializerList arrayinitializerlist;
+	public ArrayInitializerList arrayinitializerlist;
 	public void setArrayInitializerList(ArrayInitializerList t){
 		this.arrayinitializerlist=t;
 	}
-	private String commaStr;
+	public String commaStr;
 	public void setCOMMA(String t){
 		this.commaStr=t;
 	}

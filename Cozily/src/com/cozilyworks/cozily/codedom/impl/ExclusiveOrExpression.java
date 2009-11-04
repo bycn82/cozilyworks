@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ExclusiveOrExpression extends CodeDocument{
-	private AndExpression andexpression;
+	public AndExpression andexpression;
 	public void setAndExpression(AndExpression t){
 		this.andexpression=t;
 	}
-	private List<AndExpression> andexpressions=new ArrayList<AndExpression>();
+	public List<AndExpression> andexpressions=new ArrayList<AndExpression>();
 	public void addAndExpression(AndExpression t){
 		this.andexpressions.add(t);
 	}

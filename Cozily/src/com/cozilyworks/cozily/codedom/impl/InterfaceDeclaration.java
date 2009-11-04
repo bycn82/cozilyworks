@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class InterfaceDeclaration extends CodeDocument{
-	private NormalInterfaceDeclaration normalinterfacedeclaration;
+	public NormalInterfaceDeclaration normalinterfacedeclaration;
 	public void setNormalInterfaceDeclaration(NormalInterfaceDeclaration t){
 		this.normalinterfacedeclaration=t;
 	}
-	private AnnotationTypeDeclaration annotationtypedeclaration;
+	public AnnotationTypeDeclaration annotationtypedeclaration;
 	public void setAnnotationTypeDeclaration(AnnotationTypeDeclaration t){
 		this.annotationtypedeclaration=t;
 	}

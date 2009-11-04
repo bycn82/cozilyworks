@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class IdentifierArgs extends CodeDocument{
-	private String identifierStr;
+	public String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
 	}
-	private TypeArguments typearguments;
+	public TypeArguments typearguments;
 	public void setTypeArguments(TypeArguments t){
 		this.typearguments=t;
 	}

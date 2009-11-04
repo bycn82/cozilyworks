@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Expression extends CodeDocument{
-	private ConditionalExpression conditionalexpression;
+	public ConditionalExpression conditionalexpression;
 	public void setConditionalExpression(ConditionalExpression t){
 		this.conditionalexpression=t;
 	}
-	private AssignmentOperator assignmentoperator;
+	public AssignmentOperator assignmentoperator;
 	public void setAssignmentOperator(AssignmentOperator t){
 		this.assignmentoperator=t;
 	}
-	private Expression expression;
+	public Expression expression;
 	public void setExpression(Expression t){
 		this.expression=t;
 	}

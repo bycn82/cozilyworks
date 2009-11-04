@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ImportDeclaration extends CodeDocument{
-	private String staticStr;
+	public String staticStr;
 	public void setSTATIC(String t){
 		this.staticStr=t;
 	}
-	private QualifiedName qualifiedname;
+	public QualifiedName qualifiedname;
 	public void setQualifiedName(QualifiedName t){
 		this.qualifiedname=t;
 	}
-	private String dotstarStr;
+	public String dotstarStr;
 	public void setDOTSTAR(String t){
 		this.dotstarStr=t;
 	}

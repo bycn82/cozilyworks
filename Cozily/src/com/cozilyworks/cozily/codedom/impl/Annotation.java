@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Annotation extends CodeDocument{
-	private QualifiedName qualifiedname;
+	public QualifiedName qualifiedname;
 	public void setQualifiedName(QualifiedName t){
 		this.qualifiedname=t;
 	}
-	private ElementValueOrPairs elementvalueorpairs;
+	public ElementValueOrPairs elementvalueorpairs;
 	public void setElementValueOrPairs(ElementValueOrPairs t){
 		this.elementvalueorpairs=t;
 	}

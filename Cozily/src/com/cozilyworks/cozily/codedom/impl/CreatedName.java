@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class CreatedName extends CodeDocument{
-	private ClassOrInterfaceType classorinterfacetype;
+	public ClassOrInterfaceType classorinterfacetype;
 	public void setClassOrInterfaceType(ClassOrInterfaceType t){
 		this.classorinterfacetype=t;
 	}
-	private PrimitiveType primitivetype;
+	public PrimitiveType primitivetype;
 	public void setPrimitiveType(PrimitiveType t){
 		this.primitivetype=t;
 	}

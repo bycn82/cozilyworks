@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class QualifiedName extends CodeDocument{
-	private String identifierStr;
+	public String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
 	}
-	private List<String> identifiers=new ArrayList<String>();
+	public List<String> identifiers=new ArrayList<String>();
 	public void addIDENTIFIER(String t){
 		this.identifiers.add(t);
 	}

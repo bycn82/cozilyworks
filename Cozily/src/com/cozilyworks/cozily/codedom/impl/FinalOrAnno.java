@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class FinalOrAnno extends CodeDocument{
-	private Annotation annotation;
+	public Annotation annotation;
 	public void setAnnotation(Annotation t){
 		this.annotation=t;
 	}

@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class MultiplicativeExpression extends CodeDocument{
-	private UnaryExpression unaryexpression;
+	public UnaryExpression unaryexpression;
 	public void setUnaryExpression(UnaryExpression t){
 		this.unaryexpression=t;
 	}
-	private List<StarSlashPercent> starslashpercents=new ArrayList<StarSlashPercent>();
+	public List<StarSlashPercent> starslashpercents=new ArrayList<StarSlashPercent>();
 	public void addStarSlashPercent(StarSlashPercent t){
 		this.starslashpercents.add(t);
 	}
-	private List<UnaryExpression> unaryexpressions=new ArrayList<UnaryExpression>();
+	public List<UnaryExpression> unaryexpressions=new ArrayList<UnaryExpression>();
 	public void addUnaryExpression(UnaryExpression t){
 		this.unaryexpressions.add(t);
 	}

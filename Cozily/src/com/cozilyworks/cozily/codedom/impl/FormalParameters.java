@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class FormalParameters extends CodeDocument{
-	private FormalParameterDecls formalparameterdecls;
+	public FormalParameterDecls formalparameterdecls;
 	public void setFormalParameterDecls(FormalParameterDecls t){
 		this.formalparameterdecls=t;
 	}

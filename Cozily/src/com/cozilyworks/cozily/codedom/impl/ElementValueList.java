@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ElementValueList extends CodeDocument{
-	private ElementValue elementvalue;
+	public ElementValue elementvalue;
 	public void setElementValue(ElementValue t){
 		this.elementvalue=t;
 	}
-	private List<ElementValue> elementvalues=new ArrayList<ElementValue>();
+	public List<ElementValue> elementvalues=new ArrayList<ElementValue>();
 	public void addElementValue(ElementValue t){
 		this.elementvalues.add(t);
 	}

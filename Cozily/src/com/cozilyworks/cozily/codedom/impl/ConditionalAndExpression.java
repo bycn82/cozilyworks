@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ConditionalAndExpression extends CodeDocument{
-	private InclusiveOrExpression inclusiveorexpression;
+	public InclusiveOrExpression inclusiveorexpression;
 	public void setInclusiveOrExpression(InclusiveOrExpression t){
 		this.inclusiveorexpression=t;
 	}
-	private List<InclusiveOrExpression> inclusiveorexpressions=new ArrayList<InclusiveOrExpression>();
+	public List<InclusiveOrExpression> inclusiveorexpressions=new ArrayList<InclusiveOrExpression>();
 	public void addInclusiveOrExpression(InclusiveOrExpression t){
 		this.inclusiveorexpressions.add(t);
 	}

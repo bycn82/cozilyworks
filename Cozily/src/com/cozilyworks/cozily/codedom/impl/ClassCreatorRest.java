@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ClassCreatorRest extends CodeDocument{
-	private Arguments arguments;
+	public Arguments arguments;
 	public void setArguments(Arguments t){
 		this.arguments=t;
 	}
-	private ClassBody classbody;
+	public ClassBody classbody;
 	public void setClassBody(ClassBody t){
 		this.classbody=t;
 	}

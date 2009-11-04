@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ArrayInitializerList extends CodeDocument{
-	private VariableInitializer variableinitializer;
+	public VariableInitializer variableinitializer;
 	public void setVariableInitializer(VariableInitializer t){
 		this.variableinitializer=t;
 	}
-	private List<VariableInitializer> variableinitializers=new ArrayList<VariableInitializer>();
+	public List<VariableInitializer> variableinitializers=new ArrayList<VariableInitializer>();
 	public void addVariableInitializer(VariableInitializer t){
 		this.variableinitializers.add(t);
 	}

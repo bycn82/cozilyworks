@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ClassDeclaration extends CodeDocument{
-	private NormalClassDeclaration normalclassdeclaration;
+	public NormalClassDeclaration normalclassdeclaration;
 	public void setNormalClassDeclaration(NormalClassDeclaration t){
 		this.normalclassdeclaration=t;
 	}
-	private EnumDeclaration enumdeclaration;
+	public EnumDeclaration enumdeclaration;
 	public void setEnumDeclaration(EnumDeclaration t){
 		this.enumdeclaration=t;
 	}

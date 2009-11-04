@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class BlockOrSemi extends CodeDocument{
-	private Block block;
+	public Block block;
 	public void setBlock(Block t){
 		this.block=t;
 	}

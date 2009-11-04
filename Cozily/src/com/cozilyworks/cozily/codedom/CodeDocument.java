@@ -5,17 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.cozilyworks.cozily.codedom.impl.NormalClassDeclaration;
 import com.cozilyworks.cozily.sources.SourceDescription;
 import com.cozilyworks.cozily.util.StringUtil;
 import com.cozilyworks.cozily.util.StringUtilPlus;
 
 @SuppressWarnings("unchecked")
-public class CodeDocument{
+public class CodeDocument implements Cloneable{
 	public static boolean developing=false;
 	public int coz=0;
 	protected StringBuilder sb=new StringBuilder();
 	public void visit(){}
 	public void coz(){System.err.println(coz);}
+	public void clear(){sb=new StringBuilder();}
+	public Object clone(){
+		try{return super.clone();}catch(CloneNotSupportedException e){e.printStackTrace();}return null;}
 	public static SourceDescription source=new SourceDescription();
 	public SourceDescription getSourceDescription(){
 		SourceDescription returnSource=source;
@@ -26,12 +30,13 @@ public class CodeDocument{
 		sb.append("COZILY");
 	}
 	public String toString(){
+		clear();
 		visit();
 		return ctrlOutput();
 	}
 	/**
 	 * 简单地把对象加入
-	 *
+	 * 
 	 * @param obj
 	 */
 	protected void add(Object obj){
@@ -41,7 +46,7 @@ public class CodeDocument{
 	}
 	/**
 	 * 循环地加入一个List里的所有对象
-	 *
+	 * 
 	 * @param objs
 	 */
 	protected void adds(List objs){
@@ -53,7 +58,7 @@ public class CodeDocument{
 	}
 	/**
 	 * 如果对象非空,才会和格式一起输入
-	 *
+	 * 
 	 * @param format
 	 * @param obj
 	 */
@@ -64,7 +69,7 @@ public class CodeDocument{
 	}
 	/**
 	 * 如果对象非空,才会和格式一起输入
-	 *
+	 * 
 	 * @param format
 	 * @param objs
 	 */
@@ -77,7 +82,7 @@ public class CodeDocument{
 	}
 	/**
 	 * 带格式的输入,如果参数为NULL,则用空格代替
-	 *
+	 * 
 	 * @param formatStr
 	 * @param args
 	 */
@@ -92,7 +97,7 @@ public class CodeDocument{
 	}
 	/**
 	 * 带格式输入,多次的,意思是 这个格式被输入N次
-	 *
+	 * 
 	 * @param formatStr
 	 * @param lists
 	 */

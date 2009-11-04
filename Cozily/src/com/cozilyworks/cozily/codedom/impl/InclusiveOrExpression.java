@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class InclusiveOrExpression extends CodeDocument{
-	private ExclusiveOrExpression exclusiveorexpression;
+	public ExclusiveOrExpression exclusiveorexpression;
 	public void setExclusiveOrExpression(ExclusiveOrExpression t){
 		this.exclusiveorexpression=t;
 	}
-	private List<ExclusiveOrExpression> exclusiveorexpressions=new ArrayList<ExclusiveOrExpression>();
+	public List<ExclusiveOrExpression> exclusiveorexpressions=new ArrayList<ExclusiveOrExpression>();
 	public void addExclusiveOrExpression(ExclusiveOrExpression t){
 		this.exclusiveorexpressions.add(t);
 	}
