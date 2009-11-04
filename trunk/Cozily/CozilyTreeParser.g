@@ -80,7 +80,11 @@ classDeclaration returns[ClassDeclaration rtn]
 
 normalClassDeclaration returns[NormalClassDeclaration rtn]
 @init{rtn=new NormalClassDeclaration();}
-:^(NORMALCLASSDECLARATION0{rtn.coz=0;}    (x0=modifiers{rtn.setModifiers(x0);})   (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeParameters{rtn.setTypeParameters(x2);})? ( (x3=type{rtn.setType(x3);}))? ( (x4=typeList{rtn.setTypeList(x4);}))? (x5=classBody{rtn.setClassBody(x5);}))
+:^(NORMALCLASSDECLARATION0{rtn.coz=0;}    (x0=modifiers{rtn.setModifiers(x0);})   (x1=IDENTIFIER{rtn.setIDENTIFIER($x1.text);}) (x2=typeParameters{rtn.setTypeParameters(x2);})? ( (x3=extendTypeList{rtn.setExtendTypeList(x3);}))? ( (x4=typeList{rtn.setTypeList(x4);}))? (x5=classBody{rtn.setClassBody(x5);}))
+;
+extendTypeList returns[ExtendTypeList rtn]
+@init{rtn=new ExtendTypeList();}
+:^(EXTENDTYPELIST0{rtn.coz=0;} (x0=typeList{rtn.setTypeList(x0);}))
 ;
 
 typeParameters returns[TypeParameters rtn]

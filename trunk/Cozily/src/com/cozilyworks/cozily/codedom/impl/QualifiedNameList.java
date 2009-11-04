@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class QualifiedNameList extends CodeDocument{
-	private QualifiedName qualifiedname;
+	public QualifiedName qualifiedname;
 	public void setQualifiedName(QualifiedName t){
 		this.qualifiedname=t;
 	}
-	private List<QualifiedName> qualifiednames=new ArrayList<QualifiedName>();
+	public List<QualifiedName> qualifiednames=new ArrayList<QualifiedName>();
 	public void addQualifiedName(QualifiedName t){
 		this.qualifiednames.add(t);
 	}

@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class InstanceOfExpression extends CodeDocument{
-	private RelationalExpression relationalexpression;
+	public RelationalExpression relationalexpression;
 	public void setRelationalExpression(RelationalExpression t){
 		this.relationalexpression=t;
 	}
-	private Type type;
+	public Type type;
 	public void setType(Type t){
 		this.type=t;
 	}

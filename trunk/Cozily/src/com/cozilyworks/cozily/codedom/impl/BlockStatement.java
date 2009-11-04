@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class BlockStatement extends CodeDocument{
-	private LocalVariableDeclarationStatement localvariabledeclarationstatement;
+	public LocalVariableDeclarationStatement localvariabledeclarationstatement;
 	public void setLocalVariableDeclarationStatement(LocalVariableDeclarationStatement t){
 		this.localvariabledeclarationstatement=t;
 	}
-	private ClassOrInterfaceDeclaration classorinterfacedeclaration;
+	public ClassOrInterfaceDeclaration classorinterfacedeclaration;
 	public void setClassOrInterfaceDeclaration(ClassOrInterfaceDeclaration t){
 		this.classorinterfacedeclaration=t;
 	}
-	private Statement statement;
+	public Statement statement;
 	public void setStatement(Statement t){
 		this.statement=t;
 	}

@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class EnumBody extends CodeDocument{
-	private EnumConstants enumconstants;
+	public EnumConstants enumconstants;
 	public void setEnumConstants(EnumConstants t){
 		this.enumconstants=t;
 	}
-	private String commaStr;
+	public String commaStr;
 	public void setCOMMA(String t){
 		this.commaStr=t;
 	}
-	private EnumBodyDeclarations enumbodydeclarations;
+	public EnumBodyDeclarations enumbodydeclarations;
 	public void setEnumBodyDeclarations(EnumBodyDeclarations t){
 		this.enumbodydeclarations=t;
 	}

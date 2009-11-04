@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ExpressionList extends CodeDocument{
-	private Expression expression;
+	public Expression expression;
 	public void setExpression(Expression t){
 		this.expression=t;
 	}
-	private List<Expression> expressions=new ArrayList<Expression>();
+	public List<Expression> expressions=new ArrayList<Expression>();
 	public void addExpression(Expression t){
 		this.expressions.add(t);
 	}

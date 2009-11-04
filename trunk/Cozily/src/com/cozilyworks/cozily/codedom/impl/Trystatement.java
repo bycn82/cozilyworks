@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Trystatement extends CodeDocument{
-	private Block block;
+	public Block block;
 	public void setBlock(Block t){
 		this.block=t;
 	}
-	private Block block2;
+	public Block block2;
 	public void setBlock2(Block t){
 		this.block2=t;
 	}
-	private Catches catches;
+	public Catches catches;
 	public void setCatches(Catches t){
 		this.catches=t;
 	}

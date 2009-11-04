@@ -5,27 +5,27 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class IdentifierSuffix extends CodeDocument{
-	private List<String> bracketss=new ArrayList<String>();
+	public List<String> bracketss=new ArrayList<String>();
 	public void addBRACKETS(String t){
 		this.bracketss.add(t);
 	}
-	private List<Expression> expressions=new ArrayList<Expression>();
+	public List<Expression> expressions=new ArrayList<Expression>();
 	public void addExpression(Expression t){
 		this.expressions.add(t);
 	}
-	private Arguments arguments;
+	public Arguments arguments;
 	public void setArguments(Arguments t){
 		this.arguments=t;
 	}
-	private NonWildcardTypeArguments nonwildcardtypearguments;
+	public NonWildcardTypeArguments nonwildcardtypearguments;
 	public void setNonWildcardTypeArguments(NonWildcardTypeArguments t){
 		this.nonwildcardtypearguments=t;
 	}
-	private String identifierStr;
+	public String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
 	}
-	private InnerCreator innercreator;
+	public InnerCreator innercreator;
 	public void setInnerCreator(InnerCreator t){
 		this.innercreator=t;
 	}

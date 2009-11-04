@@ -5,19 +5,19 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class MemberDecl extends CodeDocument{
-	private FieldDeclaration fielddeclaration;
+	public FieldDeclaration fielddeclaration;
 	public void setFieldDeclaration(FieldDeclaration t){
 		this.fielddeclaration=t;
 	}
-	private MethodDeclaration methoddeclaration;
+	public MethodDeclaration methoddeclaration;
 	public void setMethodDeclaration(MethodDeclaration t){
 		this.methoddeclaration=t;
 	}
-	private ClassDeclaration classdeclaration;
+	public ClassDeclaration classdeclaration;
 	public void setClassDeclaration(ClassDeclaration t){
 		this.classdeclaration=t;
 	}
-	private InterfaceDeclaration interfacedeclaration;
+	public InterfaceDeclaration interfacedeclaration;
 	public void setInterfaceDeclaration(InterfaceDeclaration t){
 		this.interfacedeclaration=t;
 	}

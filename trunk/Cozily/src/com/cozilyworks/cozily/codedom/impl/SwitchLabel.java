@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class SwitchLabel extends CodeDocument{
-	private Expression expression;
+	public Expression expression;
 	public void setExpression(Expression t){
 		this.expression=t;
 	}

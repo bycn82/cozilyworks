@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class TypeArgument extends CodeDocument{
-	private Type type;
+	public Type type;
 	public void setType(Type t){
 		this.type=t;
 	}
-	private ExtendsOrSuper extendsorsuper;
+	public ExtendsOrSuper extendsorsuper;
 	public void setExtendsOrSuper(ExtendsOrSuper t){
 		this.extendsorsuper=t;
 	}

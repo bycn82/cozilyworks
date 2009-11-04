@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class UnaryExpression extends CodeDocument{
-	private UnaryExpression unaryexpression;
+	public UnaryExpression unaryexpression;
 	public void setUnaryExpression(UnaryExpression t){
 		this.unaryexpression=t;
 	}
-	private UnaryExpressionNotPlusMinus unaryexpressionnotplusminus;
+	public UnaryExpressionNotPlusMinus unaryexpressionnotplusminus;
 	public void setUnaryExpressionNotPlusMinus(UnaryExpressionNotPlusMinus t){
 		this.unaryexpressionnotplusminus=t;
 	}

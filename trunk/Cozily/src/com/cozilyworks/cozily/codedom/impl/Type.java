@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Type extends CodeDocument{
-	private ClassOrInterfaceType classorinterfacetype;
+	public ClassOrInterfaceType classorinterfacetype;
 	public void setClassOrInterfaceType(ClassOrInterfaceType t){
 		this.classorinterfacetype=t;
 	}
-	private List<String> bracketss=new ArrayList<String>();
+	public List<String> bracketss=new ArrayList<String>();
 	public void addBRACKETS(String t){
 		this.bracketss.add(t);
 	}
-	private PrimitiveType primitivetype;
+	public PrimitiveType primitivetype;
 	public void setPrimitiveType(PrimitiveType t){
 		this.primitivetype=t;
 	}

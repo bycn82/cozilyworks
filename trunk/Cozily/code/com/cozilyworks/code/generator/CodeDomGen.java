@@ -14,6 +14,7 @@ public class CodeDomGen{
 	public static void parse(List<Clz> clzs){
 		try{
 			String folder="src\\com\\cozilyworks\\cozily\\codedom\\impl";
+			folder="temp\\com\\cozilyworks\\cozily\\codedom\\impl";
 			for(Clz clz:clzs){
 				if(clz!=null){
 					String clzName=StringUtilPlus.ucword(clz.getName());
@@ -29,12 +30,12 @@ public class CodeDomGen{
 						if(notRepeat(med)){
 							if(med.getType().equals("String")){
 								if(med.getName().startsWith("set")){
-									w.write("private String "+med.getName().toLowerCase().substring(3)+"Str;\n");
+									w.write("public String "+med.getName().toLowerCase().substring(3)+"Str;\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"Str=t;\n");
 									w.write("}\n");
 								}else{
-									w.write("private List<String> "+med.getName().toLowerCase().substring(3)
+									w.write("public List<String> "+med.getName().toLowerCase().substring(3)
 										+"s=new ArrayList<String>();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getName().toLowerCase().substring(3)+"s.add(t);\n");
@@ -42,12 +43,12 @@ public class CodeDomGen{
 								}
 							}else{
 								if(med.getName().startsWith("set")){
-									w.write("private "+med.getType()+" "+med.getType().toLowerCase()+";\n");
+									w.write("public "+med.getType()+" "+med.getType().toLowerCase()+";\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"=t;\n");
 									w.write("}\n");
 								}else{
-									w.write("private List<"+med.getType()+"> "+med.getType().toLowerCase()
+									w.write("public List<"+med.getType()+"> "+med.getType().toLowerCase()
 										+"s=new ArrayList<"+med.getType()+">();\n");
 									w.write("public void "+med.getName()+"("+med.getType()+" t){\n");
 									w.write("this."+med.getType().toLowerCase()+"s.add(t);\n");

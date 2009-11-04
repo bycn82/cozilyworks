@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class LocalVariableDeclarationStatement extends CodeDocument{
-	private LocalVariableDeclaration localvariabledeclaration;
+	public LocalVariableDeclaration localvariabledeclaration;
 	public void setLocalVariableDeclaration(LocalVariableDeclaration t){
 		this.localvariabledeclaration=t;
 	}

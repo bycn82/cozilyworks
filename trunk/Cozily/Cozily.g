@@ -256,7 +256,7 @@ LITERAL5;
 LITERAL6;
 LITERAL7;
 LITERAL8;
-
+EXTENDTYPELIST0;
 
 
 
@@ -343,9 +343,15 @@ classDeclaration
 ->^(CLASSDECLARATION1    enumDeclaration)
     ;
 normalClassDeclaration 
-    :   modifiers  'class' IDENTIFIER typeParameters? ('extends' type)? ('implements' typeList)? classBody
-->^(NORMALCLASSDECLARATION0    modifiers   IDENTIFIER typeParameters? ( type)? ( typeList)? classBody)
+    :   modifiers  'class' IDENTIFIER typeParameters? extendTypeList? ('implements' typeList)? classBody
+->^(NORMALCLASSDECLARATION0    modifiers   IDENTIFIER typeParameters? extendTypeList? typeList? classBody)
     ;
+
+extendTypeList
+	:	'extends' typeList
+->^(EXTENDTYPELIST0 typeList)
+	;
+
 typeParameters 
     :   '<' typeParameter (',' typeParameter)* '>'
 ->^(TYPEPARAMETERS0     typeParameter ( typeParameter)*)

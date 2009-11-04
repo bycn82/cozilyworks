@@ -5,19 +5,19 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class InterfaceBodyDeclaration extends CodeDocument{
-	private InterfaceFieldDeclaration interfacefielddeclaration;
+	public InterfaceFieldDeclaration interfacefielddeclaration;
 	public void setInterfaceFieldDeclaration(InterfaceFieldDeclaration t){
 		this.interfacefielddeclaration=t;
 	}
-	private InterfaceMethodDeclaration interfacemethoddeclaration;
+	public InterfaceMethodDeclaration interfacemethoddeclaration;
 	public void setInterfaceMethodDeclaration(InterfaceMethodDeclaration t){
 		this.interfacemethoddeclaration=t;
 	}
-	private InterfaceDeclaration interfacedeclaration;
+	public InterfaceDeclaration interfacedeclaration;
 	public void setInterfaceDeclaration(InterfaceDeclaration t){
 		this.interfacedeclaration=t;
 	}
-	private ClassDeclaration classdeclaration;
+	public ClassDeclaration classdeclaration;
 	public void setClassDeclaration(ClassDeclaration t){
 		this.classdeclaration=t;
 	}

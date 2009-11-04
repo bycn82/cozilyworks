@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class CatchClause extends CodeDocument{
-	private FormalParameter formalparameter;
+	public FormalParameter formalparameter;
 	public void setFormalParameter(FormalParameter t){
 		this.formalparameter=t;
 	}
-	private Block block;
+	public Block block;
 	public void setBlock(Block t){
 		this.block=t;
 	}

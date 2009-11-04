@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class VariableModifiers extends CodeDocument{
-	private List<FinalOrAnno> finalorannos=new ArrayList<FinalOrAnno>();
+	public List<FinalOrAnno> finalorannos=new ArrayList<FinalOrAnno>();
 	public void addFinalOrAnno(FinalOrAnno t){
 		this.finalorannos.add(t);
 	}

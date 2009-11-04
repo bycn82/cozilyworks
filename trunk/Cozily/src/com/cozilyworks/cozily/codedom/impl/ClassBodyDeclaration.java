@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ClassBodyDeclaration extends CodeDocument{
-	private String staticStr;
+	public String staticStr;
 	public void setSTATIC(String t){
 		this.staticStr=t;
 	}
-	private Block block;
+	public Block block;
 	public void setBlock(Block t){
 		this.block=t;
 	}
-	private MemberDecl memberdecl;
+	public MemberDecl memberdecl;
 	public void setMemberDecl(MemberDecl t){
 		this.memberdecl=t;
 	}

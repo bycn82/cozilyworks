@@ -5,19 +5,19 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class LocalVariableDeclaration extends CodeDocument{
-	private VariableModifiers variablemodifiers;
+	public VariableModifiers variablemodifiers;
 	public void setVariableModifiers(VariableModifiers t){
 		this.variablemodifiers=t;
 	}
-	private Type type;
+	public Type type;
 	public void setType(Type t){
 		this.type=t;
 	}
-	private VariableDeclarator variabledeclarator;
+	public VariableDeclarator variabledeclarator;
 	public void setVariableDeclarator(VariableDeclarator t){
 		this.variabledeclarator=t;
 	}
-	private List<VariableDeclarator> variabledeclarators=new ArrayList<VariableDeclarator>();
+	public List<VariableDeclarator> variabledeclarators=new ArrayList<VariableDeclarator>();
 	public void addVariableDeclarator(VariableDeclarator t){
 		this.variabledeclarators.add(t);
 	}

@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class TypeParameter extends CodeDocument{
-	private String identifierStr;
+	public String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
 	}
-	private TypeBound typebound;
+	public TypeBound typebound;
 	public void setTypeBound(TypeBound t){
 		this.typebound=t;
 	}

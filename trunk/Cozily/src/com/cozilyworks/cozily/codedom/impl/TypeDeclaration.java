@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class TypeDeclaration extends CodeDocument{
-	private ClassOrInterfaceDeclaration classorinterfacedeclaration;
+	public ClassOrInterfaceDeclaration classorinterfacedeclaration;
 	public void setClassOrInterfaceDeclaration(ClassOrInterfaceDeclaration t){
 		this.classorinterfacedeclaration=t;
 	}

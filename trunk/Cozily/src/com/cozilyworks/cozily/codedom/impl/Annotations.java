@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Annotations extends CodeDocument{
-	private List<Annotation> annotations=new ArrayList<Annotation>();
+	public List<Annotation> annotations=new ArrayList<Annotation>();
 	public void addAnnotation(Annotation t){
 		this.annotations.add(t);
 	}

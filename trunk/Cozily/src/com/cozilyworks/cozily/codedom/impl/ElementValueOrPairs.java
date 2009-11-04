@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ElementValueOrPairs extends CodeDocument{
-	private ElementValuePairs elementvaluepairs;
+	public ElementValuePairs elementvaluepairs;
 	public void setElementValuePairs(ElementValuePairs t){
 		this.elementvaluepairs=t;
 	}
-	private ElementValue elementvalue;
+	public ElementValue elementvalue;
 	public void setElementValue(ElementValue t){
 		this.elementvalue=t;
 	}

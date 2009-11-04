@@ -5,15 +5,15 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ShiftExpression extends CodeDocument{
-	private AdditiveExpression additiveexpression;
+	public AdditiveExpression additiveexpression;
 	public void setAdditiveExpression(AdditiveExpression t){
 		this.additiveexpression=t;
 	}
-	private List<ShiftOp> shiftops=new ArrayList<ShiftOp>();
+	public List<ShiftOp> shiftops=new ArrayList<ShiftOp>();
 	public void addShiftOp(ShiftOp t){
 		this.shiftops.add(t);
 	}
-	private List<AdditiveExpression> additiveexpressions=new ArrayList<AdditiveExpression>();
+	public List<AdditiveExpression> additiveexpressions=new ArrayList<AdditiveExpression>();
 	public void addAdditiveExpression(AdditiveExpression t){
 		this.additiveexpressions.add(t);
 	}

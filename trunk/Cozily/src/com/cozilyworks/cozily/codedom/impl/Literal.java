@@ -5,39 +5,39 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Literal extends CodeDocument{
-	private String intliteralStr;
+	public String intliteralStr;
 	public void setINTLITERAL(String t){
 		this.intliteralStr=t;
 	}
-	private String longliteralStr;
+	public String longliteralStr;
 	public void setLONGLITERAL(String t){
 		this.longliteralStr=t;
 	}
-	private String floatliteralStr;
+	public String floatliteralStr;
 	public void setFLOATLITERAL(String t){
 		this.floatliteralStr=t;
 	}
-	private String doubleliteralStr;
+	public String doubleliteralStr;
 	public void setDOUBLELITERAL(String t){
 		this.doubleliteralStr=t;
 	}
-	private String charliteralStr;
+	public String charliteralStr;
 	public void setCHARLITERAL(String t){
 		this.charliteralStr=t;
 	}
-	private String stringliteralStr;
+	public String stringliteralStr;
 	public void setSTRINGLITERAL(String t){
 		this.stringliteralStr=t;
 	}
-	private String trueStr;
+	public String trueStr;
 	public void setTRUE(String t){
 		this.trueStr=t;
 	}
-	private String falseStr;
+	public String falseStr;
 	public void setFALSE(String t){
 		this.falseStr=t;
 	}
-	private String nullStr;
+	public String nullStr;
 	public void setNULL(String t){
 		this.nullStr=t;
 	}

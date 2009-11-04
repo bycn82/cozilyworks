@@ -5,7 +5,7 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Catches extends CodeDocument{
-	private List<CatchClause> catchclauses=new ArrayList<CatchClause>();
+	public List<CatchClause> catchclauses=new ArrayList<CatchClause>();
 	public void addCatchClause(CatchClause t){
 		this.catchclauses.add(t);
 	}

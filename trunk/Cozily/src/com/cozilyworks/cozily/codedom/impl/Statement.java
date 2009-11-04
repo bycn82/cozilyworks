@@ -5,43 +5,43 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class Statement extends CodeDocument{
-	private Block block;
+	public Block block;
 	public void setBlock(Block t){
 		this.block=t;
 	}
-	private Expression expression;
+	public Expression expression;
 	public void setExpression(Expression t){
 		this.expression=t;
 	}
-	private Expression expression2;
+	public Expression expression2;
 	public void setExpression2(Expression x2){
 		this.expression2=x2;
 	}
-	private ParExpression parexpression;
+	public ParExpression parexpression;
 	public void setParExpression(ParExpression t){
 		this.parexpression=t;
 	}
-	private Statement statement;
+	public Statement statement;
 	public void setStatement(Statement t){
 		this.statement=t;
 	}
-	private Statement statement2;
+	public Statement statement2;
 	public void setStatement2(Statement x5){
 		this.statement2=x5;
 	}
-	private Forstatement forstatement;
+	public Forstatement forstatement;
 	public void setForstatement(Forstatement t){
 		this.forstatement=t;
 	}
-	private Trystatement trystatement;
+	public Trystatement trystatement;
 	public void setTrystatement(Trystatement t){
 		this.trystatement=t;
 	}
-	private SwitchBlockStatementGroups switchblockstatementgroups;
+	public SwitchBlockStatementGroups switchblockstatementgroups;
 	public void setSwitchBlockStatementGroups(SwitchBlockStatementGroups t){
 		this.switchblockstatementgroups=t;
 	}
-	private String identifierStr;
+	public String identifierStr;
 	public void setIDENTIFIER(String t){
 		this.identifierStr=t;
 	}

@@ -5,11 +5,11 @@ import java.util.List;
 import com.cozilyworks.cozily.codedom.*;
 
 public class ClassOrInterfaceDeclaration extends CodeDocument{
-	private ClassDeclaration classdeclaration;
+	public ClassDeclaration classdeclaration;
 	public void setClassDeclaration(ClassDeclaration t){
 		this.classdeclaration=t;
 	}
-	private InterfaceDeclaration interfacedeclaration;
+	public InterfaceDeclaration interfacedeclaration;
 	public void setInterfaceDeclaration(InterfaceDeclaration t){
 		this.interfacedeclaration=t;
 	}
