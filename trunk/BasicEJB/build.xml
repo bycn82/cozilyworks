@@ -6,7 +6,7 @@
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="jboss.server.config" value="default" />
-	<property name="jboss.home" value="D:\\SERVERS\\JBoss" />
+	<property name="jboss.home" value="D:\\SERVER\\JBoss4" />
 
 	<!-- Build classpath -->
 	<path id="build.classpath">
