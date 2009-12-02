@@ -12,12 +12,16 @@
 		ctx=new InitialContext(props);
 		Hello helloworld=(Hello)ctx.lookup("LocalStatelessBean/local");
 		out.println(helloworld.SayHello("Bill"));
+		out.println("</br>");
 		helloworld=(Hello)ctx.lookup("RemoteStatelessBean/remote");
 		out.println(helloworld.SayHello("Bill"));
+		out.println("</br>");
 		helloworld=(Hello)ctx.lookup("LocalStatefullBean/local");
 		out.println(helloworld.SayHello("Bill"));
+		out.println("</br>");
 		helloworld=(Hello)ctx.lookup("RemoteStatefullBean/remote");
 		out.println(helloworld.SayHello("Bill"));
+		out.println("</br>");
 	}catch(NamingException e){
 		out.println(e.getMessage());
 	}
