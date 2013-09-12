@@ -1,0 +1,94 @@
+"
+" Version:
+"    9dec2010
+"
+" Sections:
+"    -> General
+"
+" Change Log:
+"     > version 9dec2010: create the basic config
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible
+syntax enable "Enable syntax hl
+if &term=~"xterm"
+	set t_Co=256
+endif
+colorscheme whitesand
+set lines=33 columns=100
+set cursorline
+set noeb
+set autoindent
+set cindent
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab
+set smarttab
+set number
+set history=1000
+set nobackup
+set noswapfile
+set ignorecase
+set hlsearch
+set incsearch
+set gdefault
+set enc=utf-8
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
+set langmenu=zh_CN.UTF-8
+set helplang=cn
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+set laststatus=1
+set ruler           
+set cmdheight=1
+set viminfo+=!
+set iskeyword+=_,$,@,%,#,-
+set linespace=0
+set wildmenu
+set backspace=2
+set whichwrap+=<,>,h,l
+set mousemodel=extend
+set selection=exclusive
+set report=0
+set fillchars=vert:\ ,stl:\ ,stlnc:\
+set showmatch
+set matchtime=5
+set scrolloff=3
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
+set smartindent
+filetype on
+filetype plugin on
+filetype indent on
+
+if has("autocmd")
+   autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby set number
+   autocmd BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
+endif " has("autocmd")
+
+set encoding=utf-8
+function! SetFileEncodings(encodings)
+    let b:myfileencodingsbak=&fileencodings
+    let &fileencodings=a:encodings
+endfunction
+function! RestoreFileEncodings()
+    let &fileencodings=b:myfileencodingsbak
+    unlet b:myfileencodingsbak
+endfunction
+au BufReadPre *.nfo call SetFileEncodings('cp437')|set ambiwidth=single
+au BufReadPost *.nfo call RestoreFileEncodings()
+au BufRead,BufNewFile *  setfiletype txt
+
+vnoremap <C-X> "+d
+vnoremap <C-C> "+y
+map <C-V> "+gP
+map <C-Z> u
