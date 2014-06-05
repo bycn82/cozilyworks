@@ -1,0 +1,17 @@
+Index: sbin/ipfw/ipfw.8
+===================================================================
+--- sbin/ipfw/ipfw.8	(revision 266589)
++++ sbin/ipfw/ipfw.8	(working copy)
+@@ -2162,10 +2162,9 @@
+ .Pp
+ .Bl -tag -width indent -compact
+ .It Cm bw Ar bandwidth | device
+-Bandwidth, measured in
++Bandwidth, officially recommend to use 
+ .Sm off
+-.Op Cm K | M
+-.Brq Cm bit/s | Byte/s .
++.Brq Cm kbit/s | mbit/s | KByte/s |MByte/s  .
+ .Sm on
+ .Pp
+ A value of 0 (default) means unlimited bandwidth.
