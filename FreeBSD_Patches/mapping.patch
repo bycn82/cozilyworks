@@ -1,0 +1,476 @@
+Index: sbin/ipfw/ipfw2.c
+===================================================================
+--- sbin/ipfw/ipfw2.c	(revision 267049)
++++ sbin/ipfw/ipfw2.c	(working copy)
+@@ -370,6 +370,17 @@
+ 	{ NULL, 0 }	/* terminator */
+ };
+ 
++static struct _s_x table_actions[] = {
++	{ "add",		TOK_TBL_ADD },
++	{ "delete",		TOK_TBL_DEL },
++	{ "del",		TOK_TBL_DEL },
++	{ "list",		TOK_TBL_LIST },
++	{ "flush",		TOK_TBL_FLUSH },
++	{ "name",		TOK_TBL_NAME },
++	{ "type",		TOK_TBL_TYPE },
++	{ NULL, 0 }	/* terminator */
++};
++
+ /*
+  * Helper routine to print a possibly unaligned uint64_t on
+  * various platform. If width > 0, print the value with
+@@ -4163,11 +4174,11 @@
+ ipfw_table_handler(int ac, char *av[])
+ {
+ 	ipfw_table_xentry xent;
+-	int do_add;
+ 	int is_all;
+ 	uint32_t a;
+ 	uint32_t tables_max;
+ 
++
+ 	tables_max = ipfw_get_tables_max();
+ 
+ 	memset(&xent, 0, sizeof(xent));
+@@ -4176,75 +4187,136 @@
+ 	if (ac && isdigit(**av)) {
+ 		xent.tbl = atoi(*av);
+ 		is_all = 0;
+-		ac--; av++;
+ 	} else if (ac && _substrcmp(*av, "all") == 0) {
+ 		xent.tbl = 0;
+ 		is_all = 1;
+-		ac--; av++;
+-	} else
+-		errx(EX_USAGE, "table number or 'all' keyword required");
+-	if (xent.tbl >= tables_max)
+-		errx(EX_USAGE, "The table number exceeds the maximum allowed "
+-			"value (%d)", tables_max - 1);
++	} else {
++		/* get table id via name and type*/
++		xent.tbl=mapping_getid(IPFW_TABLE_NAME,*av);
++		is_all = 0;
++	}
++	ac--; av++;
++	if (xent.tbl >= tables_max){
++		errx(EX_USAGE, "The table number (%d) exceeds the maximum allowed "
++			"value (%d)",xent.tbl, tables_max - 1);
++	}
+ 	NEED1("table needs command");
+-	if (is_all && _substrcmp(*av, "list") != 0
+-		   && _substrcmp(*av, "flush") != 0)
+-		errx(EX_USAGE, "table number required");
+-
+-	if (_substrcmp(*av, "add") == 0 ||
+-	    _substrcmp(*av, "delete") == 0) {
+-		do_add = **av == 'a';
+-		ac--; av++;
+-		if (!ac)
+-			errx(EX_USAGE, "address required");
+-
+-		table_fill_xentry(*av, &xent);
+-
+-		ac--; av++;
+-		if (do_add && ac) {
+-			unsigned int tval;
+-			/* isdigit is a bit of a hack here.. */
+-			if (strchr(*av, (int)'.') == NULL && isdigit(**av))  {
+-				xent.value = strtoul(*av, NULL, 0);
+-			} else {
+-				if (lookup_host(*av, (struct in_addr *)&tval) == 0) {
+-					/* The value must be stored in host order	 *
+-					 * so that the values < 65k can be distinguished */
+-		       			xent.value = ntohl(tval);
+-				} else {
+-					errx(EX_NOHOST, "hostname ``%s'' unknown", *av);
++	int matched_index = match_token(table_actions, *av);
++	switch(matched_index) {
++		case TOK_TBL_ADD:
++		case TOK_TBL_DEL:
++			{
++				ac--; av++;
++				if (!ac){
++					errx(EX_USAGE, "address required");
+ 				}
++				table_fill_xentry(*av, &xent);
++				ac--; av++;
++				if (matched_index==TOK_TBL_ADD && ac) {
++					unsigned int tval;
++					/* isdigit is a bit of a hack here.. */
++					if (strchr(*av, (int)'.') == NULL && isdigit(**av))  {
++						xent.value = strtoul(*av, NULL, 0);
++					} else {
++						if (lookup_host(*av, (struct in_addr *)&tval) == 0) {
++							/* The value must be stored in host order	 *
++							 * so that the values < 65k can be distinguished */
++				       			xent.value = ntohl(tval);
++						} else {
++							errx(EX_NOHOST, "hostname ``%s'' unknown", *av);
++						}
++					}
++				} else{
++					xent.value = 0;
++				}
++				if (do_setcmd3(matched_index==TOK_TBL_ADD ? IP_FW_TABLE_XADD : IP_FW_TABLE_XDEL,
++				    &xent, xent.len) < 0) {
++					/* If running silent, don't bomb out on these errors. */
++					if (!(co.do_quiet && (errno == (matched_index==TOK_TBL_ADD ? EEXIST : ESRCH))))
++						err(EX_OSERR, "setsockopt(IP_FW_TABLE_%s)",
++						    matched_index==TOK_TBL_ADD ? "XADD" : "XDEL");
++					/* In silent mode, react to a failed add by deleting */
++					if (matched_index==TOK_TBL_ADD) {
++						do_setcmd3(IP_FW_TABLE_XDEL, &xent, xent.len);
++						if (do_setcmd3(IP_FW_TABLE_XADD, &xent, xent.len) < 0)
++							err(EX_OSERR,
++							    "setsockopt(IP_FW_TABLE_XADD)");
++					}
++				}
+ 			}
+-		} else
+-			xent.value = 0;
+-		if (do_setcmd3(do_add ? IP_FW_TABLE_XADD : IP_FW_TABLE_XDEL,
+-		    &xent, xent.len) < 0) {
+-			/* If running silent, don't bomb out on these errors. */
+-			if (!(co.do_quiet && (errno == (do_add ? EEXIST : ESRCH))))
+-				err(EX_OSERR, "setsockopt(IP_FW_TABLE_%s)",
+-				    do_add ? "XADD" : "XDEL");
+-			/* In silent mode, react to a failed add by deleting */
+-			if (do_add) {
+-				do_setcmd3(IP_FW_TABLE_XDEL, &xent, xent.len);
+-				if (do_setcmd3(IP_FW_TABLE_XADD, &xent, xent.len) < 0)
+-					err(EX_OSERR,
+-					    "setsockopt(IP_FW_TABLE_XADD)");
++			break;
++		case TOK_TBL_FLUSH:
++			{
++				a = is_all ? tables_max : (uint32_t)(xent.tbl + 1);
++				do {
++					if (do_cmd(IP_FW_TABLE_FLUSH, &xent.tbl,
++					    sizeof(xent.tbl)) < 0)
++						err(EX_OSERR, "setsockopt(IP_FW_TABLE_FLUSH)");
++				} while (++xent.tbl < a);
+ 			}
+-		}
+-	} else if (_substrcmp(*av, "flush") == 0) {
+-		a = is_all ? tables_max : (uint32_t)(xent.tbl + 1);
+-		do {
+-			if (do_cmd(IP_FW_TABLE_FLUSH, &xent.tbl,
+-			    sizeof(xent.tbl)) < 0)
+-				err(EX_OSERR, "setsockopt(IP_FW_TABLE_FLUSH)");
+-		} while (++xent.tbl < a);
+-	} else if (_substrcmp(*av, "list") == 0) {
+-		a = is_all ? tables_max : (uint32_t)(xent.tbl + 1);
+-		do {
+-			table_list(xent.tbl, is_all);
+-		} while (++xent.tbl < a);
+-	} else
+-		errx(EX_USAGE, "invalid table command %s", *av);
++			break;
++		case TOK_TBL_LIST:
++			{
++				a = is_all ? tables_max : (uint32_t)(xent.tbl + 1);
++				do {
++					table_list(xent.tbl, is_all);
++				} while (++xent.tbl < a);
++			}
++			break;
++		case TOK_TBL_NAME:
++		case TOK_TBL_TYPE:
++			{
++				if (ac==1){
++					errx(EX_USAGE, "more option required");
++				}
++				
++				int type;
++				if(matched_index==TOK_TBL_NAME){
++					type=IPFW_TABLE_NAME;
++				}else if(matched_index==TOK_TBL_TYPE){
++					type=IPFW_TABLE_TYPE;
++				}
++				av++;
++				if (_substrcmp(*av, "delete") == 0){
++					ipfw_mapping mapping_element;
++					memset(&mapping_element, 0, sizeof(mapping_element));
++					mapping_element.id=xent.tbl;
++					mapping_element.type=type;
++					if (do_setcmd3(IP_FW_MAPPING_DEL,&mapping_element,
++						sizeof(mapping_element)) < 0){
++						err(EX_OSERR,"setsockopt(IP_FW_MAPPING_SET)");
++					}
++				}else if (_substrcmp(*av, "show") == 0){
++					ip_fw3_opheader *op3;
++					socklen_t len;
++					len = sizeof(ip_fw3_opheader) + sizeof(ipfw_mapping);
++					op3 = alloca(len);
++					memset(op3, 0, sizeof(ip_fw3_opheader));
++					ipfw_mapping *mapping=(ipfw_mapping *)(op3+1);
++					mapping->id=xent.tbl;
++					mapping->type=type;
++					op3->opcode = IP_FW_MAPPING_GET;
++					if (do_cmd(IP_FW3, op3, (uintptr_t)&len) < 0){
++						err(EX_OSERR, "getsockopt(IP_FW_TABLE_XGETSIZE)");
++					}
++					printf("%s\n",mapping->label);
++				}else{
++					ipfw_mapping mapping_element;
++					memset(&mapping_element, 0, sizeof(mapping_element));
++					mapping_element.id=xent.tbl;
++					mapping_element.type=type;
++					strcpy(mapping_element.label,*av);
++					if (do_setcmd3(IP_FW_MAPPING_SET,&mapping_element,
++						sizeof(mapping_element)) < 0){
++						err(EX_OSERR,"setsockopt(IP_FW_MAPPING_SET)");
++					}
++				}
++
++			}
++			break;
++		default:
++			errx(EX_USAGE, "invalid table command %s", *av);
++	}
+ }
+ 
+ static void
+@@ -4423,3 +4495,20 @@
+ 
+ 	free(tbl);
+ }
++int mapping_getid(int type,char *label){
++	ip_fw3_opheader *op3;
++	socklen_t len;
++	len = sizeof(ip_fw3_opheader) + sizeof(ipfw_mapping);
++	op3 = alloca(len);
++	memset(op3, 0, sizeof(ip_fw3_opheader));
++	ipfw_mapping *mapping=(ipfw_mapping *)(op3+1);
++
++	mapping->type=type;
++	mapping->id=0;
++	strcpy(mapping->label,label);
++	op3->opcode = IP_FW_MAPPING_GET;
++	if (do_cmd(IP_FW3, op3, (uintptr_t)&len) < 0){
++		err(EX_OSERR, "getsockopt(IP_FW_TABLE_XGETSIZE)");
++	}
++	return mapping->id;
++}
+Index: sbin/ipfw/ipfw2.h
+===================================================================
+--- sbin/ipfw/ipfw2.h	(revision 267049)
++++ sbin/ipfw/ipfw2.h	(working copy)
+@@ -205,6 +205,13 @@
+ 	TOK_LOOKUP,
+ 	TOK_SOCKARG,
+ 	TOK_SETDSCP,
++	/* table tokens */
++	TOK_TBL_ADD,
++	TOK_TBL_DEL,
++	TOK_TBL_LIST,
++	TOK_TBL_FLUSH,
++	TOK_TBL_NAME,
++	TOK_TBL_TYPE,
+ };
+ /*
+  * the following macro returns an error message if we run out of
+@@ -297,3 +304,9 @@
+ void fill_unreach6_code(u_short *codep, char *str);
+ void fill_icmp6types(struct _ipfw_insn_icmp6 *cmd, char *av, int cblen);
+ int fill_ext6hdr(struct _ipfw_insn *cmd, char *av);
++
++/* table mapping */
++int mapping_getid(int type,char *label);
++void mapping_getlabel(int id,int type,char *label);
++void mapping_add(int id,int type,char *label);
++void mapping_delete(int id,int type);
+Index: sys/modules/ipfw/Makefile
+===================================================================
+--- sys/modules/ipfw/Makefile	(revision 267049)
++++ sys/modules/ipfw/Makefile	(working copy)
+@@ -17,7 +17,7 @@
+ #CFLAGS+= -DIPFIREWALL_VERBOSE_LIMIT=100
+ #
+ #If you want it to pass all packets by default
+-#CFLAGS+= -DIPFIREWALL_DEFAULT_TO_ACCEPT
++CFLAGS+= -DIPFIREWALL_DEFAULT_TO_ACCEPT
+ #
+ 
+ .if !defined(KERNBUILDDIR)
+Index: sys/netinet/ip_fw.h
+===================================================================
+--- sys/netinet/ip_fw.h	(revision 267049)
++++ sys/netinet/ip_fw.h	(working copy)
+@@ -75,6 +75,10 @@
+ #define	IP_FW_TABLE_XGETSIZE	88	/* get table size */
+ #define	IP_FW_TABLE_XLIST	89	/* list table contents */
+ 
++#define IP_FW_MAPPING_GET	90
++#define IP_FW_MAPPING_SET	91
++#define IP_FW_MAPPING_DEL	92
++
+ /*
+  * The kernel representation of ipfw rules is made of a list of
+  * 'instructions' (for all practical purposes equivalent to BPF
+@@ -602,6 +606,11 @@
+ #define	IPFW_TABLE_INTERFACE	2	/* Table for holding interface names */
+ #define	IPFW_TABLE_MAXTYPE	2	/* Maximum valid number */
+ 
++#define	IPFW_TABLE_NAME		1	/* type in mapping */
++#define	IPFW_TABLE_TYPE		2	/* type in mapping */
++#define	IPFW_PIPE_NAME		3	/* type in mapping */
++#define	IPFW_QUEUE_NAME		4	/* type in mapping */
++
+ typedef struct	_ipfw_table_entry {
+ 	in_addr_t	addr;		/* network address		*/
+ 	u_int32_t	value;		/* value			*/
+@@ -624,6 +633,18 @@
+ } ipfw_table_xentry;
+ #define	IPFW_TCF_INET	0x01		/* CIDR flags: IPv4 record	*/
+ 
++typedef struct _ipfw_mapping{
++	uint16_t	id;
++	uint8_t		type;
++	char 		label[20];
++	struct	_ipfw_mapping *next;
++} ipfw_mapping;
++
++typedef struct _ipfw_mapping_query{
++	ip_fw3_opheader	opheader;
++	ipfw_mapping	mapping;
++} ipfw_mapping_query;
++
+ typedef struct	_ipfw_table {
+ 	u_int32_t	size;		/* size of entries in bytes	*/
+ 	u_int32_t	cnt;		/* # of entries			*/
+Index: sys/netpfil/ipfw/ip_fw_private.h
+===================================================================
+--- sys/netpfil/ipfw/ip_fw_private.h	(revision 267049)
++++ sys/netpfil/ipfw/ip_fw_private.h	(working copy)
+@@ -233,6 +233,7 @@
+ 	spinlock_t uh_lock;
+ #else
+ 	struct rwlock	uh_lock;	/* lock for upper half */
++	struct _ipfw_mapping	*mapping;
+ #endif
+ };
+ 
+Index: sys/netpfil/ipfw/ip_fw_sockopt.c
+===================================================================
+--- sys/netpfil/ipfw/ip_fw_sockopt.c	(revision 267049)
++++ sys/netpfil/ipfw/ip_fw_sockopt.c	(working copy)
+@@ -1280,7 +1280,116 @@
+ 			free(tbl, M_TEMP);
+ 		}
+ 		break;
+-
++	/*	MAPPING	*/
++	case IP_FW_MAPPING_SET:
++		{
++			ipfw_mapping *ele= (ipfw_mapping *)(op3 + 1);
++			ipfw_mapping *current_ele,*new_ele;
++			int found=0,current_need_checked=1;
++			if ((size = valsize) < sizeof(ipfw_mapping)) {
++				error = EINVAL;
++				break;
++			}
++			new_ele= malloc(size, M_TEMP, M_ZERO | M_WAITOK);
++			memcpy(new_ele, ele, sizeof(ipfw_mapping));
++			current_ele=chain->mapping;
++			if(current_ele!=NULL){
++				while(current_need_checked==1)
++				{
++					if(ele->id==current_ele->id && ele->type== current_ele->type){
++						found=1;
++						break;
++					}
++					current_need_checked=0;	
++					/* if current is the last element, then just quit the loop.*/
++					if(current_ele->next!=NULL){
++						current_ele=current_ele->next;
++						current_need_checked=1;
++					}
++				}
++				/* if found, then update the label, otherwise, append to the last element, */
++				if(found){
++					strcpy(current_ele->label,ele->label);
++				}else{
++					current_ele->next=new_ele;
++				}
++			}else{
++				/* append the new_element into the chain */
++				chain->mapping=new_ele;
++			}
++		}
++		break;
++	case IP_FW_MAPPING_GET:
++		{
++			ipfw_mapping *ele= (ipfw_mapping *)(op3 + 1);
++			ipfw_mapping *current_ele;
++			int found=0,current_need_checked=1;
++			current_ele=chain->mapping;
++			if(current_ele!=NULL){
++				while(current_need_checked==1)
++				{
++					if(ele->id==0){
++						if(ele->type== current_ele->type && strcmp(ele->label,current_ele->label)==0){
++							found=1;
++							break;
++						}
++					}else{
++						if(ele->id==current_ele->id && ele->type== current_ele->type){
++							found=1;
++							break;
++						}
++					}
++					current_need_checked=0;	
++					if(current_ele->next!=NULL){
++						current_ele=current_ele->next;
++						current_need_checked=1;	
++					}
++				}
++				/* if found, copy out*/
++				if(found){
++					if(ele->id==0){
++						ele->id=current_ele->id;
++					}else{
++						strcpy(ele->label,current_ele->label);
++					}
++					error = sooptcopyout(sopt, op3, sizeof(ipfw_mapping_query));
++				}
++			}else{
++				error = EINVAL;
++			}
++		}
++		break;
++	case IP_FW_MAPPING_DEL:
++		{
++			ipfw_mapping *ele= (ipfw_mapping *)(op3 + 1);
++			ipfw_mapping *previous_ele,*current_ele,*next_ele;
++			current_ele=chain->mapping;
++			if(current_ele!=NULL){
++				/* if delete the first element */
++				if(ele->id==current_ele->id && ele->type== current_ele->type){
++					next_ele=current_ele->next;
++					if(next_ele!=NULL){
++						chain->mapping=next_ele;
++					}
++					free(current_ele,M_TEMP);
++				}else{
++					next_ele=current_ele->next;
++					while(next_ele!=NULL){
++						previous_ele=current_ele;
++						current_ele=current_ele->next;
++						next_ele=current_ele->next;
++						if(ele->id==current_ele->id && ele->type== current_ele->type){
++							free(current_ele,M_TEMP);
++							break;
++						}
++						previous_ele->next=next_ele;
++					}
++				}
++			}else{
++				error = EINVAL;
++			}
++		}
++		break;
+ 	/*--- NAT operations are protected by the IPFW_LOCK ---*/
+ 	case IP_FW_NAT_CFG:
+ 		if (IPFW_NAT_LOADED)
