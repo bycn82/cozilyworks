@@ -1,0 +1,210 @@
+Index: sbin/ipfw/ipfw.8
+===================================================================
+--- sbin/ipfw/ipfw.8	(revision 266886)
++++ sbin/ipfw/ipfw.8	(working copy)
+@@ -602,6 +602,22 @@
+ Note: logging is done after all other packet matching conditions
+ have been successfully verified, and before performing the final
+ action (accept, deny, etc.) on the packet.
++.It Cm pps Ar limit duration
++Rule with the 
++.Cm pps
++keyword will allow the first
++.Ar limit
++packets in recent 
++.Ar duration 
++milliseconds.
++.It Cm ppt Ar limit duration
++Rule with the 
++.Cm ppt
++keyword will allow the first
++.Ar limit
++packets in recent 
++.Ar duration 
++ticks.
+ .It Cm tag Ar number
+ When a packet matches a rule with the
+ .Cm tag
+Index: sbin/ipfw/ipfw2.c
+===================================================================
+--- sbin/ipfw/ipfw2.c	(revision 266886)
++++ sbin/ipfw/ipfw2.c	(working copy)
+@@ -244,6 +244,8 @@
+ 	{ "allow",		TOK_ACCEPT },
+ 	{ "permit",		TOK_ACCEPT },
+ 	{ "count",		TOK_COUNT },
++	{ "pps",		TOK_PPS },
++	{ "ppt",		TOK_PPT },
+ 	{ "pipe",		TOK_PIPE },
+ 	{ "queue",		TOK_QUEUE },
+ 	{ "divert",		TOK_DIVERT },
+@@ -1232,6 +1234,20 @@
+ 			PRINT_UINT_ARG("skipto ", cmd->arg1);
+ 			break;
+ 
++		case O_PPS:
++			{
++			ipfw_insn_pps *pps=(ipfw_insn_pps *)cmd;
++			printf("pps %d %d",cmd->arg1,pps->duration);
++			break;			
++			}
++			
++		case O_PPT:
++			{
++			ipfw_insn_pps *pps=(ipfw_insn_pps *)cmd;
++			printf("ppt %d %d",pps->limit,pps->duration_in_ticks);
++			break;			
++			}
++
+ 		case O_PIPE:
+ 			PRINT_UINT_ARG("pipe ", cmd->arg1);
+ 			break;
+@@ -2985,7 +3001,43 @@
+ 	case TOK_COUNT:
+ 		action->opcode = O_COUNT;
+ 		break;
++		
++	case TOK_PPS:
++		action->opcode = O_PPS;
++		ipfw_insn_pps *pps = (ipfw_insn_pps *)action;
++		action->len = F_INSN_SIZE(ipfw_insn_pps);
++		if (isdigit(**av)) {
++			action->arg1 = strtoul(*av, NULL, 10);
++			av++;
++		}else{
++			errx(EX_USAGE, "illegal argument pps `limit` %s", *av);
++		}
++		if (isdigit(**av)) {
++			pps->duration= strtoul(*av, NULL, 10);
++			av++;	
++		}else{
++			errx(EX_USAGE,"illegal arugment pps `duration` %s", *av);
++		}
++		break;	
+ 
++	case TOK_PPT:
++		action->opcode = O_PPT;
++		ipfw_insn_pps *ppt = (ipfw_insn_pps *)action;
++		action->len = F_INSN_SIZE(ipfw_insn_pps);
++		if (isdigit(**av)) {
++			ppt->limit = strtoul(*av, NULL, 10);
++			av++;
++		}else{
++			errx(EX_USAGE, "illegal argument ppt `limit` %s", *av);
++		}
++		if (isdigit(**av)) {
++			ppt->duration_in_ticks= strtoul(*av, NULL, 10);
++			av++;	
++		}else{
++			errx(EX_USAGE,"illegal arugment ppt `ticks` %s", *av);
++		}
++		break;	
++
+ 	case TOK_NAT:
+ 		action->opcode = O_NAT;
+ 		action->len = F_INSN_SIZE(ipfw_insn_nat);
+Index: sbin/ipfw/ipfw2.h
+===================================================================
+--- sbin/ipfw/ipfw2.h	(revision 266886)
++++ sbin/ipfw/ipfw2.h	(working copy)
+@@ -92,6 +92,8 @@
+ 	TOK_NGTEE,
+ 	TOK_FORWARD,
+ 	TOK_SKIPTO,
++	TOK_PPS,
++	TOK_PPT,
+ 	TOK_DENY,
+ 	TOK_REJECT,
+ 	TOK_RESET,
+Index: sys/netinet/ip_fw.h
+===================================================================
+--- sys/netinet/ip_fw.h	(revision 266886)
++++ sys/netinet/ip_fw.h	(working copy)
+@@ -165,6 +165,8 @@
+ 	O_REJECT,		/* arg1=icmp arg (same as deny)	*/
+ 	O_COUNT,		/* none				*/
+ 	O_SKIPTO,		/* arg1=next rule number	*/
++	O_PPS,			/* arg1=limit, pps->duration */
++	O_PPT,			/* pps->limit, pps->duration_in_ticks */
+ 	O_PIPE,			/* arg1=pipe number		*/
+ 	O_QUEUE,		/* arg1=queue number		*/
+ 	O_DIVERT,		/* arg1=port number		*/
+@@ -378,6 +380,18 @@
+ } ipfw_insn_log;
+ 
+ /*
++ *	This is used for PPS
++ */
++typedef struct _ipfw_insn_pps{
++	ipfw_insn o;
++	uint32_t start_time;
++	uint32_t count;
++	uint32_t duration;			
++	uint32_t limit;
++	uint32_t duration_in_ticks;
++} ipfw_insn_pps;
++
++/*
+  * Data structures required by both ipfw(8) and ipfw(4) but not part of the
+  * management API are protected by IPFW_INTERNAL.
+  */
+Index: sys/netpfil/ipfw/ip_fw2.c
+===================================================================
+--- sys/netpfil/ipfw/ip_fw2.c	(revision 266886)
++++ sys/netpfil/ipfw/ip_fw2.c	(working copy)
+@@ -2188,6 +2188,37 @@
+ 			    skip_or = 0;
+ 			    continue;
+ 			    break;	/* not reached */
++			    
++			case O_PPT:
++			case O_PPS:{
++				ipfw_insn_pps *pps = (ipfw_insn_pps *)cmd;
++				if(pps->limit==0){
++					int limit,duration_in_ticks;
++					if(1000/hz > pps->duration){
++						duration_in_ticks=1;
++					}else{
++						duration_in_ticks=(pps->duration * hz +500)/1000;
++					}	
++					limit=(cmd->arg1 *1000 * duration_in_ticks + hz * pps->duration/2)/(hz * pps->duration);
++					pps->limit=limit;
++					pps->duration_in_ticks=duration_in_ticks;
++				}
++				if(pps->start_time+pps->duration_in_ticks>= ticks){
++					if(pps->count < pps->limit){
++						retval = IP_FW_PASS;
++					}else{
++						retval = IP_FW_DENY;
++					}
++					pps->count++;
++				}else{
++					pps->start_time=ticks;
++					pps->count=1;
++					retval = IP_FW_PASS;
++				}
++				l = 0;		
++				done = 1;
++				break;	
++			}
+ 
+ 			case O_CALLRETURN: {
+ 				/*
+Index: sys/netpfil/ipfw/ip_fw_sockopt.c
+===================================================================
+--- sys/netpfil/ipfw/ip_fw_sockopt.c	(revision 266886)
++++ sys/netpfil/ipfw/ip_fw_sockopt.c	(working copy)
+@@ -703,6 +703,13 @@
+ 				goto bad_size;
+ 			break;
+ 
++		case O_PPS:
++		case O_PPT:
++			have_action=1;
++			if (cmdlen != F_INSN_SIZE(ipfw_insn_pps))
++				goto bad_size;
++			break;
++
+ 		case O_PIPE:
+ 		case O_QUEUE:
+ 			if (cmdlen != F_INSN_SIZE(ipfw_insn))
