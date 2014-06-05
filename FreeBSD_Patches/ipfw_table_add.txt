@@ -1,0 +1,17 @@
+1. you can get the latest source which already fixed this issue.
+
+2. or just comment out the whole else trunk as below
+} else {
+/* Port or any other key */
+key = strtol(arg, &p, 10);
+/* Skip non-base 10 entries like 'fa1' */
+if (p != arg) {
+pkey = (uint32_t *)paddr;
+*pkey = htonl(key);
+type = IPFW_TABLE_CIDR;
+addrlen = sizeof(uint32_t);
+}
+}
+
+3. or only comment out this line in the else trunk
+type = IPFW_TABLE_CIDR;
