@@ -1,0 +1,13 @@
+Index: lib/libutil/humanize_number.c
+===================================================================
+--- lib/libutil/humanize_number.c	(revision 267817)
++++ lib/libutil/humanize_number.c	(working copy)
+@@ -142,7 +142,7 @@
+ 		 * divide once more.
+ 		 */
+ 		for (i = 0;
+-		    (quotient >= max || (quotient == max - 1 &&
++		    (quotient >= max - 1 || (quotient == max - 1 &&
+ 		    remainder >= divisordeccut)) && i < maxscale; i++) {
+ 			remainder = quotient % divisor;
+ 			quotient /= divisor;
