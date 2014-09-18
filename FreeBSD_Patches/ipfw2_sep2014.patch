@@ -1,0 +1,12 @@
+Index: sbin/ipfw/ipfw2.c
+===================================================================
+--- sbin/ipfw/ipfw2.c	(revision 271092)
++++ sbin/ipfw/ipfw2.c	(working copy)
+@@ -419,6 +419,7 @@
+ 
+ 	b->ptr = b->buf;
+ 	b->avail = b->size;
++	b->buf[0]=0;
+ }
+ 
+ /*
