@@ -1,0 +1,194 @@
+/*
+*	bycn82@gmail.com
+*	29 Oct. 2014
+*	This is the first working version which can support 8 bytes ipfw_insn, and support filter "layer2"
+*
+*	Steps to test
+*	1. ipfw add allow all from any to any layer2
+*	2. sysctl -a net.link.ether.ipfw=1
+*	the system can still survive, it means the size are caculated properly already.
+*/
+diff --git a/sbin/ipfw/ipfw2.c b/sbin/ipfw/ipfw2.c
+index 7027fb9..0f7ab9d 100644
+--- a/sbin/ipfw/ipfw2.c
++++ b/sbin/ipfw/ipfw2.c
+@@ -863,7 +863,7 @@ show_ipfw(struct ipfw_ioc_rule *rule, int pcwidth, int bcwidth)
+ 	 * first print actions
+ 	 */
+         for (l = rule->cmd_len - rule->act_ofs, cmd = ACTION_PTR(rule);
+-			l > 0 ; l -= F_LEN(cmd), cmd += F_LEN(cmd)) {
++			l > 0 ; l -= F_LEN(cmd),cmd=(ipfw_insn *)((uint32_t *)cmd+ F_LEN(cmd)) ) {
+ 		switch(cmd->opcode) {
+ 		case O_CHECK_STATE:
+ 			printf("check-state");
+@@ -948,7 +948,7 @@ show_ipfw(struct ipfw_ioc_rule *rule, int pcwidth, int bcwidth)
+ 	}
+ 
+         for (l = rule->act_ofs, cmd = rule->cmd ;
+-			l > 0 ; l -= F_LEN(cmd) , cmd += F_LEN(cmd)) {
++			l > 0 ; l -= F_LEN(cmd) , cmd=(ipfw_insn *)((uint32_t *)cmd+ F_LEN(cmd))) {
+ 		/* useful alias */
+ 		ipfw_insn_u32 *cmd32 = (ipfw_insn_u32 *)cmd;
+ 
+@@ -2387,7 +2387,7 @@ static void
+ fill_cmd(ipfw_insn *cmd, enum ipfw_opcodes opcode, int flags, u_int16_t arg)
+ {
+ 	cmd->opcode = opcode;
+-	cmd->len =  ((cmd->len | flags) & (F_NOT | F_OR)) | 1;
++	cmd->len =  ((cmd->len | flags) & (F_NOT | F_OR)) | LEN_OF_IPFWINSN;
+ 	cmd->arg1 = arg;
+ }
+ 
+@@ -2570,7 +2570,7 @@ add(int ac, char *av[])
+ 	NEED1("missing action");
+ 	i = match_token(rule_actions, *av);
+ 	ac--; av++;
+-	action->len = 1;	/* default */
++	action->len = LEN_OF_IPFWINSN;	/* default */
+ 	switch(i) {
+ 	case TOK_CHECKSTATE:
+ 		have_state = action;
+@@ -3219,7 +3219,7 @@ done:
+ 			break;
+ 		default:
+ 			bcopy(src, dst, i * sizeof(u_int32_t));
+-			dst += i;
++			dst=(ipfw_insn *)((uint32_t *)dst+ i);
+ 		}
+ 	}
+ 
+@@ -3229,12 +3229,12 @@ done:
+ 	if (have_state && have_state->opcode != O_CHECK_STATE) {
+ 		i = F_LEN(have_state);
+ 		bcopy(have_state, dst, i * sizeof(u_int32_t));
+-		dst += i;
++		dst=(ipfw_insn *)((uint32_t *)dst+ i);
+ 	}
+ 	/*
+ 	 * start action section
+ 	 */
+-	rule->act_ofs = dst - rule->cmd;
++	rule->act_ofs = (uint32_t *)dst - (uint32_t *)(rule->cmd);
+ 
+ 	/*
+ 	 * put back O_LOG if necessary
+@@ -3243,7 +3243,7 @@ done:
+ 	if ( src->opcode == O_LOG ) {
+ 		i = F_LEN(src);
+ 		bcopy(src, dst, i * sizeof(u_int32_t));
+-		dst += i;
++		dst=(ipfw_insn *)((uint32_t *)dst+ i);
+ 	}
+ 	/*
+ 	 * copy all other actions
+@@ -3251,7 +3251,7 @@ done:
+ 	for (src = (ipfw_insn *)actbuf; src != action; src += i) {
+ 		i = F_LEN(src);
+ 		bcopy(src, dst, i * sizeof(u_int32_t));
+-		dst += i;
++		dst=(ipfw_insn *)((uint32_t *)dst+ i);
+ 	}
+ 
+ 	rule->cmd_len = (u_int32_t *)dst - (u_int32_t *)(rule->cmd);
+diff --git a/sys/net/ipfw/Makefile b/sys/net/ipfw/Makefile
+index 62fcfb4..0216a5e 100644
+--- a/sys/net/ipfw/Makefile
++++ b/sys/net/ipfw/Makefile
+@@ -19,7 +19,7 @@ opt_ipfw.h:
+ 	#echo '#define IPFIREWALL_VERBOSE_LIMIT 100' >> ${.OBJDIR}/${.TARGET}
+ 	#
+ 	# If you want it to pass all packets by default
+-	#echo '#define IPFIREWALL_DEFAULT_TO_ACCEPT 1' >> ${.OBJDIR}/${.TARGET}
++	echo '#define IPFIREWALL_DEFAULT_TO_ACCEPT 1' >> ${.OBJDIR}/${.TARGET}
+ .endif
+ 
+ .include <bsd.kmod.mk>
+diff --git a/sys/net/ipfw/ip_fw2.c b/sys/net/ipfw/ip_fw2.c
+index cef01d0..5107128 100644
+--- a/sys/net/ipfw/ip_fw2.c
++++ b/sys/net/ipfw/ip_fw2.c
+@@ -1894,7 +1894,7 @@ again:
+ 
+ 		skip_or = 0;
+ 		for (l = f->cmd_len, cmd = f->cmd; l > 0;
+-		     l -= cmdlen, cmd += cmdlen) {
++		     l -= cmdlen, cmd=(ipfw_insn *)((uint32_t *)cmd+ cmdlen)) {
+ 			int match, deny;
+ 
+ 			/*
+@@ -3511,7 +3511,7 @@ ipfw_check_ioc_rule(struct ipfw_ioc_rule *rule, int size, uint32_t *rule_flags)
+ 	 * instruction sizes.
+ 	 */
+ 	for (l = rule->cmd_len, cmd = rule->cmd; l > 0;
+-	     l -= cmdlen, cmd += cmdlen) {
++	     l -= cmdlen, cmd=(ipfw_insn *)((uint32_t *)cmd+ cmdlen)) {
+ 		cmdlen = F_LEN(cmd);
+ 		if (cmdlen > l) {
+ 			kprintf("ipfw: opcode %d size truncated\n",
+diff --git a/sys/net/ipfw/ip_fw2.h b/sys/net/ipfw/ip_fw2.h
+index 8433c53..89d5b69 100644
+--- a/sys/net/ipfw/ip_fw2.h
++++ b/sys/net/ipfw/ip_fw2.h
+@@ -32,6 +32,20 @@
+ #include <net/netisr2.h>
+ #endif
+ 
++#define _MODULAR_DESIGN
++#ifdef _MODULAR_DESIGN
++#define RESERVED_SIZE 		12 
++#define	SIZE_OF_IPFWINSN	8
++#define	LEN_OF_IPFWINSN		2
++
++
++#else
++#define RESERVED_SIZE 		16
++#define	SIZE_OF_IPFWINSN	4
++#define	LEN_OF_IPFWINSN		1
++
++#endif
++
+ /*
+  * The kernel representation of ipfw rules is made of a list of
+  * 'instructions' (for all practical purposes equivalent to BPF
+@@ -153,8 +167,13 @@ typedef struct	_ipfw_insn {	/* template for instructions */
+ #define	F_OR		0x40
+ #define	F_LEN_MASK	0x3f
+ #define	F_LEN(cmd)	((cmd)->len & F_LEN_MASK)
+-
+ 	uint16_t	arg1;
++
++#ifdef _MODULAR_DESIGN
++	uint8_t		module;
++	uint8_t		reserved;
++	uint16_t	arg2;
++#endif
+ } ipfw_insn;
+ 
+ /*
+@@ -311,7 +330,7 @@ struct ip_fw {
+ #define IPFW_RULE_F_INVALID	0x1
+ #define IPFW_RULE_F_STATE	0x2
+ 
+-#define RULESIZE(rule)	(sizeof(struct ip_fw) + (rule)->cmd_len * 4 - 4)
++#define RULESIZE(rule)	(sizeof(struct ip_fw) + (rule)->cmd_len * 4 - SIZE_OF_IPFWINSN)
+ 
+ /*
+  * This structure is used as a flow mask and a flow id for various
+@@ -442,7 +461,7 @@ struct ipfw_ioc_rule {
+ 	uint64_t	bcnt;		/* Byte counter			*/
+ 	uint32_t	timestamp;	/* tv_sec of last match		*/
+ 
+-	uint8_t		reserved[16];
++	uint8_t		reserved[RESERVED_SIZE];
+ 
+ 	ipfw_insn	cmd[1];		/* storage for commands		*/
+ };
+@@ -452,7 +471,7 @@ struct ipfw_ioc_rule {
+ #define IPFW_RULE_SIZE_MAX	255	/* unit: uint32_t */
+ 
+ #define IOC_RULESIZE(rule)	\
+-	(sizeof(struct ipfw_ioc_rule) + (rule)->cmd_len * 4 - 4)
++	(sizeof(struct ipfw_ioc_rule) + (rule)->cmd_len * 4 - SIZE_OF_IPFWINSN)
+ 
+ struct ipfw_ioc_flowid {
+ 	uint16_t	type;	/* ETHERTYPE_ */
