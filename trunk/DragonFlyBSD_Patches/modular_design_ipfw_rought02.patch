@@ -1,21 +1,72 @@
 /*
 this patch focusing on how to extend the size of the ipfw_insn structure, 
 and after extended the length of the structure ,it need to caculate the len offset, and size carefully in order to store into the kernel
+actually it also need to carefull for the offset, when show_ipfw(), it will get the rules and loop it again, 
+define a MACRO to replace all the changes, in order to make it easy to swtich from exiting to new version
 */
+
 diff --git a/sbin/ipfw/ipfw2.c b/sbin/ipfw/ipfw2.c
-index 7027fb9..5adda94 100644
+index 7027fb9..22fd97b 100644
 --- a/sbin/ipfw/ipfw2.c
 +++ b/sbin/ipfw/ipfw2.c
-@@ -2387,7 +2387,7 @@ static void
+@@ -862,8 +862,15 @@ show_ipfw(struct ipfw_ioc_rule *rule, int pcwidth, int bcwidth)
+ 	/*
+ 	 * first print actions
+ 	 */
++	 	printf("\n=======printf action=====");
++	 	printf("\n==rule->cmd_len=%d ",rule->cmd_len);
++		printf("\n==rule->act_ofs=%d ",rule->act_ofs);
++		printf("\n==l=%d\n",rule->cmd_len - rule->act_ofs);
++
+         for (l = rule->cmd_len - rule->act_ofs, cmd = ACTION_PTR(rule);
+-			l > 0 ; l -= F_LEN(cmd), cmd += F_LEN(cmd)) {
++			l > 0 ; l -= F_LEN(cmd), cmd=(ipfw_insn *)((uint32_t *)cmd+ F_LEN(cmd)) ) {
++			
++		//printf("--->opcode=%d  l=%d  F_LEN(cmd)=%d\n",cmd->opcode,l,F_LEN(cmd));
+ 		switch(cmd->opcode) {
+ 		case O_CHECK_STATE:
+ 			printf("check-state");
+@@ -926,7 +933,7 @@ show_ipfw(struct ipfw_ioc_rule *rule, int pcwidth, int bcwidth)
+ 			break;
+ 
+ 		default:
+-			printf("** unrecognized action %d len %d",
++			printf("** unrecognized action %d len %d\n",
+ 				cmd->opcode, cmd->len);
+ 		}
+ 	}
+@@ -947,13 +954,20 @@ show_ipfw(struct ipfw_ioc_rule *rule, int pcwidth, int bcwidth)
+ 		flags |= HAVE_IP | HAVE_OPTIONS;
+ 	}
+ 
++
++	printf("\n=======printf filter=====");
++	printf("\n==l=%d cmd->len=%d ",rule->act_ofs,rule->cmd->len);
++	int counter2=0;
+         for (l = rule->act_ofs, cmd = rule->cmd ;
+-			l > 0 ; l -= F_LEN(cmd) , cmd += F_LEN(cmd)) {
++			l > 0 && counter2 <10 ; l -= F_LEN(cmd)*2 , cmd=(ipfw_insn *)((uint32_t *)cmd+ F_LEN(cmd))) {
+ 		/* useful alias */
++		counter2++;
+ 		ipfw_insn_u32 *cmd32 = (ipfw_insn_u32 *)cmd;
+ 
+ 		show_prerequisites(&flags, 0, cmd->opcode);
+ 
++
++		printf("\n==>opcode=%d  l=%d F_LEN(cmd)=%d\n",cmd->opcode,l,F_LEN(cmd));
+ 		switch(cmd->opcode) {
+ 		case O_PROB:	
+ 			break;	/* done already */
+@@ -2387,7 +2401,7 @@ static void
  fill_cmd(ipfw_insn *cmd, enum ipfw_opcodes opcode, int flags, u_int16_t arg)
  {
  	cmd->opcode = opcode;
 -	cmd->len =  ((cmd->len | flags) & (F_NOT | F_OR)) | 1;
-+	cmd->len =  ((cmd->len | flags) & (F_NOT | F_OR)) | 2;
++	cmd->len =  ((cmd->len | flags) & (F_NOT | F_OR)) | LEN;
  	cmd->arg1 = arg;
  }
  
-@@ -2536,6 +2536,8 @@ add(int ac, char *av[])
+@@ -2536,6 +2550,8 @@ add(int ac, char *av[])
  	bzero(rulebuf, sizeof(rulebuf));
  
  	rule = (struct ipfw_ioc_rule *)rulebuf;
@@ -24,16 +75,24 @@ index 7027fb9..5adda94 100644
  	cmd = (ipfw_insn *)cmdbuf;
  	action = (ipfw_insn *)actbuf;
  
-@@ -2570,7 +2572,7 @@ add(int ac, char *av[])
+@@ -2570,7 +2586,7 @@ add(int ac, char *av[])
  	NEED1("missing action");
  	i = match_token(rule_actions, *av);
  	ac--; av++;
 -	action->len = 1;	/* default */
-+	action->len = 2;	/* default */
++	action->len = LEN;	/* default */
  	switch(i) {
  	case TOK_CHECKSTATE:
  		have_state = action;
-@@ -3188,7 +3190,7 @@ done:
+@@ -2926,6 +2942,7 @@ read_options:
+ 
+ 		case TOK_LAYER2:
+ 			fill_cmd(cmd, O_LAYER2, 0, 0);
++			printf("layer2 cmd->len=%d\n",cmd->len);
+ 			break;
+ 
+ 		case TOK_XMIT:
+@@ -3188,7 +3205,7 @@ done:
  	 * and now must be moved to the top of the action part.
  	 */
  	dst = (ipfw_insn *)rule->cmd;
@@ -42,7 +101,7 @@ index 7027fb9..5adda94 100644
  	/*
  	 * First thing to write into the command stream is the match probability.
  	 */
-@@ -3218,8 +3220,11 @@ done:
+@@ -3218,8 +3235,11 @@ done:
  		case O_LIMIT:
  			break;
  		default:
@@ -55,7 +114,7 @@ index 7027fb9..5adda94 100644
  		}
  	}
  
-@@ -3228,6 +3233,7 @@ done:
+@@ -3228,13 +3248,15 @@ done:
  	 */
  	if (have_state && have_state->opcode != O_CHECK_STATE) {
  		i = F_LEN(have_state);
@@ -63,7 +122,16 @@ index 7027fb9..5adda94 100644
  		bcopy(have_state, dst, i * sizeof(u_int32_t));
  		dst += i;
  	}
-@@ -3242,6 +3248,7 @@ done:
+ 	/*
+ 	 * start action section
+ 	 */
+-	rule->act_ofs = dst - rule->cmd;
++	rule->act_ofs = (void *)dst - (void *)(rule->cmd);
++	printf("act_offset= %ld\n",(uint32_t *)dst - (uint32_t *)(rule->cmd));
+ 
+ 	/*
+ 	 * put back O_LOG if necessary
+@@ -3242,6 +3264,7 @@ done:
  	src = (ipfw_insn *)cmdbuf;
  	if ( src->opcode == O_LOG ) {
  		i = F_LEN(src);
@@ -71,7 +139,7 @@ index 7027fb9..5adda94 100644
  		bcopy(src, dst, i * sizeof(u_int32_t));
  		dst += i;
  	}
-@@ -3250,16 +3257,24 @@ done:
+@@ -3250,16 +3273,24 @@ done:
  	 */
  	for (src = (ipfw_insn *)actbuf; src != action; src += i) {
  		i = F_LEN(src);
@@ -98,20 +166,11 @@ index 7027fb9..5adda94 100644
  }
  
  static void
-@@ -3624,6 +3639,18 @@ main(int ac, char *av[])
+@@ -3624,6 +3655,9 @@ main(int ac, char *av[])
  	if (s < 0)
  		err(EX_UNAVAILABLE, "socket");
  
-+	struct ipfw_ioc_rule aaa;
-+	struct ipfw_ioc_rule *t;
-+	t=&aaa;
-+	printf("%ld \n ",((void *)t->cmd - (void *)t));
-+	printf("sizeof uint8=%lu\n",sizeof(uint8_t));
-+	printf("sizeof uint16=%lu\n",sizeof(uint16_t));
-+	printf("sizeof uint32=%lu\n",sizeof(uint32_t));
-+	printf("sizeof uint64=%lu\n",sizeof(uint64_t));
-+	printf("size of ipfw_insn =%lu\n",sizeof(ipfw_insn));
-+	printf("size of struct ipfw_ioc_rule=%lu\n",sizeof(struct ipfw_ioc_rule));
++
 +
 +
  	/*
@@ -131,21 +190,18 @@ index 62fcfb4..0216a5e 100644
  
  .include <bsd.kmod.mk>
 diff --git a/sys/net/ipfw/ip_fw2.c b/sys/net/ipfw/ip_fw2.c
-index cef01d0..b651df5 100644
+index cef01d0..bcd7631 100644
 --- a/sys/net/ipfw/ip_fw2.c
 +++ b/sys/net/ipfw/ip_fw2.c
-@@ -2666,9 +2666,9 @@ ipfw_add_rule(struct ipfw_ioc_rule *ioc_rule, uint32_t rule_flags)
+@@ -2666,7 +2666,7 @@ ipfw_add_rule(struct ipfw_ioc_rule *ioc_rule, uint32_t rule_flags)
  	struct netmsg_base *nmsg;
  	struct ip_fw *f, *prev, *rule;
  	struct ip_fw_stub *stub;
 -
 +	kprintf("ipfw_add_rule()\n");
  	IPFW_ASSERT_CFGPORT(&curthread->td_msgport);
--
-+	return ;
+ 
  	/*
- 	 * If rulenum is 0, find highest numbered rule before the
- 	 * default rule, and add rule number incremental step.
 @@ -3489,12 +3489,14 @@ ipfw_check_ioc_rule(struct ipfw_ioc_rule *rule, int size, uint32_t *rule_flags)
  
  	*rule_flags = 0;
@@ -188,7 +244,25 @@ index cef01d0..b651df5 100644
  	if (size > (sizeof(uint32_t) * IPFW_RULE_SIZE_MAX) ||
  	    size < sizeof(*ioc_rule)) {
  		return EINVAL;
-@@ -3922,6 +3928,7 @@ ipfw_ctl(struct sockopt *sopt)
+@@ -3723,6 +3729,7 @@ ipfw_copy_rule(const struct ip_fw *rule, struct ipfw_ioc_rule *ioc_rule)
+ 	int i;
+ #endif
+ 
++	kprintf("--ipfw_copy_rule()\n");
+ 	KKASSERT(rule->cpuid == IPFW_CFGCPUID);
+ 
+ 	ioc_rule->act_ofs = rule->act_ofs;
+@@ -3755,7 +3762,8 @@ ipfw_copy_rule(const struct ip_fw *rule, struct ipfw_ioc_rule *ioc_rule)
+ #endif
+ 	}
+ 	KASSERT(i == ncpus, ("static rule is not duplicated on every cpu"));
+-
++	
++	kprintf("ioc_rule->cmd_len=%d\n",ioc_rule->cmd_len);
+ 	bcopy(rule->cmd, ioc_rule->cmd, ioc_rule->cmd_len * 4 /* XXX */);
+ 
+ 	return ((uint8_t *)ioc_rule + IOC_RULESIZE(ioc_rule));
+@@ -3922,6 +3930,7 @@ ipfw_ctl(struct sockopt *sopt)
  
  	case IP_FW_ADD:
  		error = ipfw_ctl_add_rule(sopt);
@@ -196,48 +270,93 @@ index cef01d0..b651df5 100644
  		break;
  
  	case IP_FW_DEL:
-@@ -4543,3 +4550,4 @@ static moduledata_t ipfwmod = {
+@@ -4438,6 +4447,12 @@ ipfw_init_dispatch(netmsg_t nmsg)
+ 			verbose_limit);
+ 	}
+ 
++	kprintf("len of default rule=%d\n",ipfw_ctx[mycpuid]->ipfw_default_rule->cmd[0].len);
++	ipfw_ctx[mycpuid]->ipfw_default_rule->cmd[0].len=LEN;
++	kprintf("updated len of default rule=%d\n",ipfw_ctx[mycpuid]->ipfw_default_rule->cmd[0].len);
++		
++
++	
+ 	callout_init_mp(&ipfw_timeout_h);
+ 	netmsg_init(&ipfw_timeout_netmsg, NULL, &netisr_adone_rport,
+ 		    MSGF_DROPABLE | MSGF_PRIORITY,
+@@ -4543,3 +4558,4 @@ static moduledata_t ipfwmod = {
  };
  DECLARE_MODULE(ipfw, ipfwmod, SI_SUB_PROTO_END, SI_ORDER_ANY);
  MODULE_VERSION(ipfw, 1);
 +
 diff --git a/sys/net/ipfw/ip_fw2.h b/sys/net/ipfw/ip_fw2.h
-index 8433c53..4fbd20d 100644
+index 8433c53..b0074cc 100644
 --- a/sys/net/ipfw/ip_fw2.h
 +++ b/sys/net/ipfw/ip_fw2.h
-@@ -147,6 +147,7 @@ enum ipfw_opcodes {		/* arguments (4 byte each)	*/
-  *
-  */
- typedef struct	_ipfw_insn {	/* template for instructions */
-+	uint8_t		module;
- 	enum ipfw_opcodes	opcode:8;
- 	uint8_t		len;	/* numer of 32-byte words */
- #define	F_NOT		0x80
-@@ -154,7 +155,9 @@ typedef struct	_ipfw_insn {	/* template for instructions */
+@@ -32,6 +32,24 @@
+ #include <net/netisr2.h>
+ #endif
+ 
++
++#define _INSN64
++#ifdef _INSN64
++#define SIZE_INSN 8
++#define LEN 2
++#define RESERVED 12 
++
++#else
++#define SIZE_INSN 4
++#define LEN 1
++#define RESERVED 16
++
++#endif
++
++
++
++
++
+ /*
+  * The kernel representation of ipfw rules is made of a list of
+  * 'instructions' (for all practical purposes equivalent to BPF
+@@ -153,8 +171,14 @@ typedef struct	_ipfw_insn {	/* template for instructions */
+ #define	F_OR		0x40
  #define	F_LEN_MASK	0x3f
  #define	F_LEN(cmd)	((cmd)->len & F_LEN_MASK)
- 
-+	uint8_t	reserved;
+-
  	uint16_t	arg1;
++
++#ifdef _INSN64
++	uint8_t		module;
++	uint8_t	reserved;
 +	uint16_t	arg2;
++#endif
++
  } ipfw_insn;
  
  /*
-@@ -442,7 +445,7 @@ struct ipfw_ioc_rule {
+@@ -311,7 +335,7 @@ struct ip_fw {
+ #define IPFW_RULE_F_INVALID	0x1
+ #define IPFW_RULE_F_STATE	0x2
+ 
+-#define RULESIZE(rule)	(sizeof(struct ip_fw) + (rule)->cmd_len * 4 - 4)
++#define RULESIZE(rule)	(sizeof(struct ip_fw) + (rule)->cmd_len * 4 - SIZE_INSN)
+ 
+ /*
+  * This structure is used as a flow mask and a flow id for various
+@@ -442,7 +466,7 @@ struct ipfw_ioc_rule {
  	uint64_t	bcnt;		/* Byte counter			*/
  	uint32_t	timestamp;	/* tv_sec of last match		*/
  
 -	uint8_t		reserved[16];
-+	uint8_t		reserved[12];
++	uint8_t		reserved[RESERVED];
  
  	ipfw_insn	cmd[1];		/* storage for commands		*/
  };
-@@ -452,7 +455,7 @@ struct ipfw_ioc_rule {
+@@ -452,7 +476,7 @@ struct ipfw_ioc_rule {
  #define IPFW_RULE_SIZE_MAX	255	/* unit: uint32_t */
  
  #define IOC_RULESIZE(rule)	\
 -	(sizeof(struct ipfw_ioc_rule) + (rule)->cmd_len * 4 - 4)
-+	(sizeof(struct ipfw_ioc_rule) + (rule)->cmd_len * 4 - 8)
++	(sizeof(struct ipfw_ioc_rule) + (rule)->cmd_len * 4 - SIZE_INSN)
  
  struct ipfw_ioc_flowid {
  	uint16_t	type;	/* ETHERTYPE_ */
