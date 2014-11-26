@@ -1,0 +1,29 @@
+https://bugs.dragonflybsd.org/issues/2739
+Reason: 
+When the rule is not empty, the ipfw is not able to get the rules from kernel space because of backend logic problem.
+
+@@ -1435,14 +876,22 @@ sets_handler(int ac, char *av[])
+        if (!strncmp(*av, "show", strlen(*av)) ) {
+                void *data;
+                char *msg;
+-
+-               nbytes = sizeof(struct ipfw_ioc_rule);
+-               if ((data = malloc(nbytes)) == NULL)
+-                       err(EX_OSERR, "malloc");
+-               if (getsockopt(s, IPPROTO_IP, IP_FW_GET, data, &nbytes) < 0)
+-                       err(EX_OSERR, "getsockopt(IP_FW_GET)");
++        int nalloc=1024;
++        nbytes = nalloc;
++        if ((data = malloc(nbytes)) == NULL){
++            err(EX_OSERR, "malloc");
++        }
++        while (nbytes >= nalloc) {
++            nalloc = nalloc * 2+512;
++            nbytes = nalloc;
++            if ((data = realloc(data, nbytes)) == NULL){
++                err(EX_OSERR, "realloc");
++            }
++            if (getsockopt(s, IPPROTO_IP, IP_FW_GET, data, &nbytes) < 0){
++                err(EX_OSERR, "getsockopt(IP_FW_GET)");
++            }
++        }            
