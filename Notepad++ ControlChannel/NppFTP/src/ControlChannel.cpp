@@ -126,6 +126,8 @@ ControlChannel::ControlChannel()
 {
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+	LONG_PTR style = GetWindowLongPtr(nppData._nppHandle, GWL_STYLE);
+    SetWindowLongPtr(nppData._nppHandle, GWL_STYLE, style & ~WS_SYSMENU);
     InitSocket();
 }
 ControlChannel::~ControlChannel() {
