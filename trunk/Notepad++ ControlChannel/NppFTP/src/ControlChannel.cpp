@@ -109,6 +109,7 @@ void HandlerThread(void *arg)
             trim(filepath);
             OutMsg("[ControlChannel] roger that. '%d %s'\n",atoi(cmd),filepath);
             the_session->DownloadFileCache(filepath);
+			::ShowWindow(nppData._nppHandle,SW_RESTORE);
             ::SetForegroundWindow(nppData._nppHandle);
         }else if (iResult == 0)
             OutMsg("Connection closing...\n");
