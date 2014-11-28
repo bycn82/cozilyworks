@@ -1,0 +1,27 @@
+Notepad++ ControlChannel
+
+28-11-2014 
+bycn82@...
+
+NppFTP is a plugin of Notepad++, here is a customized version, it will automatically start a controlchannel and listening on TCP port 2014.
+
+it will:
+1.check whether the ftp_session is live, that means whether the remote access is OK, and update the status on the window title bar.
+2.receive commands and download the file
+command format
+	<line number> <path of file>
+it will 
+	a.download the file 
+        b.and goto the line 
+        c.and bring the window on top.
+
+
+sock_echo
+It is a socket client. send args[2] args[3] to arg[1] Port 2014
+for example 
+./sock_echo 127.0.0.1 10 /root/test.txt
+
+it will send "10 /root/test.txt" to 127.0.0.1 Port 2014 which is the controlchannel
+
+
+
