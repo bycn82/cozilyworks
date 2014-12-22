@@ -1,0 +1,41 @@
+diff --git a/sys/net/netmap/netmap_mem2.c b/sys/net/netmap/netmap_mem2.c
+index fbafed5..c0359c4 100644
+--- a/sys/net/netmap/netmap_mem2.c
++++ b/sys/net/netmap/netmap_mem2.c
+@@ -144,16 +144,16 @@ const struct netmap_mem_d nm_blueprint = {
+ 
+ 
+ #define DECLARE_SYSCTLS(id, name) \
+-	SYSCTL_INT(_dev_netmap, OID_AUTO, name##_size, \
++	SYSCTL_INT(_net_netmap, OID_AUTO, name##_size, \
+ 	    CTLFLAG_RW, &netmap_params[id].size, 0, "Requested size of netmap " STRINGIFY(name) "s"); \
+-	SYSCTL_INT(_dev_netmap, OID_AUTO, name##_curr_size, \
++	SYSCTL_INT(_net_netmap, OID_AUTO, name##_curr_size, \
+ 	    CTLFLAG_RD, &nm_mem.pools[id]._objsize, 0, "Current size of netmap " STRINGIFY(name) "s"); \
+-	SYSCTL_INT(_dev_netmap, OID_AUTO, name##_num, \
++	SYSCTL_INT(_net_netmap, OID_AUTO, name##_num, \
+ 	    CTLFLAG_RW, &netmap_params[id].num, 0, "Requested number of netmap " STRINGIFY(name) "s"); \
+-	SYSCTL_INT(_dev_netmap, OID_AUTO, name##_curr_num, \
++	SYSCTL_INT(_net_netmap, OID_AUTO, name##_curr_num, \
+ 	    CTLFLAG_RD, &nm_mem.pools[id].objtotal, 0, "Current number of netmap " STRINGIFY(name) "s")
+ 
+-SYSCTL_DECL(_dev_netmap);
++SYSCTL_DECL(_net_netmap);
+ DECLARE_SYSCTLS(NETMAP_IF_POOL, if);
+ DECLARE_SYSCTLS(NETMAP_RING_POOL, ring);
+ DECLARE_SYSCTLS(NETMAP_BUF_POOL, buf);
+diff --git a/sys/net/netmap/netmap_vale.c b/sys/net/netmap/netmap_vale.c
+index 6a070e7..ae469cc 100644
+--- a/sys/net/netmap/netmap_vale.c
++++ b/sys/net/netmap/netmap_vale.c
+@@ -135,8 +135,8 @@ __FBSDID("$FreeBSD: head/sys/dev/netmap/netmap.c 257176 2013-10-26 17:58:36Z gle
+  * last packet in the block may overflow the size.
+  */
+ int bridge_batch = NM_BDG_BATCH; /* bridge batch size */
+-SYSCTL_DECL(_dev_netmap);
+-SYSCTL_INT(_dev_netmap, OID_AUTO, bridge_batch, CTLFLAG_RW, &bridge_batch, 0 , "");
++SYSCTL_DECL(_net_netmap);
++SYSCTL_INT(_net_netmap, OID_AUTO, bridge_batch, CTLFLAG_RW, &bridge_batch, 0 , "");
+ 
+ 
+ static int bdg_netmap_attach(struct netmap_adapter *);
